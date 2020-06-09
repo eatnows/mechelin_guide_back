@@ -1,5 +1,9 @@
 package com.ninety_three.mechelin;
 
-public class LoginController {
+import org.springframework.stereotype.Controller;
 
+@Controller
+public class LoginController {
+	
+	
 }
