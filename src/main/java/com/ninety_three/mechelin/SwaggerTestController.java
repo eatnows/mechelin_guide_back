@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 public class SwaggerTestController {
 	
-	public string test() {
+	public String test() {
 		return "성공";
 	}
 }
