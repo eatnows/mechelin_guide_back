@@ -23,4 +23,4 @@
 ## ignoring target file
 target/
 
-mysql.properties
+/mysql.properties
