@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+	<!-- insert -->
+	<insert id="insertOfUser" parameterType="udto">
+		INSERT user(email, password, nickname, created_at, updated_at)
+			VALUES ( #{email}, #{password}, #{nickname}, now(), now() )
+	</insert>
+	
+	<!-- email available check-->
+	<select id="mailCheckOfUser" parameterType="String" resultType="int">
+		SELECT count(*) FROM user WHERE email = #{email}
+	</select>
+	<!-- nickname available check -->
+	<select id="nickCheckOfUser" parameterType="String" resultType="int">
+		SELECT count(*) FROM user WHERE nickname = #{nickname}
+	</select>
+	<!-- ID/PW valid check -->
+	<select id="matchDataOfUser" parameterType="HashMap" resultType="int">
+		SELECT count(*) FROM user WHERE email = #{email} AND password = #{password}
+	</select>
+	
+	<!-- update -->
+	
+</mapper>
