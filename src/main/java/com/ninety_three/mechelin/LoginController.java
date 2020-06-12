@@ -39,7 +39,6 @@ public class LoginController {
 			return "mailfalse";
 		}
 	}
-	
 	/*
 		메일 중복검사
 		: 사용가능 "usethis", 중복 "usenot"
@@ -54,7 +53,20 @@ public class LoginController {
 		}
 		return result;
 	}
-	
+	/*
+		닉네임 중복검사
+		: 사용가능 "usethis", 중복 "usenot"
+	*/
+	@GetMapping("/signupcheck/nick")
+	public String nickCheck(@RequestParam String nickname) {
+		String result = "";
+		if (udao.nickCheck(nickname) == 0) {
+			result = "usethis";
+		} else {
+			result = "usenot";
+		}
+		return result;
+	}
 	/*
 		회원가입
 		: 실행 시 "success" 리턴
@@ -64,4 +76,5 @@ public class LoginController {
 		udao.insertUser(dto);
 		return "success";
 	}
+	
 }

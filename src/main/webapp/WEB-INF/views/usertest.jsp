@@ -11,20 +11,21 @@
 </head>
 <body>
 <!-- <form action="signup" method="post"> -->
-<form action="signupcheck/email" method="get">
+<form action="signupcheck/nick" method="get">
 	<table>
-		<tr>
+		<!-- <tr>
 			<th>메일주소<th>
 			<td>
 				<input type="text" name="email" />
 			</td>
-		</tr>
-		<!-- <tr>
+		</tr> -->
+		<tr>
 			<th>닉네임<th>
 			<td>
 				<input type="text" name="nickname" />
 			</td>
 		</tr>
+		<!-- 
 		<tr>
 			<th>비밀번호<th>
 			<td>
