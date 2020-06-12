@@ -22,6 +22,10 @@
 	<select id="matchDataOfUser" parameterType="HashMap" resultType="int">
 		SELECT count(*) FROM user WHERE email = #{email} AND password = #{password}
 	</select>
+	<!-- get PW of ID for valid check -->
+	<select id="getPassOfUser" parameterType="String" resultType="String">
+		SELECT password FROM user WHERE email = #{email}
+	</select>
 	
 	<!-- update -->
 	

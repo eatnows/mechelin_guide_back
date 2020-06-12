@@ -1,5 +1,6 @@
 package com.ninety_three.mechelin;
 
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,9 +32,13 @@ public class LoginController {
 	*/
 	@PostMapping("/login")		// 임시매핑
 	public String loginResult(@RequestParam String email, @RequestParam String password) {
-		if (udao.mailCheck(email)==1 && udao.loginMatch(email, password)==1) {
+		int mailchk = udao.mailCheck(email);
+		String dbpass = udao.getpwd(email);
+		boolean isValidPassword = BCrypt.checkpw(password, dbpass);
+		
+		if (mailchk==1 && isValidPassword) {
 			return "valid";
-		} else if (udao.mailCheck(email)==1) {
+		} else if (mailchk==1) {
 			return "pwfalse";
 		} else {
 			return "mailfalse";
@@ -69,10 +74,15 @@ public class LoginController {
 	}
 	/*
 		회원가입
-		: 실행 시 "success" 리턴
+		- 비밀번호 암호화
+		- 실행 시 "success" 리턴
 	*/	
 	@PostMapping("/signup")		// 임시매핑
 	public String signUp(@RequestBody UserDto dto) {
+		String password = dto.getPassword();
+		String pwdhash = BCrypt.hashpw(password, BCrypt.gensalt(15));
+		
+		dto.setPassword(pwdhash);
 		udao.insertUser(dto);
 		return "success";
 	}

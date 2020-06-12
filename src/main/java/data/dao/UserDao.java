@@ -29,13 +29,8 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 	}
 	
 	@Override
-	public int loginMatch(String email, String password) {
+	public String getpwd(String email) {
 		// TODO Auto-generated method stub
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("email", email);
-		map.put("password", password);
-		
-		return getSqlSession().selectOne("matchDataOfUser", map);
+		return getSqlSession().selectOne("getPassOfUser", email);
 	}
-	
 }
