@@ -33,16 +33,4 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("getPassOfUser", email);
 	}
-
-	@Override
-	public int apiUserCheck(String id) {
-		// TODO Auto-generated method stub
-		return getSqlSession().selectOne("checkOfApiUser", id);
-	}
-
-	@Override
-	public void insertApiUser(UserDto dto) {
-		// TODO Auto-generated method stub
-		getSqlSession().insert("insertOfApiUser", dto);
-	}
 }

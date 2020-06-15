@@ -10,5 +10,10 @@
 		<mapper resource="mybatis/setting/TestSql.xml" />
 		<mapper resource="mybatis/setting/UserSql.xml" />
 		<mapper resource="mybatis/setting/PlaceSql.xml" />
+		<typeAlias type="data.dto.PlaceDto" alias="pdto"/>
+	</typeAliases>
+	<mappers>
+		<mapper resource="mybatis/setting/TestSql.xml" />
+		<mapper resource="mybatis/setting/PlaceSql.xml" />
 	</mappers>
 </configuration>

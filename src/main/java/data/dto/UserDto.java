@@ -3,7 +3,7 @@ package data.dto;
 import java.sql.Timestamp;
 
 public class UserDto {
-	private String id;
+	private int id;
 	private String email;
 	private String password;
 	private String nickname;
@@ -14,10 +14,10 @@ public class UserDto {
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getEmail() {
