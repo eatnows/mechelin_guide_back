@@ -1,6 +1,7 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -78,6 +79,15 @@ public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
 	public void updatePlace(PlaceDto dto) {
 		// TODO Auto-generated method stub
 		getSqlSession().update("updateOfPlace", dto);
+	}
+	/*
+	 * 내가 찍은 좌표 근처에 place 테이블에 등록된 맛집 목록 출력
+	 */
+	@Override
+	public List<PlaceDto> selectAroundPlace(HashMap<String, Double> map) {
+		// TODO Auto-generated method stub
+		//List<PlaceDto> list 
+		return getSqlSession().selectList("selectAroundOfPlace", map);
 	}
 	
 	

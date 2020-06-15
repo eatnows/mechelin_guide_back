@@ -1,6 +1,7 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import data.dto.PlaceDto;
 
@@ -14,4 +15,5 @@ public interface PlaceDaoInter {
 	public int selectWishCount(int id);
 	public int selectLatelyId();
 	public void updatePlace(PlaceDto dto);
+	public List<PlaceDto> selectAroundPlace(HashMap<String, Double> map);
 }
