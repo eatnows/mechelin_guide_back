@@ -3,8 +3,10 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="data.dto.TestDto" alias="tdto"/>
+		<typeAlias type="data.dto.PlaceDto" alias="pdto"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/setting/TestSql.xml" />
+		<mapper resource="mybatis/setting/PlaceSql.xml" />
 	</mappers>
 </configuration>
