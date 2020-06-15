@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="place">
+	<!-- insert -->
+	<insert id="insertOfPlace" parameterType="pdto">
+		INSERT INTO place (latitude_x, longitude_y, name, address, created_at, updated_at) 
+		VALUES (#{latitude_x}, #{longitude_y}, #{name}, #{address}, now(), now())
+	</insert>
+	<!-- 이 맛집에 대해 리뷰글을 썼을때 맛집의 총 리뷰글 갯수 1 증가-->
+	<update id="updatePostCountOfPlace" parameterType="int">
+		UPDATE place SET post_count = post_count + 1 WHERE id = #{id}
+	</update>
+	<!-- 이 맛집에 대해 리뷰글을 썼을때 맛집의 총 리뷰글 갯수 1 감소-->
+	<update id="updatePostMinusOfPlace" parameterType="int">
+		UPDATE place SET post_count = post_count - 1 WHERE id = #{id}
+	</update>
+	<!-- 맛집의 총 리뷰글 갯수 반환하는 SQL문 -->
+	<select id="selectPostCountOfPlace" resultType="int">
+		SELECT post_count FROM place WHERE id = #{id}
+	</select>
+	<!-- 위시리스트 갯수를 1 증가 시키는 SQL 문 -->
+	<update id="updateWishCountOfPlace" parameterType="int">
+		UPDATE place SET wish_count = wish_count + 1 WHERE id = #{id}
+	</update>
+	<!-- 위시리스트 갯수를 1 감소 시키는 SQL 문 -->
+	<update id="updateWishMinusOfPlace" parameterType="int">
+		UPDATE place SET wish_count = wish_count - 1 WHERE id = #{id}
+	</update>
+	<!-- 위시리스트 갯수를 반환하는 SQL 문 -->
+	<select id="selectWishCountOfPlace" resultType="int">
+		SELECT wish_count FROM place WHERE id = #{id}
+	</select>
+	<!-- 가장 최근에 등록된 맛집의 id를 한개 반환하는 SQL문 -->
+	<select id="selectLatelyOfPlace" resultType="int">
+		SELECT id FROM place ORDER BY created_at DESC LIMIT 1
+	</select>
+</mapper>
