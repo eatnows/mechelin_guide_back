@@ -89,7 +89,12 @@ public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
 		//List<PlaceDto> list 
 		return getSqlSession().selectList("selectAroundOfPlace", map);
 	}
-	
+	/*
+	 * 맛집 삭제
+	 */
+	public void deletePlace(int id) {
+		getSqlSession().delete("deleteOfPlace", id);
+	}
 	
 
 }

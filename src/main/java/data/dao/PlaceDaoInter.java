@@ -16,4 +16,5 @@ public interface PlaceDaoInter {
 	public int selectLatelyId();
 	public void updatePlace(PlaceDto dto);
 	public List<PlaceDto> selectAroundPlace(HashMap<String, Double> map);
+	public void deletePlace(int id);
 }

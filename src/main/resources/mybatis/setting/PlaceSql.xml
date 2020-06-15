@@ -49,4 +49,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE (#{x1} > latitude_x AND latitude_x > #{x2} ) 
 		AND (#{y1} > longitude_y AND longitude_y > #{y2} )  
 	</select>
+	<!-- 맛집 삭제 일단 만들어만 둠 -->
+	<delete id="deleteOfPlace" parameterType="int">
+		DELETE FROM place WHERE id = #{id}
+	</delete>
 </mapper>
