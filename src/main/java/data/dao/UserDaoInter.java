@@ -7,4 +7,7 @@ public interface UserDaoInter {
 	public int mailCheck(String email);
 	public int nickCheck(String nickname);
 	public String getpwd(String email);
+	
+	public int apiUserCheck(String id);
+	public void insertApiUser(UserDto dto);
 }

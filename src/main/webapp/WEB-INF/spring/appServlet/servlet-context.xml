@@ -21,7 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.ninety_three.mechelin, data.dao, swagger" />
+	<context:component-scan base-package="com.ninety_three.mechelin, data.dao, swagger, kakao.login" />
 	
 	
 	
