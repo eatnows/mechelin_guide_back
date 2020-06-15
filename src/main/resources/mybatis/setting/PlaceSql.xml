@@ -53,4 +53,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteOfPlace" parameterType="int">
 		DELETE FROM place WHERE id = #{id}
 	</delete>
+	<!-- 좌표값에 해당하는 데이터가 있는지 반환, 있으면 id를 반환-->
+	<select id="selectCheckOfPlace" parameterType="HashMap" resultType="Integer">
+		SELECT id FROM place 
+		WHERE latitude_x = #{latitude_x} AND longitude_y = #{longitude_y}
+	</select>
+	
 </mapper>
