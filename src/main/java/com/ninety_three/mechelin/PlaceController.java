@@ -35,8 +35,8 @@ public class PlaceController {
 	/*
 	 * 테스트용 메소드
 	 */
-	@PutMapping("/test/{id}")
-	public void test(@PathVariable int id) {
-		dao.updateWishMinus(id);
+	@PutMapping("/test")
+	public void test(@RequestBody PlaceDto dto) {
+		dao.updatePlace(dto);
 	}
 }

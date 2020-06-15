@@ -13,5 +13,5 @@ public interface PlaceDaoInter {
 	public void updateWishMinus(int id);
 	public int selectWishCount(int id);
 	public int selectLatelyId();
-	
+	public void updatePlace(PlaceDto dto);
 }

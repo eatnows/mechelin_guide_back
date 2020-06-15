@@ -71,6 +71,14 @@ public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
 		// TODO Auto-generated method stub
 		getSqlSession().update("updateWishMinusOfPlace", id);
 	}
+	/*
+	 * 관리자가 맛집을 수정
+	 */
+	@Override
+	public void updatePlace(PlaceDto dto) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateOfPlace", dto);
+	}
 	
 	
 

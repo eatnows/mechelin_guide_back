@@ -36,4 +36,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectLatelyOfPlace" resultType="int">
 		SELECT id FROM place ORDER BY created_at DESC LIMIT 1
 	</select>
+	<!-- 등록된 맛집의 정보를 수정 -->
+	<update id="updateOfPlace" parameterType="pdto">
+		UPDATE place 
+		SET latitude_x = #{latitude_x}, longitude_y = #{longitude_y}, 
+			name = #{name}, address = #{address}, updated_at = now() 
+		WHERE id = #{id}
+	</update>
+	
 </mapper>
