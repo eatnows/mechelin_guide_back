@@ -12,4 +12,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectCheckOfUserPlace" resultType="Integer" parameterType="HashMap">
 		SELECT id FROM user_place WHERE user_id = #{user_id} AND place_id = #{place_id}
 	</select>
+	<!-- user_id가 가장 최근에 insert한 데이터를 반환하는 SQL문 -->
+	<select id="selectLatelyOfUserPlace" resultType="updto" parameterType="int">
+		SELECT * FROM user_place WHERE user_id = #{user_id} ORDER BY created_at DESC LIMIT 1
+	</select>
+	<!-- post_count 칼럼 1 증가시키는 SQL 문 -->
+	<update id="updatePlusOfUserPlace" parameterType="int">
+		UPDATE user_place SET post_count = post_count + 1 WHERE id = #{id}
+	</update>
+	<!-- post_count 칼럼 1 감소시키는 SQL 문 -->
+	<update id="updateMinusOfUserPlace" parameterType="int">
+		UPDATE user_place SET post_count = post_count - 1 WHERE id = #{id}
+	</update>
 </mapper>

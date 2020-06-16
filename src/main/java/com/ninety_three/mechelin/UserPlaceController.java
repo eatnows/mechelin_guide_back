@@ -22,15 +22,21 @@ public class UserPlaceController {
 	@Autowired
 	private UserPlaceDaoInter dao;
 	
-	
-	
-	@GetMapping("/test")
+	/*
+	 *  user_id와 place_id에 해당하는 데이터가 있는지 확인 있으면 id 없으면 null 반환
+	 */
+	@GetMapping("/testId")
 	public Integer test(@RequestParam Integer user_id, @RequestParam Integer place_id) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("user_id", user_id);
 		map.put("place_id", place_id);
 		
 		return dao.selectCheckUserPlace(map);
+	}
+	
+	@GetMapping("/test")
+	public UserPlaceDto test2(@RequestParam int user_id) {
+		return dao.selectLatelyUserPlace(user_id);
 	}
 	
 }

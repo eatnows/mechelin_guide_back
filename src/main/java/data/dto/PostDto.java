@@ -14,12 +14,12 @@ public class PostDto {
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	private int user_id;
+	private String category;
 	// 맛집 이름
 	private String name;
 	private String address;
 	private double latitude_x;
 	private double longitude_y;
-	
 	public int getId() {
 		return id;
 	}
@@ -86,6 +86,12 @@ public class PostDto {
 	public void setUser_id(int user_id) {
 		this.user_id = user_id;
 	}
+	public String getCategory() {
+		return category;
+	}
+	public void setCategory(String category) {
+		this.category = category;
+	}
 	public String getName() {
 		return name;
 	}
@@ -110,7 +116,6 @@ public class PostDto {
 	public void setLongitude_y(double longitude_y) {
 		this.longitude_y = longitude_y;
 	}
-	
 	
 	
 }
