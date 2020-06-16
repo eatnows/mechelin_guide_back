@@ -9,4 +9,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		front_image, created_at, updated_at)
 		VALUES (#{user_place_id}, #{subject}, #{content}, #{rating}, #{front_image}, now(), now())
 	</insert>
+	<!-- 게시글 삭제 버튼을 눌렀을때 실행되는 SQL문, 1이 true -->
+	<update id="deleteUserOfPost" parameterType="int">
+		UPDATE post SET isdelete = 1 WHERE id = #{id}
+	</update>
+	<!-- 실제 관리자가 게시글을 삭제하는 SQL -->
+	<delete id="deleteAdminOfPost" parameterType="int">
+		DELETE FROM post WHERE id = #{id}
+	</delete>
+	<!-- 좋아요가 1 증가하는 메소드 -->
 </mapper>

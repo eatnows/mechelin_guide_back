@@ -33,13 +33,17 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectLatelyOfUserPlace", user_id);
 	}
-
+	/*
+	 * post_count 칼럼의 값을 1증가 시키는 메소드
+	 */
 	@Override
 	public void updatePlusUserPlace(int id) {
 		// TODO Auto-generated method stub
 		getSqlSession().update("updatePlusOfUserPlace", id);
 	}
-
+	/*
+	 * post_count 칼럼의 값을 1감소 시키는 메소드
+	 */
 	@Override
 	public void updateMinusUserPlace(int id) {
 		// TODO Auto-generated method stub
@@ -47,7 +51,7 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 	}
 
 	@Override
-	public void updateIsShowUserPlace(HashMap<String, Boolean> map) {
+	public void updateIsShowUserPlace(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		getSqlSession().update("updateIsShowOfUserPlace", map);
 	}

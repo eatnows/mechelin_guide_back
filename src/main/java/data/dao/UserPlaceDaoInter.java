@@ -10,5 +10,5 @@ public interface UserPlaceDaoInter {
 	public UserPlaceDto selectLatelyUserPlace(int user_id);
 	public void updatePlusUserPlace(int id);
 	public void updateMinusUserPlace(int id);
-	public void updateIsShowUserPlace(HashMap<String, Boolean> map);
+	public void updateIsShowUserPlace(HashMap<String, Object> map);
 }

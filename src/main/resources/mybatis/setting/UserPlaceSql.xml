@@ -25,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		UPDATE user_place SET post_count = post_count - 1 WHERE id = #{id}
 	</update>
 	<!-- 지도에서 해당 맛집 표시를 키고 끄게하는 필터 기능 SQL 문 -->
+	<!-- 무조건 true 값으로 보내야함 이거말고 true false 인값을 그대로 대입하는 방법도있음 -->
 	<update id="updateIsShowOfUserPlace" parameterType="HashMap">
 		UPDATE user_place SET isshow = IF(#{isshow} = 1, isshow = 0, isshow = 1) WHERE id = #{id}
 	</update>

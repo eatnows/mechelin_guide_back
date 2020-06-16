@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -33,10 +36,15 @@ public class UserPlaceController {
 		
 		return dao.selectCheckUserPlace(map);
 	}
-	
-	@GetMapping("/test")
-	public UserPlaceDto test2(@RequestParam int user_id) {
-		return dao.selectLatelyUserPlace(user_id);
+	/*
+	 * 나의 맛집 지도상에 안보이게 하는 필터기능 무조건 true값(혹은 1)을 보내야함
+	 */
+	@PutMapping("/test/{id}/{isshow}")
+	public void test2(@PathVariable int id, @PathVariable boolean isshow) {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("isshow", isshow);
+		map.put("id", id);
+		dao.updateIsShowUserPlace(map);
 	}
 	
 }
