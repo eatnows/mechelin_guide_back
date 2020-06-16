@@ -1,5 +1,7 @@
 package data.dao;
 
+import java.util.HashMap;
+
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
 
@@ -28,6 +30,22 @@ public class PostDao extends SqlSessionDaoSupport implements PostDaoInter {
 	public void deleteAdminPost(int id) {
 		// TODO Auto-generated method stub
 		getSqlSession().delete("deleteAdminOfPost", id);
+	}
+	/*
+	 * 좋아요 버튼을 눌렀을때 좋아요 값을 1증가 1감소 시키는 메소드
+	 */
+	@Override
+	public void updateLikePost(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateLikeOfPost", map);
+	}
+	/*
+	 * id에 해당하는 리뷰글 데이터 반환
+	 */
+	@Override
+	public PostDto selectDataPost(int id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("seelctDataOfPost", id);
 	}
 
 }
