@@ -23,6 +23,8 @@ public class PostController {
 	@Autowired
 	private PlaceDaoInter pdao;
 	
+	
+	
 	/*
 	 * 리뷰글 등록하는 메소드
 	 */
@@ -48,6 +50,7 @@ public class PostController {
 			placeId = pdao.selectCheckPlace(geomap);
 		}
 		// user_place 테이블에 user의 id와 place의 id를 가진값이 있는지 확인
+		
 		
 		// 대표이미지를 설정했는지 체크 없으면 기본 이미지 출력
 		if(dto.getFront_image() == null) {

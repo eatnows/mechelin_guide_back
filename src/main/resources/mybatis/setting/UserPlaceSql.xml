@@ -8,4 +8,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO user_place (user_id, place_id, category, created_at, updated_at) 
 		VALUES (#{user_id}, #{place_id}, #{category}, now(), now()) 
 	</insert>
+	<!-- user_id와 place_id를 가지고 있는 데이터가 있는지 확인 -->
+	<select id="selectCheckOfUserPlace" resultType="Integer" parameterType="HashMap">
+		SELECT id FROM user_place WHERE user_id = #{user_id} AND place_id = #{place_id}
+	</select>
 </mapper>
