@@ -34,4 +34,22 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 		return getSqlSession().selectOne("selectLatelyOfUserPlace", user_id);
 	}
 
+	@Override
+	public void updatePlusUserPlace(int id) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updatePlusOfUserPlace", id);
+	}
+
+	@Override
+	public void updateMinusUserPlace(int id) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateMinusOfUserPlace", id);
+	}
+
+	@Override
+	public void updateIsShowUserPlace(HashMap<String, Boolean> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateIsShowOfUserPlace", map);
+	}
+
 }
