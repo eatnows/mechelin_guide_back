@@ -1,6 +1,6 @@
 package data.dao;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -27,7 +27,51 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("nickCheckOfUser", nickname);
 	}
+
+	@Override
+	public void insertValid(String email) {
+		// TODO Auto-generated method stub
+		getSqlSession().insert("holdInfoForMailValid", email);
+	}
 	
+	@Override
+	public void updateValid(String email) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("againSendMailValid", email);
+	}
+
+	@Override
+	public int hasInfo(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("didSendMailValid", email);
+	}
+	
+	@Override
+	public void gainValid(String email) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("joinGrantedOfMailValid", email);
+	}
+
+	@Override
+	public boolean isGranted(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("isUserDidMailValid", email);
+	}
+	
+	@Override
+	public void deleteValid(String email) {
+		// TODO Auto-generated method stub
+		getSqlSession().delete("deleteMailValidWhenJoined", email);
+	}
+
+	/*
+	@Override
+	public String whenAdded(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("whenSendMailValid", email);
+	}
+	*/
+
 	@Override
 	public String getpwd(String email) {
 		// TODO Auto-generated method stub
@@ -45,4 +89,5 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		// TODO Auto-generated method stub
 		getSqlSession().insert("insertOfApiUser", dto);
 	}
+
 }

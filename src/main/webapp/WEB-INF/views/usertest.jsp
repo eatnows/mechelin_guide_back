@@ -11,7 +11,9 @@
 </head>
 <body>
 <!-- <form action="login" method="post">
-<form action="signupcheck/nick" method="get">
+<form action="signupcheck/nick" method="get"> -->
+<!-- <form action="validsend" method="get"> -->
+<form action="signup" method="get">
 	<table>
 		<tr>
 			<th>메일주소<th>
@@ -19,7 +21,7 @@
 				<input type="text" name="email" />
 			</td>
 		</tr>
-		<tr>
+		<!-- <tr>
 			<th>닉네임<th>
 			<td>
 				<input type="text" name="nickname" />
@@ -30,15 +32,18 @@
 			<td>
 				<input type="password" name="password" />
 			</td>
-		</tr>
+		</tr> -->
 		<tr>
 			<td colspan="2">
 				<button type="submit">전송</button>
 			</td>
 		</tr>
 	</table>
-</form> -->
+</form>
+<!-- 
 <a href="https://kauth.kakao.com/oauth/authorize?client_id=71100263fd4bab7558fb465089e72859&redirect_uri=http://localhost:9000/mechelin/klogin&response_type=code">
 카카오로그인</a>
+ -->
+ 
 </body>
 </html>

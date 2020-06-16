@@ -18,6 +18,40 @@
 	<select id="nickCheckOfUser" parameterType="String" resultType="int">
 		SELECT count(*) FROM user WHERE nickname = #{nickname}
 	</select>
+	
+	<!-- hmmm... lookup mailvalid TB -->
+	<!-- <select id="didSendMailValid" parameterType="String" resultMap="Map">
+		SELECT count(*) count, DATE_FORMAT(created_at, '%Y%m%d') created
+			FROM mailvalid WHERE email = #{email}
+	</select> -->
+	<select id="didSendMailValid" parameterType="String" resultType="int">
+		SELECT count(*) FROM mailvalid WHERE email = #{email}
+	</select>
+	
+	<!-- email validation request -->
+	<update id="againSendMailValid" parameterType="String">
+		UPDATE mailvalid SET created_at = now() WHERE email = #{email}
+	</update>
+	<insert id="holdInfoForMailValid" parameterType="String">
+		INSERT mailvalid(email, created_at) VALUES( #{email}, now() )
+	</insert>
+	
+	<!-- grant validation -->
+	<update id="joinGrantedOfMailValid" parameterType="String">
+		UPDATE mailvalid SET validity = true WHERE email = #{email}
+	</update>
+	<!-- granted or not ? -->
+	<select id="isUserDidMailValid" parameterType="String" resultType="boolean">
+		SELECT validity FROM mailvalid WHERE email = #{email}
+	</select>
+	
+	<!-- delete mailvalid TB when insert user TB-->
+	<delete id="deleteMailValidWhenJoined" parameterType="String">
+		DELETE mailvalid WHERE email = #{email}
+	</delete>
+	
+	
+	
 	<!-- ID/PW valid check -->
 	<select id="matchDataOfUser" parameterType="HashMap" resultType="int">
 		SELECT count(*) FROM user WHERE email = #{email} AND password = #{password}
