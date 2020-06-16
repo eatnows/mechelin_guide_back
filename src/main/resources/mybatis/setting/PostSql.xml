@@ -17,5 +17,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteAdminOfPost" parameterType="int">
 		DELETE FROM post WHERE id = #{id}
 	</delete>
-	<!-- 좋아요가 1 증가하는 메소드 -->
+	<!-- 좋아요가 1 증가하고 감소하는 SQL문, likes라는 변수명으로 좋아요를 하고싶으면 1을 넣고
+			좋아요를 취소하고 싶으면 0을 넣고 SQL문 변수에 보내주면 됨-->
+	<update id="updateLikeOfPost" parameterType="int">
+		UPDATE post 
+		SET likes = IF(#{likes} = 1, likes = likes + 1, likes = likes - 1) 
+		WHERE id = #{id}
+	</update>
 </mapper>
