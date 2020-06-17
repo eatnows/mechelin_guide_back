@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="comment">
+	<!-- insert -->
+	<insert id="insertOfComment" parameterType="cdto">
+		INSERT comment
+		<if test="parent_comment_id != null">
+			(post_id, user_id, content, parent_comment_id, created_at, updated_at)
+			VALUES( #{post_id}, #{user_id}, #{content}, #{parent_comment_id}, now(), now() )
+		</if>
+		<if test="parent_comment_id == null">
+			(post_id, user_id, content, created_at, updated_at)
+			VALUES( #{post_id}, #{user_id}, #{content}, now(), now() )
+		</if>
+	</insert>
+	
+</mapper>
