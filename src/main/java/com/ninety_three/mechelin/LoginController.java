@@ -33,7 +33,8 @@ import data.dao.UserDaoInter;
 import data.dto.UserDto;
 import kakao.login.SetKakaoApi;
 
-@Controller
+@RestController
+@CrossOrigin
 public class LoginController {
 	
 	@Autowired
@@ -148,7 +149,7 @@ public class LoginController {
 		회원가입 insert
 	*/	
 	@PostMapping("/signup")		// 임시매핑
-	public String signUp(@ModelAttribute UserDto dto) {
+	public String signUp(@RequestBody UserDto dto) {
 		// 이메일 인증완료 여부 확인
 		if (udao.isGranted(dto.getEmail())) {
 			// 비밀번호 암호화
