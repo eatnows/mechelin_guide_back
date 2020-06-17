@@ -18,11 +18,61 @@
 	<select id="nickCheckOfUser" parameterType="String" resultType="int">
 		SELECT count(*) FROM user WHERE nickname = #{nickname}
 	</select>
+	
+	<!-- hmmm... lookup mailvalid TB -->
+	<!-- <select id="didSendMailValid" parameterType="String" resultMap="Map">
+		SELECT count(*) count, DATE_FORMAT(created_at, '%Y%m%d') created
+			FROM mailvalid WHERE email = #{email}
+	</select> -->
+	<select id="didSendMailValid" parameterType="String" resultType="int">
+		SELECT count(*) FROM mailvalid WHERE email = #{email}
+	</select>
+	
+	<!-- email validation request -->
+	<update id="againSendMailValid" parameterType="String">
+		UPDATE mailvalid SET created_at = now() WHERE email = #{email}
+	</update>
+	<insert id="holdInfoForMailValid" parameterType="String">
+		INSERT mailvalid(email, created_at) VALUES( #{email}, now() )
+	</insert>
+	
+	<!-- grant validation -->
+	<update id="joinGrantedOfMailValid" parameterType="String">
+		UPDATE mailvalid SET validity = true WHERE email = #{email}
+	</update>
+	<!-- granted or not ? -->
+	<select id="isUserDidMailValid" parameterType="String" resultType="boolean">
+		SELECT validity FROM mailvalid WHERE email = #{email}
+	</select>
+	
+	<!-- delete mailvalid TB when insert user TB-->
+	<delete id="deleteMailValidWhenJoined" parameterType="String">
+		DELETE mailvalid WHERE email = #{email}
+	</delete>
+	
+	
+	
 	<!-- ID/PW valid check -->
 	<select id="matchDataOfUser" parameterType="HashMap" resultType="int">
 		SELECT count(*) FROM user WHERE email = #{email} AND password = #{password}
 	</select>
+	<!-- get PW of ID for valid check -->
+	<select id="getPassOfUser" parameterType="String" resultType="String">
+		SELECT password FROM user WHERE email = #{email}
+	</select>
 	
-	<!-- update -->
+	<!-- check if kakao user already exists -->
+	<select id="checkOfApiUser" parameterType="String" resultType="int">
+		SELECT count(*) FROM 테이블명 WHERE id = #{kakaoid}
+	</select>
+	
+	<!-- kakao TB insert -->
+	<!-- 칼럼명 필요요소 더 생각해보기 -->
+	<!-- created_at 을 now()로 할지 받아올지 정해야 함
+		: rfc3339 parse 해결되면. (그냥 now()로 하고 싶긴 하다) -->
+	<insert id="insertOfApiUser" parameterType="udto">
+		INSERT 테이블명 (id, email, created_at)
+			VALUES ( #{id}, #{email}, #{created_at} )
+	</insert>
 	
 </mapper>

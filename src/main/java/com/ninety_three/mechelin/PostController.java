@@ -71,7 +71,7 @@ public class PostController {
 			updto.setPlace_id(placeId);
 			updto.setCategory(dto.getCategory());
 			updao.insertUserPlace(updto);
-			user_place_id = updao.selectLatelyUserPlace(dto.getUser_id()).getUser_id();
+			user_place_id = updao.selectLatelyUserPlace(dto.getUser_id()).getId();
 		} else {
 			// 있으면 해당 데이터의 id를 반환
 			user_place_id = updao.selectCheckUserPlace(upmap);
