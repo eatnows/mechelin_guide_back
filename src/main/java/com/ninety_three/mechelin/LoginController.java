@@ -54,7 +54,9 @@ public class LoginController {
 		메일/비밀번호 검사
 	*/
 	@PostMapping("/login")
-	public String loginResult(@RequestParam String email, @RequestParam String password) {
+	public String loginResult(@RequestBody UserDto udto) {
+		String email = udto.getEmail();
+		String password = udto.getPassword();
 		int mailchk = udao.mailCheck(email);
 		String dbpass = udao.getpwd(email);
 		boolean isValidPassword = BCrypt.checkpw(password, dbpass);
