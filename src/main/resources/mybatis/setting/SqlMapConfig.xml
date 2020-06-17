@@ -3,6 +3,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="data.dto.TestDto" alias="tdto"/>
+		<typeAlias type="data.dto.UserDto" alias="udto"/>
 		<typeAlias type="data.dto.PlaceDto" alias="pdto"/>
 		<typeAlias type="data.dto.PostDto" alias="ptdto"/>
 		<typeAlias type="data.dto.UserPlaceDto" alias="updto"/>
@@ -10,6 +11,7 @@
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/setting/TestSql.xml" />
+		<mapper resource="mybatis/setting/UserSql.xml" />
 		<mapper resource="mybatis/setting/PlaceSql.xml" />
 		<mapper resource="mybatis/setting/PostSql.xml" />
 		<mapper resource="mybatis/setting/UserPlaceSql.xml" />

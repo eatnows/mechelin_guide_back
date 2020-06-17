@@ -10,7 +10,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="signup" method="post">
+<form action="testurl" method="post">
 	<table>
 		<tr>
 			<th>이름<th>

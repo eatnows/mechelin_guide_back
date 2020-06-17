@@ -24,7 +24,7 @@ public class TestController {
 	//paramType, dataType은 자동으로 채워지기 때문에 생략가능
 	// 명시하고 싶을때는 paramType은 @requestparam일 경우 "query", @PathVariable일 경우 "path"를 적어준다
 
-	@PostMapping("/signup")
+	@PostMapping("/testurl")
 	public void insertTest(@RequestParam("name") String name) {
 		System.out.println("controller 실행됨");
 		dao.insertTest(name);
