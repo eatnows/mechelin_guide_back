@@ -47,5 +47,13 @@ public class PostDao extends SqlSessionDaoSupport implements PostDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("seelctDataOfPost", id);
 	}
+	/*
+	 * 리뷰글 수정
+	 */
+	@Override
+	public void updatePost(PostDto dto) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateOfPost", dto);
+	}
 
 }

@@ -102,4 +102,14 @@ public class PostController {
 	public void deleteAdminPost(@RequestParam int id) {
 		dao.deleteAdminPost(id);
 	}
+	/*
+	 * 리뷰글 수정, 대표이미지는 수정이 가능
+	 * 하지만 내용 이미지까지는 아직 모르겠음
+	 */
+	@PutMapping("/update")
+	public PostDto updatePost(@RequestBody PostDto dto) {
+		dao.updatePost(dto);
+		// 수정된 데이터 다시 전송
+		return dao.selectDataPost(dto.getId());
+	}
 }

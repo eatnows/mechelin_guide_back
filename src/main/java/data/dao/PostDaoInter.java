@@ -10,4 +10,5 @@ public interface PostDaoInter {
 	public void deleteAdminPost(int id);
 	public void updateLikePost(HashMap<String, Integer> id);
 	public PostDto selectDataPost(int id);
+	public void updatePost(PostDto dto);
 }

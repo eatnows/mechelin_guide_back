@@ -23,6 +23,9 @@ public class LikesController {
 	@Autowired
 	private PostDaoInter pdao;
 	
+	/*
+	 * 리뷰글에 좋아요 버튼을 눌렀을때 실행되는 메소드
+	 */
 	@PostMapping("/add")
 	public int insertPostLikes(@RequestBody LikesDto dto) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
