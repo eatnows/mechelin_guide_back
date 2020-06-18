@@ -2,6 +2,8 @@ package data.dto;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class PostDto {
 	private int id;
 	private int user_place_id;
@@ -11,15 +13,23 @@ public class PostDto {
 	private int likes;
 	private String front_image;
 	private Boolean isdelete;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp created_at;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp updated_at;
+	// user_place 테이블 참조
 	private int user_id;
 	private String category;
-	// 맛집 이름
+	private int post_count;
+	// 맛집 이름 place 테이블 참조
 	private String name;
 	private String address;
 	private double latitude_x;
 	private double longitude_y;
+	// user 테이블 참조
+	private String nickname;
+	private String profile_url;
+	
 	public int getId() {
 		return id;
 	}
@@ -92,6 +102,12 @@ public class PostDto {
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	public int getPost_count() {
+		return post_count;
+	}
+	public void setPost_count(int post_count) {
+		this.post_count = post_count;
+	}
 	public String getName() {
 		return name;
 	}
@@ -116,6 +132,17 @@ public class PostDto {
 	public void setLongitude_y(double longitude_y) {
 		this.longitude_y = longitude_y;
 	}
-	
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+	public String getProfile_url() {
+		return profile_url;
+	}
+	public void setProfile_url(String profile_url) {
+		this.profile_url = profile_url;
+	}
 	
 }

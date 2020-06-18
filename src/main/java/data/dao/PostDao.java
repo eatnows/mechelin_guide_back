@@ -1,6 +1,7 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -45,7 +46,7 @@ public class PostDao extends SqlSessionDaoSupport implements PostDaoInter {
 	@Override
 	public PostDto selectDataPost(int id) {
 		// TODO Auto-generated method stub
-		return getSqlSession().selectOne("seelctDataOfPost", id);
+		return getSqlSession().selectOne("selectDataOfPost", id);
 	}
 	/*
 	 * 리뷰글 수정
@@ -55,5 +56,22 @@ public class PostDao extends SqlSessionDaoSupport implements PostDaoInter {
 		// TODO Auto-generated method stub
 		getSqlSession().update("updateOfPost", dto);
 	}
+	/*
+	 * 방금 등록한 리뷰글의 id와 user_place_id 반환
+	 */
+	@Override
+	public PostDto selectLatelyPost(int id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selecLatelyOfPost", id);
+	}
+	/*
+	 * user_place_id에 해당하는 모든 리뷰글 데이터 반환
+	 */
+	@Override
+	public List<PostDto> selectUPDataPost(int user_place_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectUPDataOfPost", user_place_id);
+	}
+	
 
 }

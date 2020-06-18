@@ -1,10 +1,12 @@
 package com.ninety_three.mechelin;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -36,7 +38,7 @@ public class PostController {
 	 * 리뷰글 등록하는 메소드
 	 */
 	@PostMapping("/add")
-	public void insertPost(@RequestBody PostDto dto) {
+	public PostDto insertPost(@RequestBody PostDto dto) {
 		// DB에 해당 좌표값에 해당하는 맛집이 있는지 체크
 		HashMap<String, Double> geomap = new HashMap<String, Double>();
 		geomap.put("latitude_x", dto.getLatitude_x());
@@ -86,6 +88,8 @@ public class PostController {
 			dto.setFront_image("front_basic_image.jpg");
 		}
 		dao.insertPost(dto);
+		// 방금 작성한 글의 id값과 user_place_id값을 반환
+		return dao.selectLatelyPost(user_place_id);
 	}
 	
 	/*
@@ -111,5 +115,13 @@ public class PostController {
 		dao.updatePost(dto);
 		// 수정된 데이터 다시 전송
 		return dao.selectDataPost(dto.getId());
+	}
+	/*
+	 * user_place_id의 해당하는 모든 리뷰글 데이터 반환
+	 */
+	@GetMapping("/review")
+	public List<PostDto> selectDataPost(@RequestParam int user_place_id) {
+		
+		return dao.selectUPDataPost(user_place_id);
 	}
 }

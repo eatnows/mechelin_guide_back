@@ -24,15 +24,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SET likes = IF(#{likes} = 1, likes + 1, likes - 1) 
 		WHERE id = #{id}
 	</update>
-	<!-- id에 해당하는 리뷰글의 모든 데이터를 반환하는 SQL문 -->
-	<select id="seelctDataOfPost" resultType="ptdto" parameterType="int">
-		SELECT * FROM post WHERE id = #{id}
+	<!-- user_place_id에 해당하는 리뷰글의 모든 데이터를 반환하는 SQL문 -->
+	<select id="selectUPDataOfPost" resultType="ptdto" parameterType="int">
+		SELECT post.*, user.nickname, user.profile_url,
+		 		up.user_id,	up.post_count, place.name
+		FROM post
+		JOIN user_place as up
+		ON post.user_place_id = up.id
+		JOIN user
+		ON up.user_id = user.id
+		JOIN place
+		ON up.place_id = place.id
+		WHERE  post.user_place_id = #{user_place_id}
+        ORDER BY created_at DESC
 	</select>
 	<!-- 리뷰글 수정 -->
-	<update id="updateOfPost" parameterType="pdto">
+	<update id="updateOfPost" parameterType="ptdto">
 		UPDATE post 
 		SET subject = #{subject}, content = #{content}, rating = #{rating}, 
 			front_image = #{front_image}, updated_at = now()
 		WHERE id = #{id}
 	</update>
+	<!-- 해당 user_id(user_place_id)가 방금 작성한 리뷰글의 id와 user_place_id 반환-->
+	<select id="selecLatelyOfPost" parameterType="int" resultType="ptdto">
+		SELECT id, user_place_id FROM post WHERE user_place_id = #{user_place_id} 
+		ORDER BY created_at DESC LIMIT 1
+	</select>
+	<!-- id에 해당하는 리뷰글 데이터 반환, 좋아요등에 이용됨 -->
+	<select id="selectDataOfPost" resultType="ptdto" parameterType="int">
+		SELECT * FROM post WHERE id = #{id}
+	</select>
 </mapper>
