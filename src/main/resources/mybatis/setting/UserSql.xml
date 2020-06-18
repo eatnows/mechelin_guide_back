@@ -47,7 +47,7 @@
 	
 	<!-- delete mailvalid TB when insert user TB-->
 	<delete id="deleteMailValidWhenJoined" parameterType="String">
-		DELETE mailvalid WHERE email = #{email}
+		DELETE FROM mailvalid WHERE email = #{email}
 	</delete>
 	
 	
