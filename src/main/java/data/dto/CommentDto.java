@@ -10,6 +10,9 @@ public class CommentDto {
 	private String parent_comment_id;
 	private Timestamp created_at;
 	
+	// 유저 프로필 출력할 변수 추가해야 함
+	
+	
 	public String getPost_id() {
 		return post_id;
 	}

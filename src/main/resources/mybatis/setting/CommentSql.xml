@@ -7,14 +7,44 @@
 	<!-- insert -->
 	<insert id="insertOfComment" parameterType="cdto">
 		INSERT comment
-		<if test="parent_comment_id != null">
+		<if test="parent_comment_id != ''">
 			(post_id, user_id, content, parent_comment_id, created_at, updated_at)
 			VALUES( #{post_id}, #{user_id}, #{content}, #{parent_comment_id}, now(), now() )
 		</if>
-		<if test="parent_comment_id == null">
+		<if test="parent_comment_id == ''">
 			(post_id, user_id, content, created_at, updated_at)
 			VALUES( #{post_id}, #{user_id}, #{content}, now(), now() )
 		</if>
 	</insert>
+	
+	<!-- get comments -->
+	<!-- add join with user TB -->
+	<select id="listOfComments" parameterType="String" resultType="cdto">
+		SELECT post_id, user_id, content, likes, parent_comment_id, created_at
+			FROM comment
+			WHERE post_id = #{post_id} AND isdelete = false
+			ORDER BY created_at DESC
+	</select>
+	
+	<!-- update likes -->
+	<update id="updateLikesOfComment" parameterType="String">
+		UPDATE comment SET likes = likes+1 WHERE id = #{id}
+	</update>
+	
+	<!-- get current likes of single comment -->
+	<select id="likesOfComment" parameterType="String" resultType="String">
+		SELECT likes FROM comment WHERE id = #{id}
+	</select>
+	
+	<!-- delete: hide. prevent from being selected -->
+	<update id="hideOfDeletedComment" parameterType="String">
+		UPDATE comment SET isdelete = true WHERE id = #{id}
+	</update>
+		
+	<!-- update -->
+	<!-- 값 두개뿐인데 Map으로 바꿀지? -->
+	<update id="updateOfComment" parameterType="cdto">
+		UPDATE comment SET content = #{content} WHERE id = #{id}
+	</update>
 	
 </mapper>
