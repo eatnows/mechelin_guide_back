@@ -6,8 +6,15 @@
 <mapper namespace="user">
 	<!-- insert -->
 	<insert id="insertOfUser" parameterType="udto">
-		INSERT user(email, password, nickname, created_at, updated_at)
+		INSERT user
+		<if test="profile_url != ''">
+			(email, password, nickname, profile_url, created_at, updated_at)
+			VALUES ( #{email}, #{password}, #{nickname}, #{profile_url}, now(), now() )
+		</if>
+		<if test="profile_url == ''">
+			(email, password, nickname, created_at, updated_at)
 			VALUES ( #{email}, #{password}, #{nickname}, now(), now() )
+		</if>
 	</insert>
 	
 	<!-- email available check-->
@@ -63,16 +70,24 @@
 	
 	<!-- check if kakao user already exists -->
 	<select id="checkOfApiUser" parameterType="String" resultType="int">
-		SELECT count(*) FROM 테이블명 WHERE id = #{kakaoid}
+		SELECT count(*) FROM kuser WHERE email = #{email}
 	</select>
 	
 	<!-- kakao TB insert -->
-	<!-- 칼럼명 필요요소 더 생각해보기 -->
 	<!-- created_at 을 now()로 할지 받아올지 정해야 함
 		: rfc3339 parse 해결되면. (그냥 now()로 하고 싶긴 하다) -->
 	<insert id="insertOfApiUser" parameterType="udto">
-		INSERT 테이블명 (id, email, created_at)
-			VALUES ( #{id}, #{email}, #{created_at} )
+		INSERT kuser (kakaoid, email, created_at, updated_at)
+			VALUES ( #{id}, #{email}, now(), now() )
 	</insert>
+	<!-- update user profile -->
+	<update id="updateProfileOfApiUser" parameterType="udto">
+		UPDATE user SET profile_url = #{profile_url} WHERE email = #{email}
+	</update>
+	<!-- delete kakao user -->
+	<delete id="deleteOfApiUser" parameterType="String">
+		DELETE FROM kuser WHERE email = #{email}
+	</delete>
+	
 	
 </mapper>
