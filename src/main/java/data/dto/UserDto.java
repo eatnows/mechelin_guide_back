@@ -14,9 +14,6 @@ public class UserDto {
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
-	private String access_token;
-	private String check_item;
-	
 	public String getId() {
 		return id;
 	}
@@ -76,18 +73,6 @@ public class UserDto {
 	}
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
-	}
-	public String getAccess_token() {
-		return access_token;
-	}
-	public void setAccess_token(String access_token) {
-		this.access_token = access_token;
-	}
-	public String getCheck_item() {
-		return check_item;
-	}
-	public void setCheck_item(String check_item) {
-		this.check_item = check_item;
 	}
 	
 }
