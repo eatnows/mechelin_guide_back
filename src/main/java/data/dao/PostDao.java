@@ -68,9 +68,9 @@ public class PostDao extends SqlSessionDaoSupport implements PostDaoInter {
 	 * user_place_id에 해당하는 모든 리뷰글 데이터 반환
 	 */
 	@Override
-	public List<PostDto> selectUPDataPost(int user_place_id) {
+	public List<PostDto> selectUPDataPost(HashMap<String, Integer> map) {
 		// TODO Auto-generated method stub
-		return getSqlSession().selectList("selectUPDataOfPost", user_place_id);
+		return getSqlSession().selectList("selectUPDataOfPost", map);
 	}
 	
 

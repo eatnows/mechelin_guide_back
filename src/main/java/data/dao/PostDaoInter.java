@@ -13,6 +13,6 @@ public interface PostDaoInter {
 	public PostDto selectDataPost(int id);
 	public void updatePost(PostDto dto);
 	public PostDto selectLatelyPost(int id);
-	public List<PostDto> selectUPDataPost(int user_place_id);
+	public List<PostDto> selectUPDataPost(HashMap<String, Integer> map);
 	
 }
