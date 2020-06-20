@@ -24,3 +24,4 @@
 target/
 
 /mysql.properties
+src/main/webapp/WEB-INF/mysql.properties
