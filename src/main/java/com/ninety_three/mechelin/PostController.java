@@ -120,8 +120,11 @@ public class PostController {
 	 * user_place_id의 해당하는 모든 리뷰글 데이터 반환
 	 */
 	@GetMapping("/review")
-	public List<PostDto> selectDataPost(@RequestParam int user_place_id) {
-		
-		return dao.selectUPDataPost(user_place_id);
+	public List<PostDto> selectDataPost(@RequestParam int user_place_id, @RequestParam int row) {
+		System.out.println(row);
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_place_id", user_place_id);
+		map.put("row", row);
+		return dao.selectUPDataPost(map);
 	}
 }
