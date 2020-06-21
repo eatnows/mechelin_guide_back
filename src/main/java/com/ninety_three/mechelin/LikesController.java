@@ -26,7 +26,7 @@ public class LikesController {
 	/*
 	 * 리뷰글에 좋아요 버튼을 눌렀을때 실행되는 메소드
 	 */
-	@PostMapping("/add")
+	@PostMapping("/post")
 	public int insertPostLikes(@RequestBody LikesDto dto) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("user_id", dto.getUser_id());
