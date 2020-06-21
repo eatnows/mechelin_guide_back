@@ -89,5 +89,10 @@
 		DELETE FROM kuser WHERE email = #{email}
 	</delete>
 	
+	<!-- 이메일로 유저의 id 반환 -->
+	<select id="selectIdOfUser" resultType="int" parameterType="String">
+		SELECT id FROM user WHERE email = #{email}
+	</select>
+	
 	
 </mapper>

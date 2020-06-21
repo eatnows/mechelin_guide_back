@@ -54,4 +54,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectDataOfPost" resultType="ptdto" parameterType="int">
 		SELECT * FROM post WHERE id = #{id}
 	</select>
+	  <select id="selectAllOfPost" parameterType="HashMap" resultType="ptdto">
+	  select user.id, user.profile_url, user.nickname, friend.request_user_id,
+      friend.target_user_id, post.*, place.name, place.address
+      FROM post 
+      JOIN user_place as up
+      ON post.user_place_id = up.id
+      JOIN user
+      ON up.user_id = user.id
+      JOIN friend
+      ON up.user_id = friend.target_user_id
+      JOIN place
+      ON up.place_id = place.id 
+      WHERE friend.accept=true and friend.request_user_id=#{user_id}
+      ORDER BY created_at DESC LIMIT 0 OFFSET #{row};
+	</select>
 </mapper>
