@@ -22,4 +22,6 @@ public interface UserDaoInter {
 	public void insertApiUser(UserDto dto);
 	public void updateApiUser(UserDto dto);
 	public void deleteApiUser(String email);
+	
+	public int selectIdUser(String email);
 }
