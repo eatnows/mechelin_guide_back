@@ -345,4 +345,12 @@ public class LoginController {
 		return rancode;
 	}
 	
+	/*
+	 * 이메일로 id 반환하는 메소드
+	 */
+	@GetMapping("/select/id")
+	public int selectIdUser(@RequestParam String email) {
+		return udao.selectIdUser(email);
+	}
+	
 }
