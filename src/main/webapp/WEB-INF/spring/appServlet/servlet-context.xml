@@ -42,4 +42,11 @@
 		</beans:property>
 	</beans:bean>
 	
+	<!-- file upload setting -->
+	<beans:bean id="multipartResolver"
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="3000000" />
+		<beans:property name="defaultEncoding" value="utf-8"></beans:property>
+	</beans:bean>
+	
 </beans:beans>
