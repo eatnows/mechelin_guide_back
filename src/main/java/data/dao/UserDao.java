@@ -115,4 +115,12 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		System.out.println("dao delete api user called");
 		getSqlSession().delete("deleteOfApiUser", email);
 	}
+	/*
+	 * 이메일로 유저 id 반환
+	 */
+	@Override
+	public int selectIdUser(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectIdOfUser", email);
+	}
 }
