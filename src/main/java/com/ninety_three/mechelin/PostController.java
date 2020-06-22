@@ -126,4 +126,14 @@ public class PostController {
 		map.put("row", row);
 		return dao.selectUPDataPost(map);
 	}
+	/*newsfeed 내 친구의 리뷰 글 모두 불러오기*/
+	@GetMapping("/newsfeed/getallpost")
+	public List<PostDto> selectAllOfPost(@RequestParam int user_id, @RequestParam int row){
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_id", user_id);
+		map.put("row", row);
+		System.out.println(user_id+","+row);
+		return dao.selectAllOfPost(map);
+	}
+	
 }
