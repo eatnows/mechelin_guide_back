@@ -18,6 +18,10 @@ public interface UserDaoInter {
 	
 	public String getpwd(String email);
 	
-	public int apiUserCheck(String id);
+	public int apiUserCheck(String email);
 	public void insertApiUser(UserDto dto);
+	public void updateApiUser(UserDto dto);
+	public void deleteApiUser(String email);
+	
+	public int selectIdUser(String email);
 }

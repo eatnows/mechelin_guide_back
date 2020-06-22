@@ -95,6 +95,14 @@ public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
 	public void deletePlace(int id) {
 		getSqlSession().delete("deleteOfPlace", id);
 	}
+	/*
+	 * 좌표에 해당하는 값이 DB에 있는지 확인하는 메소드
+	 */
+	@Override
+	public Integer selectCheckPlace(HashMap<String, Double> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCheckOfPlace", map);
+	}
 	
 
 }
