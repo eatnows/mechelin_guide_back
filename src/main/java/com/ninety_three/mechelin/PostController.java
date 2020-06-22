@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import data.dao.ImageDaoInter;
 import data.dao.PlaceDaoInter;
 import data.dao.PostDaoInter;
 import data.dao.UserPlaceDaoInter;
@@ -32,7 +33,8 @@ public class PostController {
 	private PlaceDaoInter pdao;
 	@Autowired
 	private UserPlaceDaoInter updao;
-	
+	@Autowired
+	private ImageDaoInter idao;
 	
 	/*
 	 * 리뷰글 등록하는 메소드
@@ -88,6 +90,17 @@ public class PostController {
 			dto.setFront_image("front_basic_image.jpg");
 		}
 		dao.insertPost(dto);
+		
+		// 등록한 게시글의 id로 이미지테이블의 post_id 변경
+		for(int i=0; i<dto.getImage_id().length; i++) {
+			HashMap<String, Integer> imap = new HashMap<String, Integer>();
+			imap.put("id", dto.getImage_id()[i]);
+			imap.put("post_id", dao.selectLatelyPost(user_place_id).getId());
+			
+			idao.updatePostIdImage(imap);
+		}
+		
+		
 		// 방금 작성한 글의 id값과 user_place_id값을 반환
 		return dao.selectLatelyPost(user_place_id);
 	}

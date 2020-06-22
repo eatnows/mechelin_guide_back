@@ -5,7 +5,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="image">
 	<!-- insert -->
 	<insert id="insertOfImage" parameterType="idto">
-		INSERT INTO image (post_id, origin_name, save_name, url, created_at)
-		VALUES (#{post_id}, #{origin_name}, #{save_name}, #{url}, now())
+		INSERT INTO image (origin_name, save_name, url, created_at)
+		VALUES (#{origin_name}, #{save_name}, #{url}, now())
 	</insert>
+	
+	<!-- 데이터를 먼저 insert 후 리뷰글 등록버튼을 눌렀을때 post_id를 업데이트 시켜줌 -->
+	<update id="updatePostIdOFImage" parameterType="HashMap">
+		UPDATE image SET post_id = #{post_id} WHERE id = #{id}
+	</update>
+	<!-- 가장 최근에 등록된 데이터의 id를 반환 -->
+	<select id="selectLatelyOfImage" resultType="int">
+		SELECT id FROM image ORDER BY created_at DESC LIMIT 1
+	</select>
 </mapper>

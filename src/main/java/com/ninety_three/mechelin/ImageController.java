@@ -49,14 +49,11 @@ public class ImageController {
 	
 	ObjectMetadata metadata = new ObjectMetadata();
 
-	
-	
-	
 	/*
 	 * image 테이블에 데이터 insert
 	 */
 	@PostMapping("/add")
-	public HashMap<String, String> insertImage(@RequestParam MultipartFile images, @RequestParam int id) {
+	public HashMap<String, Object> insertImage(@RequestParam MultipartFile images, @RequestParam int id) {
 		ImageDto dto = new ImageDto();
 		UUID uuid = UUID.randomUUID();
 		String extension = images.getOriginalFilename().substring(images.getOriginalFilename().lastIndexOf("."), images.getOriginalFilename().length());
@@ -85,13 +82,16 @@ public class ImageController {
 			// s3에 업로드
 			String path = s3.fileupload(bucketName, fileName, input, metadata);
 			// image 테이블에 insert
-//			dto.setOrigin_name(images.getOriginalFilename());
-//			dto.setSave_name(uuid+extension);
-//			dto.setUrl(path);
-//			dao.insertImage(dto);
+			dto.setOrigin_name(images.getOriginalFilename());
+			dto.setSave_name(uuid+extension);
+			dto.setUrl(path);
+			dao.insertImage(dto);
+			// insert된 id의 값을 반환
+			int image_id = dao.selectLatelyImage();
 			
-			HashMap<String, String> map = new HashMap<String, String>();
+			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("data", path);
+			map.put("image_id", image_id);
 			return map;
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -99,4 +99,6 @@ public class ImageController {
 		} 
 		return null;
 	}
+	
+	
 }
