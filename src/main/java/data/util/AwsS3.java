@@ -39,10 +39,10 @@ public class AwsS3 {
     	System.out.println(bucketName);
     	System.out.println(fileName);
     	System.out.println(file);
-        String fileExt = file.getName().split("[.]")[1];
-        this.s3Client.putObject(new PutObjectRequest(bucketName, "images/place/0/"+fileName+"."+fileExt, file)
+        //String fileExt = file.getName().split("[.]")[1];
+        this.s3Client.putObject(new PutObjectRequest(bucketName, fileName, file)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        String path = "https://버킷이름.s3.ap-northeast-2.amazonaws.com/"+"images/place/0/"+fileName+"."+fileExt;
+        String path = "https://버킷이름.s3.ap-northeast-2.amazonaws.com/"+fileName;
         System.out.println(path);
         return path;
     }
