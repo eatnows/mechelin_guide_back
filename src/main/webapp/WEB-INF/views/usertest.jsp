@@ -13,37 +13,24 @@
 <!-- <form action="login" method="post">
 <form action="signupcheck/nick" method="get"> -->
 <!-- <form action="validsend" method="get"> -->
-<form action="upcommlike" method="post">
+<form action="changepwd/reset" method="post">
 	<table>
-		<!-- <tr>
+		<tr>
 			<th>메일주소<th>
 			<td>
 				<input type="text" name="email" />
 			</td>
 		</tr>
-		<tr>
+		<!-- <tr>
 			<th>닉네임<th>
 			<td>
 				<input type="text" name="nickname" />
 			</td>
-		</tr>
+		</tr> -->
 		<tr>
 			<th>비밀번호<th>
 			<td>
 				<input type="password" name="password" />
-			</td>
-		</tr>
-		 -->
-		<tr>
-			<th>comment_id<th>
-			<td>
-				<input type="text" name="comment_id" />
-			</td>
-		</tr>
-		<tr>
-			<th>user_id<th>
-			<td>
-				<input type="text" name="user_id" />
 			</td>
 		</tr>
 		<tr>

@@ -313,7 +313,7 @@ public class LoginController {
 	/*
 		비밀번호 변경 인증코드 메일 발송
 	*/
-	@GetMapping("/changepwd")
+	@GetMapping("/login/changepwd")
 	public String changepwd(@RequestParam String email) {
 		// password 난수발생코드
 		Random ran = new Random(System.currentTimeMillis());
@@ -353,4 +353,17 @@ public class LoginController {
 		return udao.selectIdUser(email);
 	}
 	
+	
+	@PostMapping("/changepwd/reset")
+	public void change(
+		@RequestBody UserDto dto
+	) {
+		String pwdhash = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("email", dto.getEmail());
+		map.put("password", pwdhash);
+		
+		udao.changePwd(map);
+	}
 }

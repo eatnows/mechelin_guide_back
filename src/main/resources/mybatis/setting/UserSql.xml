@@ -68,6 +68,12 @@
 		SELECT password FROM user WHERE email = #{email}
 	</select>
 	
+	<!-- change password -->
+	<update id="updatePassOfUser" parameterType="HashMap">
+		UPDATE user SET password = #{password} WHERE email = #{email}
+	</update>
+	
+	
 	<!-- check if kakao user already exists -->
 	<select id="checkOfApiUser" parameterType="String" resultType="int">
 		SELECT count(*) FROM kuser WHERE email = #{email}
