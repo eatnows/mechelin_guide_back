@@ -5,13 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
-
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +50,7 @@ public class ImageController {
 	private AwsS3 s3; 
 	
 	ObjectMetadata metadata = new ObjectMetadata();
+	String bucketName = "버킷이름";
 
 	/*
 	 * image 테이블에 데이터 insert
@@ -58,7 +61,7 @@ public class ImageController {
 		UUID uuid = UUID.randomUUID();
 		String extension = images.getOriginalFilename().substring(images.getOriginalFilename().lastIndexOf("."), images.getOriginalFilename().length());
 		
-		String bucketName = "버킷이름";
+		
 		String fileName = "images/place/"+id+"/"+uuid+extension;
 		File file = new File(images.getOriginalFilename());
 		InputStream input = null;
@@ -85,6 +88,7 @@ public class ImageController {
 			dto.setOrigin_name(images.getOriginalFilename());
 			dto.setSave_name(uuid+extension);
 			dto.setUrl(path);
+			dto.setKey_name(fileName);
 			dao.insertImage(dto);
 			// insert된 id의 값을 반환
 			int image_id = dao.selectLatelyImage();
@@ -100,5 +104,18 @@ public class ImageController {
 		return null;
 	}
 	
+	/*
+	 * post_id가 null값인 채로 1일이 지나면 자동삭제
+	 */
+	@Scheduled(cron = "0 0 12 * * *")
+	public void deleteAuto() {
+		List<String> list = new ArrayList<String>();
+		
+		list = dao.selectKeyNameImage();
+		for(int i=0; i<list.size(); i++) {
+			s3.filedelete(bucketName, list.get(i));
+		}
+		dao.deleteDayImage();
+	}
 	
 }

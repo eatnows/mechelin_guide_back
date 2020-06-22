@@ -7,6 +7,7 @@ public class ImageDto {
 	private int post_id;
 	private String origin_name;
 	private String save_name;
+	private String key_name;
 	private String url;
 	private Timestamp created_at;
 	
@@ -35,6 +36,12 @@ public class ImageDto {
 	public void setSave_name(String save_name) {
 		this.save_name = save_name;
 	}
+	public String getKey_name() {
+		return key_name;
+	}
+	public void setKey_name(String key_name) {
+		this.key_name = key_name;
+	}
 	public String getUrl() {
 		return url;
 	}
@@ -47,6 +54,7 @@ public class ImageDto {
 	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
 	}
+	
 	
 	
 }

@@ -1,6 +1,7 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
@@ -31,6 +32,20 @@ public class ImageDao extends SqlSessionDaoSupport implements ImageDaoInter {
 	public int selectLatelyImage() {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectLatelyOfImage");
+	}
+	/*
+	 * post_id의 값이 null인채로 1일이 지난 데이터의 key_name 반환
+	 */
+	@Override
+	public List<String> selectKeyNameImage() {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectKeyNameOfImage");
+	}
+
+	@Override
+	public void deleteDayImage() {
+		// TODO Auto-generated method stub
+		getSqlSession().delete("deleteDayOfImage");
 	}
 
 }

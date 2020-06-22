@@ -5,8 +5,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="image">
 	<!-- insert -->
 	<insert id="insertOfImage" parameterType="idto">
-		INSERT INTO image (origin_name, save_name, url, created_at)
-		VALUES (#{origin_name}, #{save_name}, #{url}, now())
+		INSERT INTO image (origin_name, save_name, key_name, url, created_at)
+		VALUES (#{origin_name}, #{save_name}, #{key_name}, #{url}, now())
 	</insert>
 	
 	<!-- 데이터를 먼저 insert 후 리뷰글 등록버튼을 눌렀을때 post_id를 업데이트 시켜줌 -->
@@ -17,4 +17,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectLatelyOfImage" resultType="int">
 		SELECT id FROM image ORDER BY created_at DESC LIMIT 1
 	</select>
+	<!-- post_id가 null값인 데이터 삭제 (null값인 채로 시간이 지나면) -->
+	<delete id="deleteNullOfImage">
+		DELETE FROM image WHERE post_id IS NULL
+	</delete>
+	<!-- post_id가 null값인채로 1일이 지난 데이터의 key_name 반환 -->
+	<select id="selectKeyNameOfImage" resultType="String">
+		SELECT key_name FROM image WHERE post_id IS NULL AND CURDATE() - interval 1 day > created_at 
+	</select>
+	<!-- post_id가 null값인채로 1일이 지난 데이터 삭제 -->
+	<delete id="deleteDayOfImage">
+		DELETE FROM image WHERE post_id IS NULL AND CURDATE() - interval 1 day > created_at
+	</delete>
 </mapper>
