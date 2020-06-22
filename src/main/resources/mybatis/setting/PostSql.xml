@@ -67,6 +67,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       JOIN place
       ON up.place_id = place.id 
       WHERE friend.accept=true and friend.request_user_id=#{user_id}
-      ORDER BY created_at DESC LIMIT 0 OFFSET #{row};
+      ORDER BY created_at DESC LIMIT 5 OFFSET #{row};
 	</select>
 </mapper>

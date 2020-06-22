@@ -356,13 +356,12 @@ public class LoginController {
 	
 	@PostMapping("/changepwd/reset")
 	public void change(
-		@RequestParam String email,
-		@RequestParam String password
+		@RequestBody UserDto dto
 	) {
-		String pwdhash = BCrypt.hashpw(password, BCrypt.gensalt());
+		String pwdhash = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());
 		
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("email", email);
+		map.put("email", dto.getEmail());
 		map.put("password", pwdhash);
 		
 		udao.changePwd(map);
