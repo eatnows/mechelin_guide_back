@@ -1,5 +1,7 @@
 package data.dao;
 
+import java.util.HashMap;
+
 import data.dto.UserDto;
 
 public interface UserDaoInter {
@@ -17,6 +19,7 @@ public interface UserDaoInter {
 	public void deleteValid(String email);
 	
 	public String getpwd(String email);
+	public void changePwd(HashMap<String, String> map);
 	
 	public int apiUserCheck(String email);
 	public void insertApiUser(UserDto dto);

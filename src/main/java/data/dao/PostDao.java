@@ -72,6 +72,11 @@ public class PostDao extends SqlSessionDaoSupport implements PostDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("selectUPDataOfPost", map);
 	}
-	
+	/*newsfeed - 내 친구 글 모두 불러오기*/
+	@Override
+	public List<PostDto> selectAllOfPost(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectAllOfPost",map);
+	}
 
 }
