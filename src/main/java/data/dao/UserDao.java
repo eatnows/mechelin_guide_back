@@ -1,5 +1,6 @@
 package data.dao;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
@@ -89,6 +90,12 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 	}
 
 	@Override
+	public void changePwd(HashMap<String, String> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updatePassOfUser", map);
+	}
+
+	@Override
 	public int apiUserCheck(String email) {
 		// TODO Auto-generated method stub
 		System.out.println("dao api user check called");
@@ -123,4 +130,5 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectIdOfUser", email);
 	}
+
 }
