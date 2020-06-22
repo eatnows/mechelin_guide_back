@@ -10,16 +10,19 @@
 <title>comment test page</title>
 </head>
 <body>
-<form action="insertcomm" method="post">
+<!-- <form action="insertcomm" method="post"> -->
+<form action="getcomments" method="get">
+<!-- 
 	<input type="hidden" name="post_id" value="7">
 	<input type="hidden" name="user_id" value="3">
-	<!-- sql에 "" 그대로 넘어가도 null 처리 된다 -->
+	sql에 "" 그대로 넘어가도 null 처리 된다
 	<input type="hidden" name="parent_comment_id" value="">
+ -->
 	<table>
 		<tr>
-			<th>댓글내용<th>
+			<th>post_id<th>
 			<td>
-				<input type="text" name="content" />
+				<input type="text" name="post_id" />
 			</td>
 		</tr>
 		

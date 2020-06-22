@@ -3,16 +3,26 @@ package data.dto;
 import java.sql.Timestamp;
 
 public class CommentDto {
+	private String id;
 	private String post_id;
 	private String user_id;
 	private String content;
 	private int likes;
 	private String parent_comment_id;
 	private Timestamp created_at;
+	private Timestamp updated_at;
 	
 	// 유저 프로필 출력할 변수 추가해야 함
+	private String profile_url;
+	private String nickname;
 	
 	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public String getPost_id() {
 		return post_id;
 	}
@@ -48,6 +58,25 @@ public class CommentDto {
 	}
 	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
+	}
+	public Timestamp getUpdated_at() {
+		return updated_at;
+	}
+	public void setUpdated_at(Timestamp updated_at) {
+		this.updated_at = updated_at;
+	}
+	
+	public String getProfile_url() {
+		return profile_url;
+	}
+	public void setProfile_url(String profile_url) {
+		this.profile_url = profile_url;
+	}
+	public String getNickname() {
+		return nickname;
+	}
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
 	}
 	
 }

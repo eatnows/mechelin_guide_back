@@ -8,8 +8,8 @@
 	<insert id="insertOfComment" parameterType="cdto">
 		INSERT comment
 		<if test="parent_comment_id != ''">
-			(post_id, user_id, content, parent_comment_id, created_at, updated_at)
-			VALUES( #{post_id}, #{user_id}, #{content}, #{parent_comment_id}, now(), now() )
+			(post_id, user_id, content, parent_comment_id, comment_level, created_at, updated_at)
+			VALUES( #{post_id}, #{user_id}, #{content}, #{parent_comment_id}, true, now(), now() )
 		</if>
 		<if test="parent_comment_id == ''">
 			(post_id, user_id, content, created_at, updated_at)
@@ -18,17 +18,25 @@
 	</insert>
 	
 	<!-- get comments -->
-	<!-- add join with user TB -->
 	<select id="listOfComments" parameterType="String" resultType="cdto">
-		SELECT post_id, user_id, content, likes, parent_comment_id, created_at
-			FROM comment
-			WHERE post_id = #{post_id} AND isdelete = false
-			ORDER BY created_at DESC
+		SELECT u.profile_url, u.nickname,
+			c.id, c.post_id, c.user_id, c.content, c.likes, c.parent_comment_id, c.updated_at
+			FROM comment c
+			JOIN user u ON c.user_id = u.id
+			WHERE c.post_id = #{post_id} AND c.isdelete = false
+			ORDER BY c.created_at ASC;
 	</select>
 	
 	<!-- update likes -->
-	<update id="updateLikesOfComment" parameterType="String">
-		UPDATE comment SET likes = likes+1 WHERE id = #{id}
+	<update id="updateLikesOfComment" parameterType="HashMap">
+		UPDATE comment SET 
+		<if test="islike == 'up'">
+			likes = likes+1
+		</if>
+		<if test="islike == 'down'">
+			likes = likes-1
+		</if>
+		WHERE id = #{comment_id}
 	</update>
 	
 	<!-- get current likes of single comment -->
@@ -42,9 +50,9 @@
 	</update>
 		
 	<!-- update -->
-	<!-- 값 두개뿐인데 Map으로 바꿀지? -->
 	<update id="updateOfComment" parameterType="cdto">
-		UPDATE comment SET content = #{content} WHERE id = #{id}
+		UPDATE comment SET content = #{content}, updated_at = now()
+		WHERE id = #{id}
 	</update>
 	
 </mapper>

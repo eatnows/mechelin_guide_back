@@ -8,6 +8,7 @@
 		<typeAlias type="data.dto.PostDto" alias="ptdto"/>
 		<typeAlias type="data.dto.UserPlaceDto" alias="updto"/>
 		<typeAlias type="data.dto.LikesDto" alias="ldto"/>
+		<typeAlias type="data.dto.CommentDto" alias="cdto"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/setting/TestSql.xml" />
@@ -16,5 +17,6 @@
 		<mapper resource="mybatis/setting/PostSql.xml" />
 		<mapper resource="mybatis/setting/UserPlaceSql.xml" />
 		<mapper resource="mybatis/setting/LikesSql.xml" />
+		<mapper resource="mybatis/setting/CommentSql.xml" />
 	</mappers>
 </configuration>
