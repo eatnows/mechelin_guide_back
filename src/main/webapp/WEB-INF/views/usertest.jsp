@@ -13,7 +13,7 @@
 <!-- <form action="login" method="post">
 <form action="signupcheck/nick" method="get"> -->
 <!-- <form action="validsend" method="get"> -->
-<form action="signup" method="post">
+<form action="changepwd/reset" method="post">
 	<table>
 		<tr>
 			<th>메일주소<th>
@@ -21,12 +21,12 @@
 				<input type="text" name="email" />
 			</td>
 		</tr>
-		<tr>
+		<!-- <tr>
 			<th>닉네임<th>
 			<td>
 				<input type="text" name="nickname" />
 			</td>
-		</tr>
+		</tr> -->
 		<tr>
 			<th>비밀번호<th>
 			<td>
