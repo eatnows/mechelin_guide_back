@@ -29,4 +29,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateIsShowOfUserPlace" parameterType="HashMap">
 		UPDATE user_place SET isshow = IF(#{isshow} = 1, isshow = 0, isshow = 1) WHERE id = #{id}
 	</update>
+	<!-- user_place의 id로 place의 id 값 반환 -->
+	<select id="selectPlaceIdOfUserPlace" resultType="int" parameterType="int">
+		SELECT place_id FROM user_place WHERE id = #{id}
+	</select>
 </mapper>

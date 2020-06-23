@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="image">
+	<!-- insert -->
+	<insert id="insertOfImage" parameterType="idto">
+		INSERT INTO image (origin_name, save_name, key_name, url, created_at)
+		VALUES (#{origin_name}, #{save_name}, #{key_name}, #{url}, now())
+	</insert>
+	
+	<!-- 데이터를 먼저 insert 후 리뷰글 등록버튼을 눌렀을때 post_id를 업데이트 시켜줌 -->
+	<update id="updatePostIdOFImage" parameterType="HashMap">
+		UPDATE image SET post_id = #{post_id} WHERE id = #{id}
+	</update>
+	<!-- 가장 최근에 등록된 데이터의 id를 반환 -->
+	<select id="selectLatelyOfImage" resultType="int">
+		SELECT id FROM image ORDER BY created_at DESC LIMIT 1
+	</select>
+	<!-- post_id가 null값인 데이터 삭제 (null값인 채로 시간이 지나면) -->
+	<delete id="deleteNullOfImage">
+		DELETE FROM image WHERE post_id IS NULL
+	</delete>
+	<!-- post_id가 null값인채로 1일이 지난 데이터의 key_name 반환 -->
+	<select id="selectKeyNameOfImage" resultType="String">
+		SELECT key_name FROM image WHERE post_id IS NULL AND CURDATE() - interval 1 day > created_at 
+	</select>
+	<!-- post_id가 null값인채로 1일이 지난 데이터 삭제 -->
+	<delete id="deleteDayOfImage">
+		DELETE FROM image WHERE post_id IS NULL AND CURDATE() - interval 1 day > created_at
+	</delete>
+	<!-- post_id에 제일 처음 이미지의 url 반환 -->
+	<select id="selectFirstImageOfImage" parameterType="int" resultType="String">
+		SELECT url FROM image WHERE post_id = #{post_id} ORDER BY id LIMIT 1
+	</select>
+</mapper>

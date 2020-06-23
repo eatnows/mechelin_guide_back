@@ -21,7 +21,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:component-scan base-package="com.ninety_three.mechelin, data.dao, swagger, kakao.login" />
+	<context:component-scan base-package="com.ninety_three.mechelin, data.dao, swagger, kakao.login, data.util" />
 	
 	
 	<!-- mail server setting -->
@@ -29,7 +29,7 @@
 		<beans:property name="host" value="smtp.gmail.com" />
 		<beans:property name="port" value="587" />
 		<beans:property name="username" value="projectmechelin@gmail.com" />
-		<beans:property name="password" value="mechelin9393" />
+		<beans:property name="password" value="비밀번호" />
 		<beans:property name="javaMailProperties">
 			<beans:props>
 				<beans:prop key="mail.smtp.ssl.trust">
@@ -40,6 +40,13 @@
 				</beans:prop>
 			</beans:props>
 		</beans:property>
+	</beans:bean>
+	
+	<!-- file upload setting -->
+	<beans:bean id="multipartResolver"
+	class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<beans:property name="maxUploadSize" value="3000000" />
+		<beans:property name="defaultEncoding" value="utf-8"></beans:property>
 	</beans:bean>
 	
 </beans:beans>

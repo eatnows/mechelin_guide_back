@@ -55,5 +55,13 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 		// TODO Auto-generated method stub
 		getSqlSession().update("updateIsShowOfUserPlace", map);
 	}
+	/*
+	 * user_place의 id로 place의 id를 반환하는 메소드
+	 */
+	@Override
+	public int selectPostIdUserPlace(int id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectPlaceIdOfUserPlace", id);
+	}
 
 }

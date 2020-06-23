@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ON up.user_id = user.id
 		JOIN place
 		ON up.place_id = place.id
-		WHERE  post.user_place_id = #{user_place_id}
+		WHERE  post.user_place_id = #{user_place_id} AND isdelete = false
         ORDER BY created_at DESC LIMIT 0, #{row}
 	</select>
 	<!-- 리뷰글 수정 -->
@@ -54,19 +54,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectDataOfPost" resultType="ptdto" parameterType="int">
 		SELECT * FROM post WHERE id = #{id}
 	</select>
-	  <select id="selectAllOfPost" parameterType="HashMap" resultType="ptdto">
-	  select user.id, user.profile_url, user.nickname, friend.request_user_id,
-      friend.target_user_id, post.*, place.name, place.address
-      FROM post 
-      JOIN user_place as up
-      ON post.user_place_id = up.id
-      JOIN user
-      ON up.user_id = user.id
-      JOIN friend
-      ON up.user_id = friend.target_user_id
-      JOIN place
-      ON up.place_id = place.id 
-      WHERE friend.accept=true and friend.request_user_id=#{user_id}
-      ORDER BY created_at DESC LIMIT 5 OFFSET #{row};
+	<!-- 나의 밥친구들의 리뷰글 보이기 -->
+	<select id="selectAllOfPost" parameterType="HashMap" resultType="ptdto">
+		select user.id, user.profile_url, user.nickname, friend.request_user_id,
+		friend.target_user_id, post.*, place.name, place.address
+		FROM post 
+		JOIN user_place as up
+		ON post.user_place_id = up.id
+		JOIN user
+		ON up.user_id = user.id
+		JOIN friend
+		ON up.user_id = friend.target_user_id
+		JOIN place
+		ON up.place_id = place.id 
+		WHERE friend.accept=true AND friend.request_user_id=#{user_id} AND isdelete = false
+		ORDER BY created_at DESC LIMIT 5 OFFSET #{row};
 	</select>
+	<!-- 글 등록시 대표이미지 변경 -->
+	<update id="updateFrontImageOfPost" parameterType="HashMap">
+		UPDATE post SET front_image = #{front_image} WHERE id = #{id}
+	</update>
+
 </mapper>
