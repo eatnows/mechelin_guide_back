@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updatePostCountOfPlace" parameterType="int">
 		UPDATE place SET post_count = post_count + 1 WHERE id = #{id}
 	</update>
-	<!-- 이 맛집에 대해 리뷰글을 썼을때 맛집의 총 리뷰글 갯수 1 감소-->
+	<!-- 이 맛집에 대해 리뷰글을 지웠을때 맛집의 총 리뷰글 갯수 1 감소-->
 	<update id="updatePostMinusOfPlace" parameterType="int">
 		UPDATE place SET post_count = post_count - 1 WHERE id = #{id}
 	</update>

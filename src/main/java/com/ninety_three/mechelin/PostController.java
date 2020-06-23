@@ -108,9 +108,17 @@ public class PostController {
 	/*
 	 * 유저가 삭제버튼을 눌렀을때 실행되는 메소드
 	 */
-	@PutMapping("/delete/{id}")
-	public void deleteUserPost(@PathVariable int id) {
+	@PutMapping("/delete/{id}/{user_place_id}")
+	public void deleteUserPost(@PathVariable int id, @PathVariable int user_place_id) {
 		dao.deleteUserPost(id);
+		// 나만의 맛집에 대한 post_count -1
+		updao.updateMinusUserPlace(user_place_id);
+		
+		// 맛집에 대한 총 리뷰글 수 -1
+		
+		// user_place의 id로 place의 id얻기
+		int placeId = updao.selectPostIdUserPlace(user_place_id);
+		pdao.updatePostMinus(placeId);	
 	}
 	/*
 	 * 관리자가 삭제버튼을 눌렀을때 실제 삭제되는 메소드

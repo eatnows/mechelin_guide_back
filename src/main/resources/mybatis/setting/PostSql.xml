@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ON up.user_id = user.id
 		JOIN place
 		ON up.place_id = place.id
-		WHERE  post.user_place_id = #{user_place_id}
+		WHERE  post.user_place_id = #{user_place_id} AND isdelete = false
         ORDER BY created_at DESC LIMIT 0, #{row}
 	</select>
 	<!-- 리뷰글 수정 -->
@@ -66,7 +66,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
       ON up.user_id = friend.target_user_id
       JOIN place
       ON up.place_id = place.id 
-      WHERE friend.accept=true and friend.request_user_id=#{user_id}
+      WHERE friend.accept=true AND friend.request_user_id=#{user_id} AND isdelete = false
       ORDER BY created_at DESC LIMIT 5 OFFSET #{row};
 	</select>
+
 </mapper>
