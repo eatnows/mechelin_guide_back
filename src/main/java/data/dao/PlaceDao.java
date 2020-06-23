@@ -103,6 +103,14 @@ public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectCheckOfPlace", map);
 	}
+	/*
+	 * 나의 맛집을 조회하는 메소드
+	 */
+	@Override
+	public List<PlaceDto> selectMyPlace(int user_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectMyPlaceOfPlace", user_id);
+	}
 	
 
 }

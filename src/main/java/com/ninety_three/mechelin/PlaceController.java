@@ -53,10 +53,12 @@ public class PlaceController {
 	}
 	
 	/*
-	 * 테스트용 메소드
+	 * 나의 맛집을 조회하는 메소드
 	 */
-	@DeleteMapping("/test")
-	public void test(@RequestParam int id) {
-		dao.deletePlace(id);
+	@GetMapping("/myplace")
+	public List<PlaceDto> selectMyPlace(@RequestParam int user_id){
+		System.out.println("시작됨");
+		List<PlaceDto> list = dao.selectMyPlace(user_id);
+		return list;
 	}
 }

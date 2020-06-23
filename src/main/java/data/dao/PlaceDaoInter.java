@@ -18,4 +18,5 @@ public interface PlaceDaoInter {
 	public List<PlaceDto> selectAroundPlace(HashMap<String, Double> map);
 	public void deletePlace(int id);
 	public Integer selectCheckPlace(HashMap<String, Double> map);
+	public List<PlaceDto> selectMyPlace(int user_id);
 }

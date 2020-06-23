@@ -58,5 +58,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT id FROM place 
 		WHERE latitude_x = #{latitude_x} AND longitude_y = #{longitude_y}
 	</select>
+	<!-- 나의 맛집을 조회하는 SQL문 -->
+	<select id="selectMyPlaceOfPlace" resultType="pdto" parameterType="int">
+		SELECT * FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+		WHERE user.id = #{user_id}
+	</select>
 	
 </mapper>
