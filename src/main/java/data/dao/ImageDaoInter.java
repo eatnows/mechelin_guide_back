@@ -11,4 +11,5 @@ public interface ImageDaoInter {
 	public int selectLatelyImage();
 	public List<String> selectKeyNameImage();
 	public void deleteDayImage();
+	public String selectFirstImage(int post_id);
 }

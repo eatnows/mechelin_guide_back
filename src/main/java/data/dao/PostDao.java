@@ -78,5 +78,10 @@ public class PostDao extends SqlSessionDaoSupport implements PostDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("selectAllOfPost",map);
 	}
+	@Override
+	public void updateFrontImagePost(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateFrontImageOfPost", map);
+	}
 
 }

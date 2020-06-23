@@ -15,4 +15,5 @@ public interface PostDaoInter {
 	public PostDto selectLatelyPost(int id);
 	public List<PostDto> selectUPDataPost(HashMap<String, Integer> map);
 	public List<PostDto> selectAllOfPost(HashMap<String, Integer> map);
+	public void updateFrontImagePost(HashMap<String, Object> map);
 }

@@ -100,6 +100,13 @@ public class PostController {
 			idao.updatePostIdImage(imap);
 		}
 		
+		// - 글에 등록된 이미지 중 첫번째 이미지를 대표 이미지로 선정 - 
+		HashMap<String, Object> pmap = new HashMap<String, Object>();
+		pmap.put("id", dao.selectLatelyPost(user_place_id).getId());
+		// 리뷰글의 제일 처음 사진 url 반환
+		String url = idao.selectFirstImage(dao.selectLatelyPost(user_place_id).getId());
+		pmap.put("front_image", url);
+		dao.updateFrontImagePost(pmap);
 		
 		// 방금 작성한 글의 id값과 user_place_id값을 반환
 		return dao.selectLatelyPost(user_place_id);
@@ -114,8 +121,7 @@ public class PostController {
 		// 나만의 맛집에 대한 post_count -1
 		updao.updateMinusUserPlace(user_place_id);
 		
-		// 맛집에 대한 총 리뷰글 수 -1
-		
+		// 맛집에 대한 총 리뷰글 수 -1	
 		// user_place의 id로 place의 id얻기
 		int placeId = updao.selectPostIdUserPlace(user_place_id);
 		pdao.updatePostMinus(placeId);	

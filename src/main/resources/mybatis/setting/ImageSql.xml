@@ -29,4 +29,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteDayOfImage">
 		DELETE FROM image WHERE post_id IS NULL AND CURDATE() - interval 1 day > created_at
 	</delete>
+	<!-- post_id에 제일 처음 이미지의 url 반환 -->
+	<select id="selectFirstImageOfImage" parameterType="int" resultType="String">
+		SELECT url FROM image WHERE post_id = #{post_id} ORDER BY id LIMIT 1
+	</select>
 </mapper>

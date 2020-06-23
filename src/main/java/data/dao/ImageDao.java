@@ -48,4 +48,10 @@ public class ImageDao extends SqlSessionDaoSupport implements ImageDaoInter {
 		getSqlSession().delete("deleteDayOfImage");
 	}
 
+	@Override
+	public String selectFirstImage(int post_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectFirstImageOfImage", post_id);
+	}
+
 }
