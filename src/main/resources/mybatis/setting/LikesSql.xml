@@ -18,5 +18,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT post_islike FROM likes 
 		WHERE user_id = #{user_id} AND post_id = #{post_id}
 	</select>
+	
+	
+	<!-- 좋아요 테이블에 이 댓글과 이 유저가 있는가? -->
+	<select id="selectCommentOflikes" parameterType="HashMap" resultType="int">
+		SELECT comment_islike FROM likes
+			WHERE user_id = #{user_id} AND comment_id = #{comment_id}
+	</select>
+	
+	<!-- 댓글 좋아요 insert -->
+	<insert id="insertCommentOflikes" parameterType="ldto">
+		INSERT INTO likes (user_id, comment_id, created_at, updated_at)
+			VALUES ( #{user_id}, #{comment_id}, now(), now() )
+	</insert>
+	
+	<!-- 댓글 좋아요 반영/취소 -->
+	<update id="updateCommentOflikes" parameterType="HashMap">
+		UPDATE likes SET comment_islike = IF(#{comment_islike} = true, false, true) 
+			WHERE user_id = #{user_id} AND comment_id = #{comment_id}
+	</update>
+	
+	
 </mapper>
 

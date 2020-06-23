@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import data.dao.CommentDaoInter;
 import data.dao.LikesDaoInter;
 import data.dao.PostDaoInter;
 import data.dto.LikesDto;
@@ -22,6 +23,8 @@ public class LikesController {
 	private LikesDaoInter dao;
 	@Autowired
 	private PostDaoInter pdao;
+	@Autowired
+	private CommentDaoInter cdao;
 	
 	/*
 	 * 리뷰글에 좋아요 버튼을 눌렀을때 실행되는 메소드
@@ -59,5 +62,53 @@ public class LikesController {
 		}
 		// post_id에 좋아요 숫자 반환
 		return pdao.selectDataPost(dto.getPost_id()).getLikes();
+	}
+	
+	@PostMapping("/upcommlike")
+	public String commLikes(@RequestBody LikesDto dto) {
+		
+		String comment_id = Integer.toString(dto.getComment_id());
+		
+		HashMap<String, Integer> lmap = new HashMap<String, Integer>();
+		lmap.put("user_id", dto.getUser_id());
+		lmap.put("comment_id", dto.getComment_id());
+		
+		// likes TB에 없을 경우
+		if(dao.selectCommentLikes(lmap) == null) {
+			// likes TB에 insert
+			dao.insertCommentLikes(dto);
+			
+			// comment TB의 좋아요 +1
+			HashMap<String, String> cmap = new HashMap<String, String>();
+			cmap.put("comment_id", comment_id);
+			cmap.put("islike", "up");
+			cdao.updateCommentLikes(cmap);
+			System.out.println("likes X, comment +1");
+		} else {		// likes TB에 있을 경우
+			if(dao.selectCommentLikes(lmap) == 0) {
+				// islike 가 false 일 경우, true로 update
+				dao.updateCommentLikes(lmap);
+				
+				// comment TB 의 좋아요 +1
+				HashMap<String, String> cmap = new HashMap<String, String>();
+				cmap.put("comment_id", comment_id);
+				cmap.put("islike", "up");
+				cdao.updateCommentLikes(cmap);
+				System.out.println("likes O, comment +1");
+			} else {
+				// islike 가 true 일 경우, false 로 update
+				lmap.put("comment_islike", 1);
+				dao.updateCommentLikes(lmap);
+				
+				// comment TB 의 좋아요 -1
+				HashMap<String, String> cmap = new HashMap<String, String>();
+				cmap.put("comment_id", comment_id);
+				cmap.put("islike", "down");
+				cdao.updateCommentLikes(cmap);
+				System.out.println("likes O, comment -1");
+			}
+		}
+		
+		return cdao.getCommentLikes(comment_id);
 	}
 }

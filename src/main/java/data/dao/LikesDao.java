@@ -34,5 +34,30 @@ public class LikesDao extends SqlSessionDaoSupport implements LikesDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectPostOflikes", map);
 	}
+	
+	/*
+		이 댓글, 이 유저의 좋아요 기록이 있는가?
+	*/
+	@Override
+	public Integer selectCommentLikes(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCommentOflikes", map);
+	}
+	/*
+		likes TB insert
+	*/
+	@Override
+	public void insertCommentLikes(LikesDto dto) {
+		// TODO Auto-generated method stub
+		getSqlSession().insert("insertCommentOflikes", dto);
+	}
+	/*
+		likes TB update
+	*/
+	@Override
+	public void updateCommentLikes(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateCommentOflikes", map);
+	}
 
 }
