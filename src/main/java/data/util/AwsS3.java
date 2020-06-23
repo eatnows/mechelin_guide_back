@@ -48,6 +48,10 @@ public class AwsS3 {
         return path;
     }
     
+    public void filedelete(String bucketName, String keyName) {
+    	this.s3Client.deleteObject(bucketName, keyName);
+    }
+    
     
 
 
