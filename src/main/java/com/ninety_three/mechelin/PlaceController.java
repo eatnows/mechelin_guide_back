@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import data.dao.PlaceDaoInter;
 import data.dto.PlaceDto;
+import data.dto.PostDto;
 
 @RestController
 @CrossOrigin
@@ -56,9 +57,9 @@ public class PlaceController {
 	 * 나의 맛집을 조회하는 메소드
 	 */
 	@GetMapping("/myplace")
-	public List<PlaceDto> selectMyPlace(@RequestParam int user_id){
+	public List<PostDto> selectMyPlace(@RequestParam int user_id){
 		System.out.println("시작됨");
-		List<PlaceDto> list = dao.selectMyPlace(user_id);
+		List<PostDto> list = dao.selectMyPlace(user_id);
 		return list;
 	}
 }

@@ -7,6 +7,7 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import data.dto.PlaceDto;
+import data.dto.PostDto;
 
 @Repository
 public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
@@ -107,7 +108,7 @@ public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
 	 * 나의 맛집을 조회하는 메소드
 	 */
 	@Override
-	public List<PlaceDto> selectMyPlace(int user_id) {
+	public List<PostDto> selectMyPlace(int user_id) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("selectMyPlaceOfPlace", user_id);
 	}
