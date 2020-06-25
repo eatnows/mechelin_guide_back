@@ -64,7 +64,7 @@ public class LikesController {
 		return pdao.selectDataPost(dto.getPost_id()).getLikes();
 	}
 	
-	@PostMapping("/upcommlike")
+	@PostMapping("/comment")
 	public String commLikes(@RequestBody LikesDto dto) {
 		
 		String comment_id = Integer.toString(dto.getComment_id());
@@ -83,7 +83,6 @@ public class LikesController {
 			cmap.put("comment_id", comment_id);
 			cmap.put("islike", "up");
 			cdao.updateCommentLikes(cmap);
-			System.out.println("likes X, comment +1");
 		} else {		// likes TB에 있을 경우
 			if(dao.selectCommentLikes(lmap) == 0) {
 				// islike 가 false 일 경우, true로 update
@@ -94,7 +93,6 @@ public class LikesController {
 				cmap.put("comment_id", comment_id);
 				cmap.put("islike", "up");
 				cdao.updateCommentLikes(cmap);
-				System.out.println("likes O, comment +1");
 			} else {
 				// islike 가 true 일 경우, false 로 update
 				lmap.put("comment_islike", 1);
@@ -105,7 +103,6 @@ public class LikesController {
 				cmap.put("comment_id", comment_id);
 				cmap.put("islike", "down");
 				cdao.updateCommentLikes(cmap);
-				System.out.println("likes O, comment -1");
 			}
 		}
 		

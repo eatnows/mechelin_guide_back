@@ -3,40 +3,45 @@ package com.ninety_three.mechelin;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import data.dao.CommentDaoInter;
 import data.dto.CommentDto;
 
-@Controller
+@RestController
+@CrossOrigin
+@RequestMapping("/comment")
 public class CommentController {
 	
 	@Autowired
 	CommentDaoInter cdao;
 	
-	@GetMapping("/commtest")
-	public String commtest() {
-		return "commenttest";
-	}
-	
-	@PostMapping("/insertcomm")
-	public String insertcomm(@ModelAttribute CommentDto cdto) {
+	@PostMapping("/insertcomment")
+	public String insertcomm(@RequestBody CommentDto cdto) {
 		cdao.insertComment(cdto);
-		return "check DB";
+		return "check comment insert";
 	}
 	
-	@GetMapping("/deletecomm")
+	@GetMapping("/deletecomment")
 	public String deleteComm(@RequestParam String comment_id) {
 		cdao.deleteComment(comment_id);
-		return "hide accessed";
+		return "hide done";
 	}
 	
 	@GetMapping("/getcomments")
 	public List<CommentDto> getAllComments(@RequestParam String post_id) {
 		return cdao.getAllComments(post_id);
+	}
+	
+	@PostMapping("/updatecomment")
+	public String updateComm(@RequestBody CommentDto dto) {
+		cdao.updateComment(dto);
+		return "check comment update";
 	}
 }

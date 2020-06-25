@@ -7,11 +7,11 @@
 	<!-- insert -->
 	<insert id="insertOfComment" parameterType="cdto">
 		INSERT comment
-		<if test="parent_comment_id != ''">
+		<if test="parent_comment_id != null">
 			(post_id, user_id, content, parent_comment_id, comment_level, created_at, updated_at)
 			VALUES( #{post_id}, #{user_id}, #{content}, #{parent_comment_id}, true, now(), now() )
 		</if>
-		<if test="parent_comment_id == ''">
+		<if test="parent_comment_id == null">
 			(post_id, user_id, content, created_at, updated_at)
 			VALUES( #{post_id}, #{user_id}, #{content}, now(), now() )
 		</if>
