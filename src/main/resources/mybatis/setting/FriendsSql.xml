@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="friends">
+	
+	<!-- 친구 신청/수락 과정 -->
+	<!-- friends TB 에 있는가? -->
+	<select id="isDataAtFriends" parameterType="fdto" resultType="int">
+		SELECT count(*) FROM friend
+			WHERE (request_user_id = #{request_user_id}	AND target_user_id = #{target_user_id})
+			OR (request_user_id = #{target_user_id}	AND target_user_id = #{request_user_id})
+	</select>
+	<!-- 지금 친구인가? -->
+	<select id="isTrueOfFriends" parameterType="fdto" resultType="boolean">
+		SELECT accept FROM friend
+			WHERE (request_user_id = #{request_user_id}	AND target_user_id = #{target_user_id})
+			OR (request_user_id = #{target_user_id}	AND target_user_id = #{request_user_id})
+	</select>
+	<!-- 첫 친구신청인가? -->
+	<select id="isFirstTime" parameterType="fdto" resultType="int">
+		SELECT count(*) FROM friend
+			WHERE request_user_id = #{request_user_id} AND target_user_id = #{target_user_id}
+	</select>
+	<!-- 언제 마지막으로 요청했는가? -->
+	<select id="whenAddedOfFriends" parameterType="fdto" resultType="String">
+		SELECT updated_at FROM friend
+			WHERE request_user_id = #{request_user_id} AND target_user_id = #{target_user_id}
+	</select>
+	
+	<!-- 첫 신청일 때 insert -->
+	<insert id="insertOfFriends" parameterType="fdto">
+		INSERT friend( request_user_id, target_user_id, created_at, updated_at )
+			VALUES( #{request_user_id}, #{target_user_id}, now(), now() )
+	</insert>
+	<!-- 재신청일 때 update -->
+	<update id="addAgainOfFriends" parameterType="fdto">
+		UPDATE friend SET updated_at = now(),
+			request_user_id = #{request_user_id}, target_user_id = #{target_user_id}
+		WHERE request_user_id = #{request_user_id}
+			AND target_user_id = #{target_user_id}
+	</update>
+	
+	<!-- 친구수락 -->
+	<update id="acceptOfFriends" parameterType="fdto">
+		UPDATE friend SET accept = true
+			WHERE request_user_id = #{request_user_id}
+				AND target_user_id = #{target_user_id}
+	</update>
+	
+	<!-- 친구삭제 -->
+	<delete id="deleteOfFriends" parameterType="fdto">
+		DELETE FROM friend 
+			WHERE request_user_id = #{request_user_id}
+				AND target_user_id = #{target_user_id}
+	</delete>
+	
+	<!-- 아이디로 이메일 얻기 -->
+	<!-- UserSql로 보내야 하나..? -->
+	<select id="getMailAddrOfUser" parameterType="int" resultType="String">
+		SELECT email FROM user WHERE id = #{user_id}
+	</select>
+	
+</mapper>
