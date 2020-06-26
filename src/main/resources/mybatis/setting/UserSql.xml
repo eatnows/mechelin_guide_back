@@ -100,5 +100,8 @@
 		SELECT id FROM user WHERE email = #{email}
 	</select>
 	
-	
+	<!-- id로 user dto 반환 -->
+	<select id="profileOfUser" parameterType="String" resultType="udto">
+		SELECT * FROM user WHERE id = #{id}
+	</select>
 </mapper>

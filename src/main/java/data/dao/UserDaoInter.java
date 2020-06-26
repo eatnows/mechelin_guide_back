@@ -27,4 +27,5 @@ public interface UserDaoInter {
 	public void deleteApiUser(String email);
 	
 	public int selectIdUser(String email);
+	public UserDto getUserProfile(String id);
 }

@@ -9,25 +9,35 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import data.dao.FriendsDaoInter;
+import data.dao.UserDaoInter;
 import data.dto.FriendsDto;
+import data.dto.UserDto;
 
-@Controller
+@RestController
+@CrossOrigin
+@RequestMapping("/friends")
 public class FriendsController {
 	
 	@Autowired
 	FriendsDaoInter fdao;
 	
 	@Autowired
+	UserDaoInter udao;
+	
+	@Autowired
 	private JavaMailSender sender;
 	
 	@PostMapping("/checkfriend")
-	public String checkFriend(@ModelAttribute FriendsDto dto) {
+	public String checkFriend(@RequestBody FriendsDto dto) {
 		// 테이블에 있는가?
 		if(fdao.haveData(dto) == 0) {
 			// 테이블에도 없으면
@@ -36,26 +46,28 @@ public class FriendsController {
 			// 테이블에 있으면,
 			// 친구 수락 상태인가?
 			if(fdao.isFriend(dto)) {
-				return "now friend";
+				return "friend";
 			} else {
 				// 마지막 신청 시간과 현재 시간 비교
 				long updated_at = fdao.howRecent(dto).getTime();
 				Date now = new Date();
-				long compare = TimeUnit.MILLISECONDS.toDays(now.getTime() - updated_at);
 				
+				long compare = TimeUnit.MILLISECONDS.toDays(now.getTime() - updated_at);
 				// 이 사람이 신청한 적 있는가?
 				int isfirst = fdao.isFirst(dto);
 				if(isfirst == 1) {
 					// 본인이 신청했다면
 					if(compare < 3) {
 						// 신청한 지 3일 미만이면
-						return "wait for accept";
+						return "wait";
+					} else {
+						return "send again";
 					}
 				} else {
 					// 상대가 자신에게 요청했다면
 					if(compare < 3) {
 						// 신청한 지 3일 미만이면
-						return "check your email";
+						return "accept";
 					}
 				}
 				// 친구 신청한 지 3일 이상이면
@@ -66,7 +78,7 @@ public class FriendsController {
 	}
 	
 	@PostMapping("/addfriend")
-	public void addFriend(@ModelAttribute FriendsDto dto) {
+	public void addFriend(@RequestBody FriendsDto dto) {
 		int havedata = fdao.haveData(dto);
 		if (havedata == 0) {
 			// 양쪽 다 첫 신청일 경우 TB insert
@@ -80,7 +92,7 @@ public class FriendsController {
 		String email = fdao.getMailAddr(dto.getTarget_user_id());
 		
 		String subject = "MEchelin 가이드 친구요청 메일입니다.";
-		String clickurl = "http://localhost:9000/mechelin/addfriend"
+		String clickurl = "http://localhost:9000/mechelin/friends/acceptfriend"
 				+ "?request=" + dto.getRequest_user_id()
 				+ "&target=" + dto.getTarget_user_id();
 		String content = "<a href='" + clickurl + "'>수락하려면 클릭하세요</a>";
@@ -100,7 +112,7 @@ public class FriendsController {
 		}
 	}
 	
-	@PostMapping("/acceptfriend")
+	@GetMapping("/acceptfriend")
 	public void acceptFriend(
 		@RequestParam String request,
 		@RequestParam String target
@@ -113,7 +125,12 @@ public class FriendsController {
 	}
 	
 	@PostMapping("/deletefriend")
-	public void deleteFriend(@ModelAttribute FriendsDto dto) {
+	public void deleteFriend(@RequestBody FriendsDto dto) {
 		fdao.deleteFriend(dto);
+	}
+	
+	@GetMapping("/profile")
+	public UserDto getUserProfile(@RequestParam String id) {
+		return udao.getUserProfile(id);
 	}
 }

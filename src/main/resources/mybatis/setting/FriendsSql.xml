@@ -26,7 +26,8 @@
 	<!-- 언제 마지막으로 요청했는가? -->
 	<select id="whenAddedOfFriends" parameterType="fdto" resultType="String">
 		SELECT updated_at FROM friend
-			WHERE request_user_id = #{request_user_id} AND target_user_id = #{target_user_id}
+			WHERE (request_user_id = #{request_user_id}	AND target_user_id = #{target_user_id})
+			OR (request_user_id = #{target_user_id}	AND target_user_id = #{request_user_id})
 	</select>
 	
 	<!-- 첫 신청일 때 insert -->
