@@ -148,6 +148,7 @@ public class PostController {
 	 */
 	@GetMapping("/review")
 	public List<PostDto> selectDataPost(@RequestParam int user_place_id, @RequestParam int row) {
+		System.out.println("실행됨");
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("user_place_id", user_place_id);
 		map.put("row", row);

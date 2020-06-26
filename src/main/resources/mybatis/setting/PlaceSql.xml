@@ -58,5 +58,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT id FROM place 
 		WHERE latitude_x = #{latitude_x} AND longitude_y = #{longitude_y}
 	</select>
+	<!-- 나의 맛집을 조회하는 SQL문, 출력때문에 ptdto로 받음 -->
+	<select id="selectMyPlaceOfPlace" resultType="ptdto" parameterType="int">
+		SELECT place.*, up.id AS user_place_id, post.*, pin_url 
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+		WHERE user.id = #{user.id} AND isdelete = false 
+		AND isshow = true AND blacklist = false AND post.id 
+        IN (SELECT MAX(post.id) FROM post GROUP BY user_place_id);
+	</select>
+	<!-- 내 친구의 맛집을 조회하는 SQL 문, 출력때문에 ptdto로 받음 -->
+	<select id="selectFriendsPlaceOfPlace" resultType="ptdto" parameterType="int">
+		SELECT place.*, up.id AS user_place_id, post.*, user_id, pin_url 
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+		WHERE isdelete = false 
+		AND isshow = true AND blacklist = false AND post.id 
+        IN (SELECT MAX(post.id) FROM post GROUP BY user_place_id)
+		AND user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true)
+        ORDER BY user.id;
+	</select>
 	
 </mapper>
