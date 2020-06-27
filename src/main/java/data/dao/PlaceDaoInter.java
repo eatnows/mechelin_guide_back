@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import data.dto.PlaceDto;
+import data.dto.PostDto;
 
 public interface PlaceDaoInter {
 	public void insertPlace(PlaceDto dto);
@@ -18,4 +19,6 @@ public interface PlaceDaoInter {
 	public List<PlaceDto> selectAroundPlace(HashMap<String, Double> map);
 	public void deletePlace(int id);
 	public Integer selectCheckPlace(HashMap<String, Double> map);
+	public List<PostDto> selectMyPlace(int user_id);
+	public List<PostDto> selectFriendsPlace(int user_id);
 }

@@ -29,6 +29,7 @@ public class PostDto {
 	// user 테이블 참조
 	private String nickname;
 	private String profile_url;
+	private String pin_url;
 	
 	private int[] image_id;
 
@@ -184,6 +185,14 @@ public class PostDto {
 		this.profile_url = profile_url;
 	}
 
+	public String getPin_url() {
+		return pin_url;
+	}
+
+	public void setPin_url(String pin_url) {
+		this.pin_url = pin_url;
+	}
+
 	public int[] getImage_id() {
 		return image_id;
 	}
@@ -191,7 +200,6 @@ public class PostDto {
 	public void setImage_id(int[] image_id) {
 		this.image_id = image_id;
 	}
-	
-	
+
 	
 }

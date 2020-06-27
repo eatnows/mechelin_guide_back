@@ -131,4 +131,11 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		return getSqlSession().selectOne("selectIdOfUser", email);
 	}
 
+	@Override
+	public UserDto getUserProfile(String id) {
+		// TODO Auto-generated method stub
+		System.out.println("dao get profile called");
+		return getSqlSession().selectOne("profileOfUser", id);
+	}
+
 }
