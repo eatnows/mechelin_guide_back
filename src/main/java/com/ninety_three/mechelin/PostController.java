@@ -85,9 +85,9 @@ public class PostController {
 		// 게시글 등록을 위해 user_place_id의 값을 dto에 넣어줌
 		dto.setUser_place_id(user_place_id);
 		
-		// 대표이미지를 설정했는지 체크 없으면 기본 이미지 출력
+		// 대표이미지를 설정했는지 체크 없으면 기본 이미지 출력}
 		if(dto.getFront_image() == null) {
-			dto.setFront_image("front_basic_image.jpg");
+			dto.setFront_image("https://mechelinbucket.s3.ap-northeast-2.amazonaws.com/images/place/default_front_image.png");
 		}
 		dao.insertPost(dto);
 		
@@ -105,9 +105,13 @@ public class PostController {
 		pmap.put("id", dao.selectLatelyPost(user_place_id).getId());
 		// 리뷰글의 제일 처음 사진 url 반환
 		String url = idao.selectFirstImage(dao.selectLatelyPost(user_place_id).getId());
+		if(url == null) {
+			url = "https://mechelinbucket.s3.ap-northeast-2.amazonaws.com/images/place/default_front_image.png";
+		}
 		pmap.put("front_image", url);
 		dao.updateFrontImagePost(pmap);
-		
+
+			
 		// 방금 작성한 글의 id값과 user_place_id값을 반환
 		return dao.selectLatelyPost(user_place_id);
 	}
