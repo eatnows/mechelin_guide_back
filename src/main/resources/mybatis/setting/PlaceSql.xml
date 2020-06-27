@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<!-- 나와 친구의 모든 맛집 조회, 프론트에서 필터로 출력할것 -->
 	<select id="selectAllPlaceOfPlace" resultType="ptdto" parameterType="int">
-		SELECT place.*, up.id AS user_place_id, post.*, user_id, pin_url 
+		SELECT place.*, up.id AS user_place_id, post.*, user_id, pin_url, up.category, up.blacklist
 		FROM place
 		JOIN user_place AS up
 		ON up.place_id = place.id
