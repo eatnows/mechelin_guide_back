@@ -93,4 +93,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY user.id;
 	</select>
 	
+	<!-- 나와 친구의 모든 맛집 조회, 프론트에서 필터로 출력할것 -->
+	<select id="selectAllPlaceOfPlace" resultType="ptdto" parameterType="int">
+		SELECT place.*, up.id AS user_place_id, post.*, user_id, pin_url, up.category, up.blacklist
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+		WHERE isdelete = false
+		AND isshow = true AND post.id 
+        IN (SELECT MAX(post.id) FROM post GROUP BY user_place_id)
+		AND user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT #{user_id} AS user_id FROM DUAL)
+        ORDER BY user.id;
+	</select>
 </mapper>

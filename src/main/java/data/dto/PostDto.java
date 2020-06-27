@@ -21,6 +21,7 @@ public class PostDto {
 	private int user_id;
 	private String category;
 	private int post_count;
+	private Boolean blacklist;
 	// 맛집 이름 place 테이블 참조
 	private String name;
 	private String address;
@@ -137,6 +138,14 @@ public class PostDto {
 		this.post_count = post_count;
 	}
 
+	public Boolean getBlacklist() {
+		return blacklist;
+	}
+
+	public void setBlacklist(Boolean blacklist) {
+		this.blacklist = blacklist;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -201,5 +210,6 @@ public class PostDto {
 		this.image_id = image_id;
 	}
 
+	
 	
 }

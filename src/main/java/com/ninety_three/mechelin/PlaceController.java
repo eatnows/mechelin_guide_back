@@ -70,4 +70,12 @@ public class PlaceController {
 		List<PostDto> list = dao.selectFriendsPlace(user_id);
 		return list;
 	}
+	/*
+	 * 나와 친구의 맛집 모두를 조회하는 메소드
+	 */
+	@GetMapping("/allplace")
+	public List<PostDto> selectAllPlace(@RequestParam int user_id){
+		List<PostDto> list = dao.selectALLPlace(user_id);
+		return list;
+	}
 }
