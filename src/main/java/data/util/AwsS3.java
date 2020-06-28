@@ -35,7 +35,9 @@ public class AwsS3 {
         s3Client.setEndpoint("s3.ap-northeast-2.amazonaws.com"); //  아시아 태평양 서울
     }
 
-
+    /*
+     * 리뷰글 이미지 업로드
+     */
     public String fileupload(String bucketName, String fileName, InputStream input, ObjectMetadata metadata) throws FileNotFoundException{
     	System.out.println(bucketName);
     	System.out.println(fileName);
@@ -47,12 +49,21 @@ public class AwsS3 {
         System.out.println(path);
         return path;
     }
-    
+    /*
+     *  S3에 이미지 업로드된 것 삭제
+     */
     public void filedelete(String bucketName, String keyName) {
     	this.s3Client.deleteObject(bucketName, keyName);
     }
     
-    
+    /*
+     * 프로필 이미지 업로드
+     */
+    public String profileUpload(String bucketName, String fileName, InputStream input, ObjectMetadata metadata) throws FileNotFoundException{
+    	this.s3Client.putObject(bucketName, fileName, input, metadata);
+    	String path = "https://버킷이름.s3.ap-northeast-2.amazonaws.com/"+fileName;
+    	return path;
+    }
 
 
 

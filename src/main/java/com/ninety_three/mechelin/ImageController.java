@@ -33,6 +33,7 @@ import com.amazonaws.util.IOUtils;
 import com.sun.mail.iap.ByteArray;
 
 import data.dao.ImageDaoInter;
+import data.dao.UserDaoInter;
 import data.dto.ImageDto;
 import data.util.AwsS3;
 
@@ -46,8 +47,9 @@ public class ImageController {
 	@Autowired
 	private ImageDaoInter dao;
 	@Autowired
-	//private AwsS3ImageUpload S3;
-	private AwsS3 s3; 
+	private AwsS3 s3;
+	@Autowired
+	private UserDaoInter udao;
 	
 	ObjectMetadata metadata = new ObjectMetadata();
 	String bucketName = "버킷이름";
@@ -118,4 +120,45 @@ public class ImageController {
 		dao.deleteDayImage();
 	}
 	
+	/*
+	 * profile image s3에 저장
+	 */
+	@PostMapping("/profile/image")
+	public String profileImgUpload(@RequestParam MultipartFile avatar, @RequestParam int id){
+		String extension = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().lastIndexOf("."), avatar.getOriginalFilename().length());
+		String fileName = "images/profile/"+id+"/"+"profile_image_"+id+extension;
+		File file = new File(avatar.getOriginalFilename());
+		
+		InputStream input = null;
+		byte[] bytes; 		
+		try {
+			input = avatar.getInputStream();
+			bytes = IOUtils.toByteArray(avatar.getInputStream());
+			ObjectMetadata metadata = new ObjectMetadata();
+			metadata.setContentType(avatar.getContentType());
+			metadata.setContentLength(bytes.length);
+			avatar.transferTo(file);
+		} catch (IllegalStateException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+
+		try {
+			// s3에 업로드
+			String path = s3.fileupload(bucketName, fileName, input, metadata);
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("id", id);
+			map.put("profile_url", path);
+			// 프로필 url 주소 변경
+			udao.updateProfileImageUser(map);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+		return "success";
+		
+	}
 }

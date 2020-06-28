@@ -137,5 +137,13 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		System.out.println("dao get profile called");
 		return getSqlSession().selectOne("profileOfUser", id);
 	}
+	/*
+	 * 프로필 이미지 변경하는 메소드
+	 */
+	@Override
+	public void updateProfileImageUser(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateProfileImgOfUser", map);
+	}
 
 }

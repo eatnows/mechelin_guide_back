@@ -28,4 +28,5 @@ public interface UserDaoInter {
 	
 	public int selectIdUser(String email);
 	public UserDto getUserProfile(String id);
+	public void updateProfileImageUser(HashMap<String, Object> map);
 }
