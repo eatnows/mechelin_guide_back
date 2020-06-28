@@ -173,10 +173,8 @@ public class PostController {
 	@GetMapping("/search")
 	public List<PostDto> selectSearchPost(@RequestParam int user_id, @RequestParam String keyword){
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		System.out.println(keyword);
 		map.put("user_id", user_id);
 		map.put("keyword", keyword);
-		
 		List<PostDto> list = dao.selectSearchPost(map);
 		return list;
 	}
