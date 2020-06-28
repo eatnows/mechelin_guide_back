@@ -135,14 +135,13 @@ public class ImageController {
 	 * profile image s3에 저장
 	 */
 	@PostMapping("/profile/image")
-	public String profileImgUpload(@RequestParam MultipartFile avatar, @RequestParam int id){
+	public void profileImgUpload(@RequestParam MultipartFile avatar, @RequestParam int id){
 		String extension = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().lastIndexOf("."), avatar.getOriginalFilename().length());
 		String fileName = "images/profile/"+id+"/"+"profile_image_"+id+extension;
 		File file = new File(avatar.getOriginalFilename());
 		
 		InputStream input = null;
-		
-		
+			
 		byte[] bytes; 		
 		try {
 			input = avatar.getInputStream();
@@ -189,14 +188,10 @@ public class ImageController {
 			
 			// 메모리 이미지에 그리자
 			g.drawImage(profile, 9, 7, 35, 35, null, null);
-			String title = "마커";
 			// 그 위에 덮을 이미지
 			g.drawImage(marker, null, 0, 0);
-			
-			//메모리 이미지를 파일로 저장한다.   
-	        //File file2 = new File( "C:/Users/Shin/Desktop/dfdfsdfs.png");   
 	        
-	        
+			// s3 저장을 위해 필요한 변수들
 	        ByteArrayOutputStream os = new ByteArrayOutputStream();
 	        ImageIO.write(tmp, "png", os);
 	        InputStream markerInput = new ByteArrayInputStream(os.toByteArray());
@@ -213,7 +208,6 @@ public class ImageController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		return "success";
 		
 	}
 }
