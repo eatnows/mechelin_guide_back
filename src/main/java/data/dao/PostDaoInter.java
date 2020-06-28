@@ -16,4 +16,5 @@ public interface PostDaoInter {
 	public List<PostDto> selectUPDataPost(HashMap<String, Integer> map);
 	public List<PostDto> selectAllOfPost(HashMap<String, Integer> map);
 	public void updateFrontImagePost(HashMap<String, Object> map);
+	public List<PostDto> selectSearchPost(HashMap<String, Object> map);
 }

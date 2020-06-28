@@ -167,5 +167,16 @@ public class PostController {
 		System.out.println(user_id+","+row);
 		return dao.selectAllOfPost(map);
 	}
+	/*
+	 * 검색시 키워드에 맞는 데이터 반환
+	 */
+	@GetMapping("/search")
+	public List<PostDto> selectSearchPost(@RequestParam int user_id, @RequestParam String keyword){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("user_id", user_id);
+		map.put("keyword", keyword);
+		List<PostDto> list = dao.selectSearchPost(map);
+		return list;
+	}
 	
 }

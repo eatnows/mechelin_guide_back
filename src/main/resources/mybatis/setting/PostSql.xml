@@ -74,5 +74,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateFrontImageOfPost" parameterType="HashMap">
 		UPDATE post SET front_image = #{front_image} WHERE id = #{id}
 	</update>
-
+	<!-- 검색결과에 필요한 나와 내 밥친구들 모든 리뷰글 -->
+	<select id="selectSearchPostOfPost" resultType="ptdto" parameterType="HashMap">
+		SELECT place.name, place.wish_count, up.id AS user_place_id, post.*, user_id, temp.comment_count
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+        LEFT JOIN (SELECT post_id, count(1) AS comment_count FROM comment 
+        WHERE isdelete = false GROUP BY post_id) temp
+        ON temp.post_id = post.id
+		WHERE isdelete = false
+		AND user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT #{user_id} AS user_id FROM DUAL)
+        AND place.name LIKE CONCAT('%',#{keyword},'%')
+        ORDER BY post.created_at DESC;
+	</select>
 </mapper>
