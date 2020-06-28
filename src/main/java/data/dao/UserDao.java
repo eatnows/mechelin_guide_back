@@ -146,4 +146,10 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		getSqlSession().update("updateProfileImgOfUser", map);
 	}
 
+	@Override
+	public void updateMarkerImageUser(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateMarkerImgOfUser", map);
+	}
+
 }

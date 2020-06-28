@@ -108,4 +108,8 @@
 	<update id="updateProfileImgOfUser" parameterType="HashMap">
 		UPDATE user SET profile_url = #{profile_url} WHERE id = #{id}
 	</update>
+	<!-- 핀 사진 이미지 주소 변경 -->
+	<update id="updateMarkerImgOfUser" parameterType="HashMap">
+		UPDATE user SET pin_url = #{pin_url} WHERE id = #{id}
+	</update>
 </mapper>

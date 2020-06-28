@@ -1,14 +1,25 @@
 package com.ninety_three.mechelin;
 
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.awt.image.renderable.RenderableImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+
+import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -130,6 +141,8 @@ public class ImageController {
 		File file = new File(avatar.getOriginalFilename());
 		
 		InputStream input = null;
+		
+		
 		byte[] bytes; 		
 		try {
 			input = avatar.getInputStream();
@@ -149,12 +162,54 @@ public class ImageController {
 		try {
 			// s3에 업로드
 			String path = s3.fileupload(bucketName, fileName, input, metadata);
+			
+			
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("id", id);
 			map.put("profile_url", path);
 			// 프로필 url 주소 변경
 			udao.updateProfileImageUser(map);
+			
+			int newWidth = 64;
+			int newHeight = 69;
+			// 프로필 사진으로 마커 만들기
+			URL profileUrl = new URL(path);
+			URL markerUrl = new URL("https://mechelinbucket.s3.ap-northeast-2.amazonaws.com/images/profle/hole_marker.png");
+			BufferedImage profile = ImageIO.read(profileUrl);
+			BufferedImage marker = ImageIO.read(markerUrl);
+			// 마커 크기를 기준으로 크기를 구함
+			int width = marker.getWidth();
+			int height = marker.getHeight();
+			BufferedImage tmp = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			
+			// 메모리 이미지에서 Graphics2D를 얻어온다
+			Graphics2D g = tmp.createGraphics();
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+			
+			// 메모리 이미지에 그리자
+			g.drawImage(profile, 9, 7, 35, 35, null, null);
+			String title = "마커";
+			// 그 위에 덮을 이미지
+			g.drawImage(marker, null, 0, 0);
+			
+			//메모리 이미지를 파일로 저장한다.   
+	        //File file2 = new File( "C:/Users/Shin/Desktop/dfdfsdfs.png");   
+	        
+	        
+	        ByteArrayOutputStream os = new ByteArrayOutputStream();
+	        ImageIO.write(tmp, "png", os);
+	        InputStream markerInput = new ByteArrayInputStream(os.toByteArray());
+	        ObjectMetadata markerMetadata = new ObjectMetadata();
+	        markerMetadata.setContentType("image/png");
+	        String markerFilename = "images/profile/"+id+"/"+"marker_image_"+id+".png";
+	        String markerPath = s3.fileupload(bucketName, markerFilename, markerInput, markerMetadata);
+	        map.put("pin_url", markerPath);
+	        udao.updateMarkerImageUser(map);
 		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
