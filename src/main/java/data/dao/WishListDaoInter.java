@@ -10,5 +10,6 @@ public interface WishListDaoInter {
 	public int selectIsExistWishList(HashMap<String, Integer> map);
 	public void deleteReviewWishList(HashMap<String, Integer> map);
 	public void deleteClickWishList(int id);
-	public List<PostDto> selectDataWishList(int user_id);
+	public List<PostDto> selectDataWishList(HashMap<String, Integer> map);
+	public int selectCountWishList(int user_id);
 }

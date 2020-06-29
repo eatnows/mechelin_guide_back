@@ -39,10 +39,7 @@ public class WishListController {
 		map.put("place_id", dto.getPlace_id());
 		map.put("post_id", dto.getPost_id());
 		System.out.println(map);
-		
-		map2.put("user_id", dto.getUser_id());
-		map2.put("place_id", dto.getPlace_id());
-		System.out.println(map2);
+
 		System.out.println(dao.selectIsExistWishList(map));
 		System.out.println(updao.selectCheckUserPlace(map));
 		String result = "";
@@ -56,8 +53,6 @@ public class WishListController {
 			System.out.println(result);
 
 		}
-		System.out.println("result"+result);
-
 		return result;
 	}
 	
@@ -70,12 +65,23 @@ public class WishListController {
 	}
 	
 	/*
-	 * 나의 위시 리스트 전체 목록 조회
+	 * 나의 위시 리스트 총 갯수 반환
 	 */
-	@GetMapping("/alldata")
-	public List<PostDto> selectDataWishList(@RequestParam int user_id){
-		
-		List<PostDto> list = dao.selectDataWishList(user_id);
+	@GetMapping("/totalcount")
+	public int selectTotalCount(@RequestParam int user_id) {
+		return dao.selectCountWishList(user_id);
+	}
+	/*
+	 * 페이징처리 데이터 반환
+	 */
+	@GetMapping("/pagedata")
+	public List<PostDto> selectPageData(@RequestParam int pageStart, @RequestParam int perPageNum, @RequestParam int user_id){
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		System.out.println("실행됨");
+		map.put("pageStart", pageStart);
+		map.put("perPageNum", perPageNum);
+		map.put("user_id", user_id);
+		List<PostDto> list = dao.selectDataWishList(map);
 		return list;
 	}
 }

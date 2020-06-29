@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM wishlist WHERE id = #{id}
 	</delete>
 	<!-- user_id에 해당하는 모든 위시 리스트 반환 -->
-	<select id="selectAllWishList" parameterType="ptdto" resultType="int">
+	<select id="selectAllWishList" parameterType="ptdto" resultType="HashMap">
 		SELECT wishlist.id, wishlist.user_id, post.*, place.*
 		FROM wishlist
 		JOIN post
@@ -30,6 +30,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ON wishlist.place_id = place.id
 		JOIN user
 		ON wishlist.user_id = user.id
-		WHERE wishlist.user_id = #{user_id} AND post.isdelete = false
+		WHERE wishlist.user_id = #{user_id}
+		ORDER BY wishlist.created_at DESC
+		LIMIT #{pageStart}, #{perPageNum}
 	</select>
+	<!-- 위시 리스트의 총 갯수  반환 -->
+	<select id="selectCountWishList" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM wishlist WHERE user_id = #{user_id}
+	</select>
+	<!-- 위 -->
 </mapper>

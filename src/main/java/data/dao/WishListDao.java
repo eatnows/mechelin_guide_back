@@ -40,9 +40,15 @@ public class WishListDao extends SqlSessionDaoSupport implements WishListDaoInte
 	}
 
 	@Override
-	public List<PostDto> selectDataWishList(int user_id) {
+	public List<PostDto> selectDataWishList(HashMap<String, Integer> map) {
 		// TODO Auto-generated method stub
-		return getSqlSession().selectList("selectAllWishList", user_id);
+		return getSqlSession().selectList("selectAllWishList", map);
+	}
+
+	@Override
+	public int selectCountWishList(int user_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCountWishList", user_id);
 	}
 
 }
