@@ -11,6 +11,7 @@
 		<typeAlias type="data.dto.ImageDto" alias="idto" />
 		<typeAlias type="data.dto.CommentDto" alias="cdto" />
 		<typeAlias type="data.dto.FriendsDto" alias="fdto" />
+		<typeAlias type="data.dto.AskDto" alias="adto" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/setting/TestSql.xml" />
@@ -22,5 +23,6 @@
 		<mapper resource="mybatis/setting/ImageSql.xml" />
 		<mapper resource="mybatis/setting/CommentSql.xml" />
 		<mapper resource="mybatis/setting/FriendsSql.xml" />
+		<mapper resource="mybatis/setting/AskSql.xml" />
 	</mappers>
 </configuration>
