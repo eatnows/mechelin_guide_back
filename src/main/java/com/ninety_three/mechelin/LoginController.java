@@ -354,8 +354,11 @@ public class LoginController {
 	}
 	
 	
+	/*
+		비밀번호 변경
+	*/
 	@PostMapping("/changepwd/reset")
-	public void change(
+	public void changePW(
 		@RequestBody UserDto dto
 	) {
 		String pwdhash = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());
@@ -366,4 +369,32 @@ public class LoginController {
 		
 		udao.changePwd(map);
 	}
+	
+	/*
+		소개글 변경
+	*/
+	@PostMapping("/changeintro")
+	public void changeIntro(
+		@RequestBody UserDto dto
+	) {
+		udao.changeIntro(dto);
+	}
+	/*
+		닉네임 변경
+	*/
+	@PostMapping("/changenick")
+	public void changeNick(
+		@RequestBody UserDto dto
+	) {
+		udao.changeNick(dto);
+	}
+	
+	/*
+		회원 탈퇴
+	*/
+	@GetMapping("/dropout")
+	public void dropUser(@RequestParam String id) {
+		udao.dropUser(id);
+	}
+	
 }

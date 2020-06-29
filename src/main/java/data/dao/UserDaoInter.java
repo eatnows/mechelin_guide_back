@@ -30,4 +30,8 @@ public interface UserDaoInter {
 	public UserDto getUserProfile(String id);
 	public void updateProfileImageUser(HashMap<String, Object> map);
 	public void updateMarkerImageUser(HashMap<String, Object> map);
+	
+	public void changeIntro(UserDto dto);
+	public void changeNick(UserDto dto);
+	public void dropUser(String id);
 }

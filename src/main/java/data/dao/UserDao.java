@@ -151,5 +151,23 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		// TODO Auto-generated method stub
 		getSqlSession().update("updateMarkerImgOfUser", map);
 	}
+	
+	@Override
+	public void changeIntro(UserDto dto) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateIntroduceOfUser", dto);
+	}
+	
+	@Override
+	public void changeNick(UserDto dto) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateNicknameOfUser", dto);
+	}
+
+	@Override
+	public void dropUser(String id) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("deleteAccountOfUser", id);
+	}
 
 }
