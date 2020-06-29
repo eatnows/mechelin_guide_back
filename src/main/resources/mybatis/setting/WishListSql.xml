@@ -8,9 +8,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO wishlist (user_id, place_id, post_id, created_at) 
 		VALUES (#{user_id}, #{place_id}, #{post_id}, now())
 	</insert>
-	<!-- 유저아이디와 포스트아이디로 등록된 값이 있는지 확인 -->
+	<!-- 유저아이디와 포스트아이디, 플레이스 아이디로 등록된 값이 있는지 확인 -->
 	<select id="selectIsExistOfWishList" resultType="int" parameterType="HashMap">
-		SELECT COUNT(*) FROM wishlist WHERE user_id = #{user_id} AND post_id = #{post_id}
+		SELECT COUNT(*) FROM wishlist WHERE user_id = #{user_id} AND post_id = #{post_id} AND place_id = #{place_id}
 	</select>
 	<!-- 위시리스트에 등록된 place_id에 리뷰글을 작성했을시 위시 리스트에서 삭제-->
 	<delete id="deleteOfWishList" parameterType="HashMap">
@@ -20,4 +20,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteClickOfWishList" parameterType="int">
 		DELETE FROM wishlist WHERE id = #{id}
 	</delete>
+	<!-- user_id에 해당하는 모든 위시 리스트 반환 -->
+	<select id="selectAllWishList" parameterType="ptdto" resultType="int">
+		SELECT wishlist.id, wishlist.user_id, post.*, place.*
+		FROM wishlist
+		JOIN post
+		ON wishlist.post_id = post.id
+		JOIN place
+		ON wishlist.place_id = place.id
+		JOIN user
+		ON wishlist.user_id = user.id
+		WHERE wishlist.user_id = #{user_id} AND post.isdelete = false
+	</select>
 </mapper>

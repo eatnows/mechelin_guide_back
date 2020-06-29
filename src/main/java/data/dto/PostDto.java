@@ -23,6 +23,7 @@ public class PostDto {
 	private int post_count;
 	private Boolean blacklist;
 	// 맛집 이름 place 테이블 참조
+	private int place_id;
 	private String name;
 	private String address;
 	private double latitude_x;
@@ -35,6 +36,7 @@ public class PostDto {
 	
 	private int[] image_id;
 	private Integer comment_count;
+	
 	public int getId() {
 		return id;
 	}
@@ -118,6 +120,12 @@ public class PostDto {
 	}
 	public void setBlacklist(Boolean blacklist) {
 		this.blacklist = blacklist;
+	}
+	public int getPlace_id() {
+		return place_id;
+	}
+	public void setPlace_id(int place_id) {
+		this.place_id = place_id;
 	}
 	public String getName() {
 		return name;

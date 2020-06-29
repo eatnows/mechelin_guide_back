@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 나의 밥친구들의 리뷰글 보이기 -->
 	<select id="selectAllOfPost" parameterType="HashMap" resultType="ptdto">
 		select user.id as user_id, user.profile_url, user.nickname, friend.request_user_id,
-		friend.target_user_id, post.*, place.name, place.address
+		friend.target_user_id, post.*, place.name, place.address, place.id as place_id
 		FROM post 
 		JOIN user_place as up
 		ON post.user_place_id = up.id

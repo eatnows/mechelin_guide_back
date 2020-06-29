@@ -1,9 +1,12 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
+
+import data.dto.PostDto;
 
 @Repository
 public class WishListDao extends SqlSessionDaoSupport implements WishListDaoInter {
@@ -34,6 +37,12 @@ public class WishListDao extends SqlSessionDaoSupport implements WishListDaoInte
 	public void deleteClickWishList(int id) {
 		// TODO Auto-generated method stub
 		getSqlSession().delete("deleteClickOfWishList", id);
+	}
+
+	@Override
+	public List<PostDto> selectDataWishList(int user_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectAllWishList", user_id);
 	}
 
 }
