@@ -1,5 +1,6 @@
 package com.ninety_three.mechelin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -176,6 +177,19 @@ public class PostController {
 		map.put("user_id", user_id);
 		map.put("keyword", keyword);
 		List<PostDto> list = dao.selectSearchPost(map);
+		return list;
+	}
+	
+	/*
+		user_id 기준으로, 타임라인용 게시글 리스트 반환
+	*/
+	@GetMapping("/timeline")
+	public List<PostDto> selectUserPost(@RequestParam int user_id, @RequestParam int row) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_id", user_id);
+		map.put("row", row);
+		
+		List<PostDto> list = dao.selectTimelinePost(map);
 		return list;
 	}
 	

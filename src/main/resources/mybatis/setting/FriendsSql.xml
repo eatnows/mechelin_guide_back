@@ -46,15 +46,15 @@
 	<!-- 친구수락 -->
 	<update id="acceptOfFriends" parameterType="fdto">
 		UPDATE friend SET accept = true
-			WHERE request_user_id = #{request_user_id}
-				AND target_user_id = #{target_user_id}
+			WHERE (request_user_id = #{request_user_id}	AND target_user_id = #{target_user_id})
+			OR (request_user_id = #{target_user_id}	AND target_user_id = #{request_user_id})
 	</update>
 	
 	<!-- 친구삭제 -->
 	<delete id="deleteOfFriends" parameterType="fdto">
 		DELETE FROM friend 
-			WHERE request_user_id = #{request_user_id}
-				AND target_user_id = #{target_user_id}
+			WHERE (request_user_id = #{request_user_id}	AND target_user_id = #{target_user_id})
+			OR (request_user_id = #{target_user_id}	AND target_user_id = #{request_user_id})
 	</delete>
 	
 	<!-- 아이디로 이메일 얻기 -->

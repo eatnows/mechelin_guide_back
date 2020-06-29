@@ -98,4 +98,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         AND place.name LIKE CONCAT('%',#{keyword},'%')
         ORDER BY post.created_at DESC;
 	</select>
+	
+	<!-- 해당 유저의 모든 리뷰글 (타임라인) -->
+	<select id="selectPostsOfTimeline" parameterType="HashMap" resultType="ptdto">
+		select user.id as user_id, user.profile_url, user.nickname,
+			post.*, place.name, place.address
+		FROM post 
+			JOIN user_place as up
+				ON post.user_place_id = up.id
+			JOIN user
+				ON up.user_id = user.id
+			JOIN place
+				ON up.place_id = place.id 
+		WHERE user.id = #{user_id} AND isdelete = false
+		GROUP BY post.id
+		ORDER BY post.created_at DESC LIMIT 5 OFFSET #{row};
+	</select>
 </mapper>
