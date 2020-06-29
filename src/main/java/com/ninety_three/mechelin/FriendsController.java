@@ -112,6 +112,9 @@ public class FriendsController {
 		}
 	}
 	
+	/*
+		친구수락
+	*/
 	@GetMapping("/acceptfriend")
 	public void acceptFriend(
 		@RequestParam String request,
@@ -124,11 +127,17 @@ public class FriendsController {
 		fdao.acceptFriend(dto);
 	}
 	
+	/*
+		언팔로우/친구거절
+	*/
 	@PostMapping("/deletefriend")
 	public void deleteFriend(@RequestBody FriendsDto dto) {
 		fdao.deleteFriend(dto);
 	}
 	
+	/*
+		유저프로필
+	*/
 	@GetMapping("/profile")
 	public UserDto getUserProfile(@RequestParam String id) {
 		return udao.getUserProfile(id);
