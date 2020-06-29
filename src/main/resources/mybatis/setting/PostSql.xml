@@ -57,17 +57,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 나의 밥친구들의 리뷰글 보이기 -->
 	<select id="selectAllOfPost" parameterType="HashMap" resultType="ptdto">
 		select user.id as user_id, user.profile_url, user.nickname, friend.request_user_id,
-		friend.target_user_id, post.*, place.name, place.address
+			friend.target_user_id, post.*, place.name, place.address
 		FROM post 
 		JOIN user_place as up
-		ON post.user_place_id = up.id
+			ON post.user_place_id = up.id
 		JOIN user
-		ON up.user_id = user.id
+			ON up.user_id = user.id
 		JOIN friend
-		ON up.user_id = friend.target_user_id
+			ON ((up.user_id = friend.request_user_id) OR (up.user_id = friend.target_user_id))
 		JOIN place
-		ON up.place_id = place.id 
-		WHERE friend.accept=true AND friend.request_user_id=#{user_id} AND isdelete = false
+			ON up.place_id = place.id 
+		WHERE friend.accept=true
+			AND (friend.request_user_id=#{user_id} OR friend.target_user_id=#{user_id})
+			AND isdelete = false
 		ORDER BY created_at DESC LIMIT 5 OFFSET #{row};
 	</select>
 	<!-- 글 등록시 대표이미지 변경 -->
