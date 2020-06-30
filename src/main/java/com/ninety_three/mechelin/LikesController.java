@@ -33,6 +33,7 @@ public class LikesController {
 	 */
 	@PostMapping("/post")
 	public int insertPostLikes(@RequestBody LikesDto dto) {
+		System.out.println("실행됨");
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("user_id", dto.getUser_id());
 		map.put("post_id", dto.getPost_id());
@@ -114,10 +115,11 @@ public class LikesController {
 	 * 해당 리뷰글에 좋아요를 눌렀는지 판단하는 메소드
 	 */
 	@GetMapping("/ispost")
-	public Integer isLikePost(@RequestParam int post_id, @RequestParam int id) {
+	public Integer isLikePost(@RequestParam int post_id, @RequestParam int user_id) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("post_id", post_id);
-		map.put("id", id);
+		map.put("user_id", user_id);
+		System.out.println(dao.selectPostLikes(map));
 		return dao.selectPostLikes(map);
 	}
 }
