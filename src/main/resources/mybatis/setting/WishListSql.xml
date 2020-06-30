@@ -40,5 +40,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectCountWishList" parameterType="int" resultType="int">
 		SELECT COUNT(*) FROM wishlist WHERE user_id = #{user_id}
 	</select>
-	<!-- 위 -->
+	<!-- 친구의 맛집이 내 위시 리스트에 데이터가 있는지 -->
+	<select id="selectExistOfWishList" parameterType="HashMap" resultType="int">
+		SELECT COUNT(*) FROM wishlist WHERE user_id = #{user_id} AND place_id = #{place_id}
+	</select>
 </mapper>

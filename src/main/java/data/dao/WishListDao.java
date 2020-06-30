@@ -51,4 +51,10 @@ public class WishListDao extends SqlSessionDaoSupport implements WishListDaoInte
 		return getSqlSession().selectOne("selectCountWishList", user_id);
 	}
 
+	@Override
+	public int selectExistWishList(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectExistOfWishList", map);
+	}
+
 }

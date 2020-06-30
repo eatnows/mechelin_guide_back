@@ -83,4 +83,15 @@ public class WishListController {
 		List<PostDto> list = dao.selectDataWishList(map);
 		return list;
 	}
+	
+	/*
+	 * 위시 리스트에 맛집이 추가되어있는지 확인하는 메소드
+	 */
+	@GetMapping("/exist")
+	public int selectExistWishList(@RequestParam int user_id, @RequestParam int place_id) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_id", user_id);
+		map.put("place_id", place_id);
+		return dao.selectExistWishList(map);
+	}
 }
