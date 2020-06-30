@@ -7,11 +7,11 @@
 	<!-- insert -->
 	<insert id="insertOfUser" parameterType="udto">
 		INSERT user
-		<if test="profile_url != ''">
+		<if test="profile_url != null">
 			(email, password, nickname, profile_url, created_at, updated_at)
 			VALUES ( #{email}, #{password}, #{nickname}, #{profile_url}, now(), now() )
 		</if>
-		<if test="profile_url == ''">
+		<if test="profile_url == null">
 			(email, password, nickname, created_at, updated_at)
 			VALUES ( #{email}, #{password}, #{nickname}, now(), now() )
 		</if>
@@ -80,8 +80,6 @@
 	</select>
 	
 	<!-- kakao TB insert -->
-	<!-- created_at 을 now()로 할지 받아올지 정해야 함
-		: rfc3339 parse 해결되면. (그냥 now()로 하고 싶긴 하다) -->
 	<insert id="insertOfApiUser" parameterType="udto">
 		INSERT kuser (kakaoid, email, created_at, updated_at)
 			VALUES ( #{id}, #{email}, now(), now() )

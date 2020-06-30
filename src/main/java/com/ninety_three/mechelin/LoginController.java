@@ -1,37 +1,26 @@
 package com.ninety_three.mechelin;
 
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.gson.JsonElement;
-
 import data.dao.UserDaoInter;
 import data.dto.UserDto;
+import kakao.login.KakaoApiReact;
 import kakao.login.SetKakaoApi;
 
 @RestController
@@ -42,6 +31,8 @@ public class LoginController {
 	private UserDaoInter udao;
 	@Autowired
 	private SetKakaoApi kakao;
+	@Autowired
+	private KakaoApiReact react;
 	
 	@Autowired
 	private JavaMailSender sender;
@@ -199,48 +190,29 @@ public class LoginController {
 	}
 	
 	/*
-		유저가 카카오 로그인 요청 클릭
-		: 카카오로 로그인하면 카카오 인증서버가 체크,
-		 /klogin url로 유저 인증코드 돌려줌
+		카카오 로그인
 	*/
-	@GetMapping("/klogin")
-	public UserDto klogin(
-			@RequestParam String code
-	) {
-		System.out.println("authorize_code: " + code);	// 확인
+	@PostMapping("/kakaologin")
+	public UserDto kakaoLogin(@RequestBody String kakao) {
+		HashMap<String, Object> userInfo = react.getUserInfo(kakao);
 		
 		UserDto udto = new UserDto();
-		String kakaoId = "";
-		String email = "";
-		String password = "";
-		String nickname = "";
-		String profile_url = "";
-		
-		// 인증코드를 카카오로 보내서 액세스 토큰 받아오기
-		String access_token = kakao.getAccessToken(code);
-		System.out.println("accessToken: " + access_token);		// 확인
-		
-		// 액세스 토큰을카카오로  보내서 유저 기본정보 받아오기
-		HashMap<String, Object> userInfo = kakao.getUserInfo(access_token);
-		kakaoId = userInfo.get("kakaoId").toString();
-		System.out.println("kakaoId: " + kakaoId);		// 확인
-		email = userInfo.get("email").toString();
-		System.out.println("email: " + email);		// 확인
-		nickname = userInfo.get("nickname").toString();
-		System.out.println("nickname: " + nickname);		// 확인
-		profile_url = userInfo.get("profile_url").toString();
-		System.out.println("profile_url: " + profile_url);		// 확인
+		String kakaoId = userInfo.get("kakaoId").toString();
+		String email = userInfo.get("email").toString();
+		String nickname = userInfo.get("nickname").toString();
+		String profile_url = userInfo.get("profile_url").toString();
+		String access_token = userInfo.get("access_token").toString();
 		
 		// 카카오 TB에 있는지 확인
 		int kakaomatch = udao.apiUserCheck(kakaoId);
 		if (kakaomatch != 0) {
-			// 카카오 TB에 있으면 프로필사진 update
+			// 카카오 TB에 있으면, user TB 의 프로필사진 update
 			UserDto dto = new UserDto();
 			dto.setEmail(email);
 			dto.setProfile_url(profile_url);
 			udao.updateApiUser(dto);
 		} else {
-			// user TB에 있는지 확인
+			// 카카오 TB에 없으면, user TB에 있는지 확인
 			int mailmatch = udao.mailCheck(email);
 			if (mailmatch == 0) {
 				// user TB에도 없으면
@@ -254,8 +226,7 @@ public class LoginController {
 				for (int i=0; i<8; i++) {
 					buff.append(randomChar[ran.nextInt(charcnt)]);
 				}
-				password = buff.toString();
-				System.out.println(password);		// 확인
+				String password = buff.toString();
 				
 				// set
 				UserDto dto = new UserDto();
@@ -269,7 +240,7 @@ public class LoginController {
 				udao.insertUser(dto);
 			} else {
 				// 이미 가입한 유저면
-				// kakao TB insert & user TB update
+				// kakao TB insert & user TB 프로필사진 update
 				UserDto dto = new UserDto();
 				dto.setEmail(email);
 				dto.setProfile_url(profile_url);
@@ -278,12 +249,12 @@ public class LoginController {
 			}
 		}
 		
+		udto.setId(Integer.toString(udao.selectIdUser(email)));
 		udto.setEmail(email);
 		udto.setAccess_token(access_token);
 		
 		return udto;
 	}
-	
 	/*
 		카카오 로그아웃
 	*/

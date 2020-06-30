@@ -13,12 +13,17 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import data.dto.UserDto;
 
 @Service
 public class SetKakaoApi {
@@ -182,3 +187,86 @@ public class SetKakaoApi {
 	}
 
 }
+
+/*
+	(REST API 구현 시, 컨트롤러 부분)
+	
+	@GetMapping("/klogin")
+	public UserDto klogin(
+			@RequestParam String code
+	) {
+		System.out.println("authorize_code: " + code);	// 확인
+		
+		UserDto udto = new UserDto();
+		String kakaoId = "";
+		String email = "";
+		String password = "";
+		String nickname = "";
+		String profile_url = "";
+		
+		// 인증코드를 카카오로 보내서 액세스 토큰 받아오기
+		String access_token = kakao.getAccessToken(code);
+		System.out.println("accessToken: " + access_token);		// 확인
+		
+		// 액세스 토큰을카카오로  보내서 유저 기본정보 받아오기
+		HashMap<String, Object> userInfo = kakao.getUserInfo(access_token);
+		kakaoId = userInfo.get("kakaoId").toString();
+		email = userInfo.get("email").toString();
+		nickname = userInfo.get("nickname").toString();
+		profile_url = userInfo.get("profile_url").toString();
+		
+		// 카카오 TB에 있는지 확인
+		int kakaomatch = udao.apiUserCheck(kakaoId);
+		if (kakaomatch != 0) {
+			// 카카오 TB에 있으면 프로필사진 update
+			UserDto dto = new UserDto();
+			dto.setEmail(email);
+			dto.setProfile_url(profile_url);
+			udao.updateApiUser(dto);
+		} else {
+			// user TB에 있는지 확인
+			int mailmatch = udao.mailCheck(email);
+			if (mailmatch == 0) {
+				// user TB에도 없으면
+				// kakao & user TB insert
+				
+				// password 난수발생코드
+				Random ran = new Random(System.currentTimeMillis());
+				int charcnt = randomChar.length;
+				StringBuffer buff = new StringBuffer();
+				
+				for (int i=0; i<8; i++) {
+					buff.append(randomChar[ran.nextInt(charcnt)]);
+				}
+				password = buff.toString();
+				System.out.println(password);		// 확인
+				
+				// set
+				UserDto dto = new UserDto();
+				dto.setId(kakaoId);
+				dto.setEmail(email);
+				dto.setPassword(password);
+				dto.setNickname(nickname);
+				dto.setProfile_url(profile_url);
+				
+				udao.insertApiUser(dto);
+				udao.insertUser(dto);
+			} else {
+				// 이미 가입한 유저면
+				// kakao TB insert & user TB update
+				UserDto dto = new UserDto();
+				dto.setId(kakaoId);
+				dto.setEmail(email);
+				dto.setProfile_url(profile_url);
+				
+				udao.insertApiUser(dto);
+				udao.updateApiUser(dto);
+			}
+		}
+		
+		udto.setEmail(email);
+		udto.setAccess_token(access_token);
+		
+		return udto;
+	}
+*/
