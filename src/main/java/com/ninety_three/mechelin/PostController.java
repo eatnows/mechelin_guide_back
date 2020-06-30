@@ -20,6 +20,7 @@ import data.dao.ImageDaoInter;
 import data.dao.PlaceDaoInter;
 import data.dao.PostDaoInter;
 import data.dao.UserPlaceDaoInter;
+import data.dao.WishListDaoInter;
 import data.dto.PlaceDto;
 import data.dto.PostDto;
 import data.dto.UserPlaceDto;
@@ -36,6 +37,8 @@ public class PostController {
 	private UserPlaceDaoInter updao;
 	@Autowired
 	private ImageDaoInter idao;
+	@Autowired
+	private WishListDaoInter wdao;
 	
 	/*
 	 * 리뷰글 등록하는 메소드
@@ -70,6 +73,10 @@ public class PostController {
 		upmap.put("user_id", dto.getUser_id());
 		upmap.put("place_id", placeId);
 		if(updao.selectCheckUserPlace(upmap) == null) {
+			// 위시리스트에 해당 맛집이 있는지 확인 후 있으면 위시리스트에서 삭제
+			if(wdao.selectIsExistWishList(upmap) != 0) {
+				wdao.deleteReviewWishList(upmap);
+			}
 			// null이면 값이 없다는 의미 새로 user_place 테이블에 insert
 			UserPlaceDto updto = new UserPlaceDto();
 			updto.setUser_id(dto.getUser_id());
@@ -157,6 +164,7 @@ public class PostController {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("user_place_id", user_place_id);
 		map.put("row", row);
+		System.out.println(row);
 		return dao.selectUPDataPost(map);
 	}
 	/*newsfeed 내 친구의 리뷰 글 모두 불러오기*/
@@ -166,6 +174,7 @@ public class PostController {
 		map.put("user_id", user_id);
 		map.put("row", row);
 		System.out.println(user_id+","+row);
+		System.out.println(dao.selectAllOfPost(map));
 		return dao.selectAllOfPost(map);
 	}
 	/*
