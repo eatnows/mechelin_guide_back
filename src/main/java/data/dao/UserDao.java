@@ -66,9 +66,9 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 	}
 
 	@Override
-	public String getpwd(String email) {
+	public String getpwd(UserDto dto) {
 		// TODO Auto-generated method stub
-		return getSqlSession().selectOne("getPassOfUser", email);
+		return getSqlSession().selectOne("getPassOfUser", dto);
 	}
 
 	@Override

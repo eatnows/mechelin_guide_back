@@ -19,11 +19,13 @@
 	
 	<!-- email available check-->
 	<select id="mailCheckOfUser" parameterType="String" resultType="int">
-		SELECT count(*) FROM user WHERE email = #{email}
+		SELECT count(*) FROM user
+			WHERE email = #{email} AND dropuser = false
 	</select>
 	<!-- nickname available check -->
 	<select id="nickCheckOfUser" parameterType="String" resultType="int">
-		SELECT count(*) FROM user WHERE nickname = #{nickname}
+		SELECT count(*) FROM user
+			WHERE nickname = #{nickname} AND dropuser = false
 	</select>
 	
 	<!-- hmmm... lookup mailvalid TB -->
@@ -61,16 +63,31 @@
 	
 	<!-- ID/PW valid check -->
 	<select id="matchDataOfUser" parameterType="HashMap" resultType="int">
-		SELECT count(*) FROM user WHERE email = #{email} AND password = #{password}
+		SELECT count(*) FROM user
+			WHERE email = #{email} AND password = #{password}
 	</select>
 	<!-- get PW of ID for valid check -->
-	<select id="getPassOfUser" parameterType="String" resultType="String">
-		SELECT password FROM user WHERE email = #{email}
+	<select id="getPassOfUser" parameterType="udto" resultType="String">
+		SELECT password FROM user 
+			WHERE
+			<if test="email != null">
+				email = #{email}
+			</if>
+			<if test="email == null">
+				id = #{id}
+			</if>
 	</select>
 	
 	<!-- change password -->
 	<update id="updatePassOfUser" parameterType="HashMap">
-		UPDATE user SET password = #{password} WHERE email = #{email}
+		UPDATE user SET password = #{password} 
+			WHERE
+			<if test="email != null">
+				email = #{email}
+			</if>
+			<if test="email == null">
+				id = #{id}
+			</if>
 	</update>
 	
 	

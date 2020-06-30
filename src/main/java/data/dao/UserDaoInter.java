@@ -18,7 +18,7 @@ public interface UserDaoInter {
 	public boolean isGranted(String email);
 	public void deleteValid(String email);
 	
-	public String getpwd(String email);
+	public String getpwd(UserDto dto);
 	public void changePwd(HashMap<String, String> map);
 	
 	public int apiUserCheck(String email);

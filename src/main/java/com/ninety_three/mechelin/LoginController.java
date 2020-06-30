@@ -58,27 +58,48 @@ public class LoginController {
 	*/
 	@PostMapping("/login")
 	public UserDto loginResult(@RequestBody UserDto udto) {
-		UserDto dto = new UserDto();
-		String email = udto.getEmail();
+		String id = "";
+		String email = "";
 		String password = udto.getPassword();
-		int mailchk = udao.mailCheck(email);
-		String dbpass = udao.getpwd(email);
-		boolean isValidPassword = BCrypt.checkpw(password, dbpass);
-		System.out.println("email: " + email + ", password: " + password + ", dbpass: " + dbpass);
-		System.out.println("mailchk: " + mailchk + ", isValidPassword" + isValidPassword);
+		String dbpass = "";
 		
-		if (mailchk==1 && isValidPassword) {
-			// 메일과 비밀번호 모두 일치
-			dto.setEmail(email);
-			dto.setCheck_item("valid");;
-		} else if (mailchk==1) {
-			// 메일 일치 / 비밀번호 불일치
-			dto.setCheck_item("pwfalse");
+		boolean isValidPassword = false;
+		int userchk = 0;
+
+		// 유저 있는지 확인
+		if (udto.getEmail() != null) {
+			// 이메일이 왔을 경우
+			email = udto.getEmail();
+			// 이메일 있는지 확인
+			userchk = udao.mailCheck(email);
 		} else {
-			// 메일부터 틀렸음
-			dto.setCheck_item("mailfalse");
+			// 아이디가 왔을 경우
+			id = udto.getId();
+			udto.setId(id);
+			
+			userchk = 1;
 		}
-		return dto;
+		
+		// 유저가 있으면
+		if(userchk == 1) {
+			// 비밀번호 입력값/DB 일치 확인
+			dbpass = udao.getpwd(udto);
+			isValidPassword = BCrypt.checkpw(password, dbpass);
+			
+			// 비밀번호 일치 확인
+			if(isValidPassword) {
+				// 비번 일치
+				udto.setCheck_item("valid");
+			} else {
+				// 불일치
+				udto.setCheck_item("pwfalse");
+			}
+		} else {
+			// 유저부터가 없음
+			udto.setCheck_item("mailfalse");
+		}
+		
+		return udto;
 	}
 	/*
 		메일 중복검사
@@ -335,7 +356,12 @@ public class LoginController {
 		String pwdhash = BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt());
 		
 		HashMap<String, String> map = new HashMap<String, String>();
-		map.put("email", dto.getEmail());
+		if (dto.getEmail() != null) {
+			map.put("email", dto.getEmail());
+		} else {
+			map.put("id", dto.getId());
+		}
+		
 		map.put("password", pwdhash);
 		
 		udao.changePwd(map);
@@ -363,9 +389,17 @@ public class LoginController {
 	/*
 		회원 탈퇴
 	*/
-	@GetMapping("/dropout")
-	public void dropUser(@RequestParam String id) {
-		udao.dropUser(id);
+	@PostMapping("/dropout")
+	public UserDto dropUser(@RequestBody UserDto dto) {
+		// ID/PW 일치 검증
+		dto = loginResult(dto);
+		
+		// 일치하면 탈퇴 실행
+		if (dto.getCheck_item() == "valid") {
+			udao.dropUser(dto.getId());
+		}
+		
+		return dto;
 	}
 	
 }
