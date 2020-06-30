@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="place">
+	<!-- insert -->
+	<insert id="insertOfPlace" parameterType="pdto">
+		INSERT INTO place (latitude_x, longitude_y, name, address, created_at, updated_at) 
+		VALUES (#{latitude_x}, #{longitude_y}, #{name}, #{address}, now(), now())
+	</insert>
+	<!-- 이 맛집에 대해 리뷰글을 썼을때 맛집의 총 리뷰글 갯수 1 증가-->
+	<update id="updatePostCountOfPlace" parameterType="int">
+		UPDATE place SET post_count = post_count + 1 WHERE id = #{id}
+	</update>
+	<!-- 이 맛집에 대해 리뷰글을 지웠을때 맛집의 총 리뷰글 갯수 1 감소-->
+	<update id="updatePostMinusOfPlace" parameterType="int">
+		UPDATE place SET post_count = post_count - 1 WHERE id = #{id}
+	</update>
+	<!-- 맛집의 총 리뷰글 갯수 반환하는 SQL문 -->
+	<select id="selectPostCountOfPlace" resultType="int">
+		SELECT post_count FROM place WHERE id = #{id}
+	</select>
+	<!-- 위시리스트 갯수를 1 증가 시키는 SQL 문 -->
+	<update id="updateWishCountOfPlace" parameterType="int">
+		UPDATE place SET wish_count = wish_count + 1 WHERE id = #{id}
+	</update>
+	<!-- 위시리스트 갯수를 1 감소 시키는 SQL 문 -->
+	<update id="updateWishMinusOfPlace" parameterType="int">
+		UPDATE place SET wish_count = wish_count - 1 WHERE id = #{id}
+	</update>
+	<!-- 위시리스트 갯수를 반환하는 SQL 문 -->
+	<select id="selectWishCountOfPlace" resultType="int">
+		SELECT wish_count FROM place WHERE id = #{id}
+	</select>
+	<!-- 가장 최근에 등록된 맛집의 id를 한개 반환하는 SQL문 -->
+	<select id="selectLatelyOfPlace" resultType="int">
+		SELECT id FROM place ORDER BY created_at DESC LIMIT 1
+	</select>
+	<!-- 등록된 맛집의 정보를 수정 -->
+	<update id="updateOfPlace" parameterType="pdto">
+		UPDATE place 
+		SET latitude_x = #{latitude_x}, longitude_y = #{longitude_y}, 
+			name = #{name}, address = #{address}, updated_at = now() 
+		WHERE id = #{id}
+	</update>
+	<!-- x, y 좌표에 근처에 있는 맛집들을 반환하는 메소드 -->
+	<select id="selectAroundOfPlace" resultType="pdto" parameterType="HashMap">
+		SELECT id, name, address, latitude_x, longitude_y FROM place 
+		WHERE (#{x1} > latitude_x AND latitude_x > #{x2} ) 
+		AND (#{y1} > longitude_y AND longitude_y > #{y2} )  
+	</select>
+	<!-- 맛집 삭제 일단 만들어만 둠 -->
+	<delete id="deleteOfPlace" parameterType="int">
+		DELETE FROM place WHERE id = #{id}
+	</delete>
+	<!-- 좌표값에 해당하는 데이터가 있는지 반환, 있으면 id를 반환-->
+	<select id="selectCheckOfPlace" parameterType="HashMap" resultType="Integer">
+		SELECT id FROM place 
+		WHERE latitude_x = #{latitude_x} AND longitude_y = #{longitude_y}
+	</select>
+	<!-- 나의 맛집을 조회하는 SQL문, 출력때문에 ptdto로 받음 -->
+	<select id="selectMyPlaceOfPlace" resultType="ptdto" parameterType="int">
+		SELECT place.*, up.id AS user_place_id, post.*, pin_url 
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+		WHERE user.id = #{user.id} AND isdelete = false 
+		AND isshow = true AND blacklist = false AND post.id 
+        IN (SELECT MAX(post.id) FROM post GROUP BY user_place_id);
+	</select>
+	<!-- 내 친구의 맛집을 조회하는 SQL 문, 출력때문에 ptdto로 받음 -->
+	<select id="selectFriendsPlaceOfPlace" resultType="ptdto" parameterType="int">
+		SELECT place.*, up.id AS user_place_id, post.*, user_id, pin_url 
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+		WHERE isdelete = false 
+		AND isshow = true AND blacklist = false AND post.id 
+        IN (SELECT MAX(post.id) FROM post GROUP BY user_place_id)
+		AND user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true)
+        ORDER BY user.id;
+	</select>
+	
+	<!-- 나와 친구의 모든 맛집 조회, 프론트에서 필터로 출력할것 -->
+	<select id="selectAllPlaceOfPlace" resultType="ptdto" parameterType="int">
+		SELECT place.*, up.id AS user_place_id, post.*, user_id, pin_url, up.category, up.blacklist
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+		WHERE isdelete = false
+		AND isshow = true AND post.id 
+        IN (SELECT MAX(post.id) FROM post GROUP BY user_place_id)
+		AND user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT #{user_id} AS user_id FROM DUAL)
+        ORDER BY user.id;
+	</select>
+	
+</mapper>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="user">
+	<!-- insert -->
+	<insert id="insertOfUser" parameterType="udto">
+		INSERT user
+		<if test="profile_url != null">
+			(email, password, nickname, profile_url, created_at, updated_at)
+			VALUES ( #{email}, #{password}, #{nickname}, #{profile_url}, now(), now() )
+		</if>
+		<if test="profile_url == null">
+			(email, password, nickname, created_at, updated_at)
+			VALUES ( #{email}, #{password}, #{nickname}, now(), now() )
+		</if>
+	</insert>
+	
+	<!-- email available check-->
+	<select id="mailCheckOfUser" parameterType="String" resultType="int">
+		SELECT count(*) FROM user
+			WHERE email = #{email} AND dropuser = false
+	</select>
+	<!-- nickname available check -->
+	<select id="nickCheckOfUser" parameterType="String" resultType="int">
+		SELECT count(*) FROM user
+			WHERE nickname = #{nickname} AND dropuser = false
+	</select>
+	
+	<!-- hmmm... lookup mailvalid TB -->
+	<!-- <select id="didSendMailValid" parameterType="String" resultMap="Map">
+		SELECT count(*) count, DATE_FORMAT(created_at, '%Y%m%d') created
+			FROM mailvalid WHERE email = #{email}
+	</select> -->
+	<select id="didSendMailValid" parameterType="String" resultType="int">
+		SELECT count(*) FROM mailvalid WHERE email = #{email}
+	</select>
+	
+	<!-- email validation request -->
+	<update id="againSendMailValid" parameterType="String">
+		UPDATE mailvalid SET created_at = now() WHERE email = #{email}
+	</update>
+	<insert id="holdInfoForMailValid" parameterType="String">
+		INSERT mailvalid(email, created_at) VALUES( #{email}, now() )
+	</insert>
+	
+	<!-- grant validation -->
+	<update id="joinGrantedOfMailValid" parameterType="String">
+		UPDATE mailvalid SET validity = true WHERE email = #{email}
+	</update>
+	<!-- granted or not ? -->
+	<select id="isUserDidMailValid" parameterType="String" resultType="boolean">
+		SELECT validity FROM mailvalid WHERE email = #{email}
+	</select>
+	
+	<!-- delete mailvalid TB when insert user TB-->
+	<delete id="deleteMailValidWhenJoined" parameterType="String">
+		DELETE FROM mailvalid WHERE email = #{email}
+	</delete>
+	
+	
+	
+	<!-- ID/PW valid check -->
+	<select id="matchDataOfUser" parameterType="HashMap" resultType="int">
+		SELECT count(*) FROM user
+			WHERE email = #{email} AND password = #{password}
+	</select>
+	<!-- get PW of ID for valid check -->
+	<select id="getPassOfUser" parameterType="udto" resultType="String">
+		SELECT password FROM user 
+			WHERE
+			<if test="email != null">
+				email = #{email}
+			</if>
+			<if test="email == null">
+				id = #{id}
+			</if>
+	</select>
+	
+	<!-- change password -->
+	<update id="updatePassOfUser" parameterType="HashMap">
+		UPDATE user SET password = #{password} 
+			WHERE
+			<if test="email != null">
+				email = #{email}
+			</if>
+			<if test="email == null">
+				id = #{id}
+			</if>
+	</update>
+	
+	
+	<!-- check if kakao user already exists -->
+	<select id="checkOfApiUser" parameterType="String" resultType="int">
+		SELECT count(*) FROM kuser WHERE email = #{email}
+	</select>
+	
+	<!-- kakao TB insert -->
+	<insert id="insertOfApiUser" parameterType="udto">
+		INSERT kuser (kakaoid, email, created_at, updated_at)
+			VALUES ( #{id}, #{email}, now(), now() )
+	</insert>
+	<!-- update user profile -->
+	<update id="updateProfileOfApiUser" parameterType="udto">
+		UPDATE user SET profile_url = #{profile_url} WHERE email = #{email}
+	</update>
+	<!-- delete kakao user -->
+	<delete id="deleteOfApiUser" parameterType="String">
+		DELETE FROM kuser WHERE email = #{email}
+	</delete>
+	
+	<!-- 이메일로 유저의 id 반환 -->
+	<select id="selectIdOfUser" resultType="int" parameterType="String">
+		SELECT id FROM user WHERE email = #{email}
+	</select>
+	
+	<!-- id로 user dto 반환 -->
+	<select id="profileOfUser" parameterType="String" resultType="udto">
+		SELECT * FROM user WHERE id = #{id}
+	</select>
+	<!-- user테이블의 프로필 사진 이미지 변경 -->
+	<update id="updateProfileImgOfUser" parameterType="HashMap">
+		UPDATE user SET profile_url = #{profile_url} WHERE id = #{id}
+	</update>
+	<!-- 핀 사진 이미지 주소 변경 -->
+	<update id="updateMarkerImgOfUser" parameterType="HashMap">
+		UPDATE user SET pin_url = #{pin_url} WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 소개글 변경 -->
+	<update id="updateIntroduceOfUser" parameterType="udto">
+		UPDATE user SET introduce = #{introduce} WHERE id = #{id}
+	</update>
+	<!-- 닉네임 변경 -->
+	<update id="updateNicknameOfUser" parameterType="udto">
+		UPDATE user SET nickname = #{nickname} WHERE id = #{id}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<update id="deleteAccountOfUser" parameterType="String">
+		UPDATE user SET dropuser = true WHERE id = #{id}
+	</update>
+</mapper>

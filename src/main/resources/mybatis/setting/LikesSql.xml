@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="likes">
+	<!-- 리뷰글에 처음 좋아요를 눌렀을 시 likes 테이블에 insert  -->
+	<insert id="insertPostOflikes" parameterType="ldto">
+		INSERT INTO likes (user_id, post_id, created_at, updated_at) 
+		VALUES (#{user_id}, #{post_id}, now(), now())
+	</insert>
+	<!-- 리뷰글 좋아요 취소, post_islike 칼럼의 값을 true에서 false로 변경 false에서 true로 변경 -->
+	<update id="updatePostOflikes" parameterType="HashMap">
+		UPDATE likes SET post_islike = IF(#{post_islike} = true, false, true) 
+		WHERE user_id = #{user_id} AND post_id = #{post_id} 
+	</update>
+	<!-- 특정 유저와 특정 리뷰글에 좋아요를 눌렀는지 조회 true면 누름 false, null 값 안누른상태-->
+	<select id="selectPostOflikes" parameterType="HashMap" resultType="Integer">
+		SELECT post_islike FROM likes 
+		WHERE user_id = #{user_id} AND post_id = #{post_id}
+	</select>
+	
+	
+	<!-- 좋아요 테이블에 이 댓글과 이 유저가 있는가? -->
+	<select id="selectCommentOflikes" parameterType="HashMap" resultType="int">
+		SELECT comment_islike FROM likes
+			WHERE user_id = #{user_id} AND comment_id = #{comment_id}
+	</select>
+	
+	<!-- 댓글 좋아요 insert -->
+	<insert id="insertCommentOflikes" parameterType="ldto">
+		INSERT INTO likes (user_id, comment_id, created_at, updated_at)
+			VALUES ( #{user_id}, #{comment_id}, now(), now() )
+	</insert>
+	
+	<!-- 댓글 좋아요 반영/취소 -->
+	<update id="updateCommentOflikes" parameterType="HashMap">
+		UPDATE likes SET comment_islike = IF(#{comment_islike} = true, false, true) 
+			WHERE user_id = #{user_id} AND comment_id = #{comment_id}
+	</update>
+	
+	
+</mapper>
+
