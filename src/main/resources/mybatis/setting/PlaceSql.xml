@@ -116,4 +116,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY user.id;
 	</select>
 	
+	
+	<!-- 내 맛집 갯수 -->
+	<select id="countMyPlaces" parameterType="int" resultType="int">
+		SELECT count(*) FROM user_place
+			WHERE user_id = #{user_id} AND isshow = true
+	</select>
+	<!-- 내가 게시글을 작성한 맛집들 리스트 -->
+	<select id="getMyPlaces" parameterType="String" resultType="ptdto">
+		SELECT post.front_image, 
+			up.id as user_place_id, up.post_count,	
+			pl.name, pl.address, pl.latitude_x, pl.longitude_y,	pl.id AS place_id
+		FROM user_place AS up 
+		JOIN place AS pl
+			ON up.place_id = pl.id
+		JOIN post
+			ON pl.id = post.user_place_id
+		WHERE up.user_id = #{user_id} AND up.isshow = true
+		GROUP BY pl.id
+	</select>
+	
+	<!-- 맛집리스트에서 비노출 -->
+	<update id="notShownOfUserPlace" parameterType="int">
+		UPDATE user_place SET isshow = false WHERE id = #{id}
+	</update>
 </mapper>
