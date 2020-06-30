@@ -164,6 +164,7 @@ public class PostController {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("user_place_id", user_place_id);
 		map.put("row", row);
+		System.out.println(row);
 		return dao.selectUPDataPost(map);
 	}
 	/*newsfeed 내 친구의 리뷰 글 모두 불러오기*/
@@ -173,6 +174,7 @@ public class PostController {
 		map.put("user_id", user_id);
 		map.put("row", row);
 		System.out.println(user_id+","+row);
+		System.out.println(dao.selectAllOfPost(map));
 		return dao.selectAllOfPost(map);
 	}
 	/*

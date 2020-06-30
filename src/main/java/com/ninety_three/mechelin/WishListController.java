@@ -34,7 +34,6 @@ public class WishListController {
 	@PostMapping("/add")
 	public String insertWishList(@RequestBody WishListDto dto) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		HashMap<String, Integer> map2 = new HashMap<String, Integer>();
 		map.put("user_id", dto.getUser_id());
 		map.put("place_id", dto.getPlace_id());
 		map.put("post_id", dto.getPost_id());
