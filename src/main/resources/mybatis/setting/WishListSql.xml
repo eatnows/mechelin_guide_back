@@ -10,7 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</insert>
 	<!-- 유저아이디와 포스트아이디, 플레이스 아이디로 등록된 값이 있는지 확인 -->
 	<select id="selectIsExistOfWishList" resultType="int" parameterType="HashMap">
-		SELECT COUNT(*) FROM wishlist WHERE user_id = #{user_id} AND post_id = #{post_id} AND place_id = #{place_id}
+		SELECT COUNT(*) FROM wishlist WHERE user_id = #{user_id} AND place_id = #{place_id}
 	</select>
 	<!-- 위시리스트에 등록된 place_id에 리뷰글을 작성했을시 위시 리스트에서 삭제-->
 	<delete id="deleteOfWishList" parameterType="HashMap">
