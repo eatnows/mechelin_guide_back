@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- user_place_id에 해당하는 리뷰글의 모든 데이터를 반환하는 SQL문 -->
 	<select id="selectUPDataOfPost" resultType="ptdto" parameterType="HashMap">
 		SELECT post.*, user.nickname, user.profile_url,
-		 		up.user_id,	up.post_count, place.name
+		 		up.user_id,	up.post_count, place.name, place_id
 		FROM post
 		JOIN user_place as up
 		ON post.user_place_id = up.id
@@ -41,8 +41,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 리뷰글 수정 -->
 	<update id="updateOfPost" parameterType="ptdto">
 		UPDATE post 
-		SET subject = #{subject}, content = #{content}, rating = #{rating}, 
-			front_image = #{front_image}, updated_at = now()
+		SET subject = #{subject}, content = #{content}, rating = #{rating}, category = #{category},
+			 updated_at = now()
 		WHERE id = #{id}
 	</update>
 	<!-- 해당 user_id(user_place_id)가 방금 작성한 리뷰글의 id와 user_place_id 반환-->
@@ -115,6 +115,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				ON up.place_id = place.id 
 		WHERE user.id = #{user_id} AND isdelete = false
 		GROUP BY post.id
-		ORDER BY post.created_at DESC LIMIT 5 OFFSET #{row};
+		ORDER BY post.created_at DESC LIMIT 0, #{row};
 	</select>
 </mapper>

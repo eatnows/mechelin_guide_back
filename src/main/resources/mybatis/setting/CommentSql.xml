@@ -17,6 +17,13 @@
 		</if>
 	</insert>
 	
+	<!-- look up likes TB -->
+	<select id="isUserAddedCommentOfLikes" parameterType="HashMap" resultType="int">
+		SELECT count(*) FROM likes
+			WHERE user_id = #{user_id} AND comment_id = #{id}
+				AND comment_islike = true
+	</select>
+	
 	<!-- get comments -->
 	<select id="listOfComments" parameterType="String" resultType="cdto">
 		SELECT u.profile_url, u.nickname,
