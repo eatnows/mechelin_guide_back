@@ -14,6 +14,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,13 +64,14 @@ public class ImageController {
 	private UserDaoInter udao;
 	
 	ObjectMetadata metadata = new ObjectMetadata();
-	String bucketName = "버킷이름";
+	String bucketName = "mechelinbucket";
 
 	/*
 	 * image 테이블에 데이터 insert
 	 */
 	@PostMapping("/add")
 	public HashMap<String, Object> insertImage(@RequestParam MultipartFile images, @RequestParam int id) {
+		System.out.println("이미지 추가");
 		ImageDto dto = new ImageDto();
 		UUID uuid = UUID.randomUUID();
 		String extension = images.getOriginalFilename().substring(images.getOriginalFilename().lastIndexOf("."), images.getOriginalFilename().length());
@@ -139,6 +141,7 @@ public class ImageController {
 		String extension = avatar.getOriginalFilename().substring(avatar.getOriginalFilename().lastIndexOf("."), avatar.getOriginalFilename().length());
 		String fileName = "images/profile/"+id+"/"+"profile_image_"+id+extension;
 		File file = new File(avatar.getOriginalFilename());
+		UUID uuid = UUID.randomUUID();
 		
 		InputStream input = null;
 			
@@ -193,13 +196,14 @@ public class ImageController {
 	        
 			// s3 저장을 위해 필요한 변수들
 	        ByteArrayOutputStream os = new ByteArrayOutputStream();
+	       //File file2 = new File("./marker.jpg");
 	        ImageIO.write(tmp, "png", os);
 	        InputStream markerInput = new ByteArrayInputStream(os.toByteArray());
 	        ObjectMetadata markerMetadata = new ObjectMetadata();
 	        markerMetadata.setContentType("image/png");
 	        String markerFilename = "images/profile/"+id+"/"+"marker_image_"+id+".png";
 	        String markerPath = s3.fileupload(bucketName, markerFilename, markerInput, markerMetadata);
-	        map.put("pin_url", markerPath);
+	        map.put("pin_url", markerPath+"?"+uuid);
 	        udao.updateMarkerImageUser(map);
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

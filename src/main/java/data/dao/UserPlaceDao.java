@@ -1,10 +1,12 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import data.dto.PostDto;
 import data.dto.UserPlaceDto;
 
 @Repository
@@ -62,6 +64,30 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 	public int selectPostIdUserPlace(int id) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectPlaceIdOfUserPlace", id);
+	}
+
+	@Override
+	public int selectCountMyPlace(int user_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCountMyPlace", user_id);
+	}
+
+	@Override
+	public List<PostDto> selectMyPlace(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectMyPlaceOfUserPlace", map);
+	}
+
+	@Override
+	public void updateBlackList(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateBlacklistOfUserPlace", map);
+	}
+
+	@Override
+	public int selectIsBlackList(int user_place_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectIsBlackList", user_place_id);
 	}
 
 }

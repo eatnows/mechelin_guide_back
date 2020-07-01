@@ -46,7 +46,7 @@ public class WishListController {
 		// 이미 찜등록이 되어있는지, 내 맛집에 등록된 곳인지 판단하여 추가
 		if(dao.selectIsExistWishList(map) == 0 && updao.selectCheckUserPlace(map) == null) {
 			dao.insertWishList(map);
-			result = "위시리스트에 추가 되었습니다!";
+			result = "위시리스트에 추가되었습니다!";
 			System.out.println(result);
 		} else {
 			result = "이미 등록된 맛집입니다!";

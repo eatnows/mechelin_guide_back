@@ -16,6 +16,8 @@ public class CommentDto {
 	private String profile_url;
 	private String nickname;
 	
+	// 현재 좋아요 중인지 확인
+	private boolean now_liked;
 	
 	public String getId() {
 		return id;
@@ -78,5 +80,10 @@ public class CommentDto {
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
 	}
-	
+	public boolean isNow_liked() {
+		return now_liked;
+	}
+	public void setNow_liked(boolean now_liked) {
+		this.now_liked = now_liked;
+	}
 }

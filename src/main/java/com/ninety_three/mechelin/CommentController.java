@@ -1,5 +1,7 @@
 package com.ninety_three.mechelin;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +36,29 @@ public class CommentController {
 		return "hide done";
 	}
 	
-	@GetMapping("/getcomments")
-	public List<CommentDto> getAllComments(@RequestParam String post_id) {
-		return cdao.getAllComments(post_id);
+	@PostMapping("/getcomments")
+	public List<CommentDto> getAllComments(@RequestBody LinkedHashMap<String, String> obj) {
+		String post_id = obj.get("post_id");
+		String user_id = obj.get("user_id");
+		System.out.println("post_id: " + post_id + ", user_id: " + user_id);
+		List<CommentDto> list = cdao.getAllComments(post_id);
+		
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("user_id", user_id);
+		
+		for(CommentDto dto: list) {
+			// 좋아요 중인지 확인
+			map.put("id", dto.getId());
+			int now = cdao.getNowLiked(map);
+			if (now == 0) {
+				// 좋아요 없음
+				dto.setNow_liked(false);
+			} else {
+				// 좋아요 있음
+				dto.setNow_liked(true);
+			}
+		}
+		return list;
 	}
 	
 	@PostMapping("/updatecomment")

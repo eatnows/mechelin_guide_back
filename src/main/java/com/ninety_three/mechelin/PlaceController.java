@@ -78,4 +78,28 @@ public class PlaceController {
 		List<PostDto> list = dao.selectALLPlace(user_id);
 		return list;
 	}
+	
+	
+	/*
+	 * 나의 등록 맛집 총 갯수 반환
+	 */
+	@GetMapping("/totalcount")
+	public int selectTotalCount(@RequestParam int user_id) {
+		return 0; //dao.selectCountWishList(user_id);
+	}
+	/*
+	 * 페이징처리 데이터 반환
+	 */
+	@GetMapping("/pagedata")
+	public List<PostDto> selectPageData(@RequestParam int pageStart, @RequestParam int perPageNum, @RequestParam int user_id){
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		System.out.println("실행됨");
+		map.put("pageStart", pageStart);
+		map.put("perPageNum", perPageNum);
+		map.put("user_id", user_id);
+		List<PostDto> list = null;
+		// list = dao.selectDataWishList(map);
+		return list;
+	}
+	
 }
