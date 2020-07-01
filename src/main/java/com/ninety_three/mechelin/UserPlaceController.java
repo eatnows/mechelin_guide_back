@@ -1,6 +1,7 @@
 package com.ninety_three.mechelin;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import data.dao.UserPlaceDao;
 import data.dao.UserPlaceDaoInter;
+import data.dto.PostDto;
 import data.dto.UserPlaceDto;
 
 @RestController
@@ -53,5 +55,17 @@ public class UserPlaceController {
 	@GetMapping("/count")
 	public int selectCountMyPlace(@RequestParam int user_id) {
 		return dao.selectCountMyPlace(user_id);
+	}
+	/*
+	 * 나의 맛집 리스트 출력
+	 */
+	@GetMapping("/myplace")
+	public List<PostDto> selectMyPlace(@RequestParam int user_id, @RequestParam int pageStart, @RequestParam int perPageNum){
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_id", user_id);
+		map.put("pageStart", pageStart);
+		map.put("perPageNum", perPageNum);
+		List<PostDto> list = dao.selectMyPlace(map);
+		return list;
 	}
 }

@@ -1,7 +1,9 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
+import data.dto.PostDto;
 import data.dto.UserPlaceDto;
 
 public interface UserPlaceDaoInter {
@@ -13,4 +15,5 @@ public interface UserPlaceDaoInter {
 	public void updateIsShowUserPlace(HashMap<String, Object> map);
 	public int selectPostIdUserPlace(int id);
 	public int selectCountMyPlace(int user_id);
+	public List<PostDto> selectMyPlace(HashMap<String, Integer> map);
 }
