@@ -7,6 +7,7 @@ import data.dto.CommentDto;
 
 public interface CommentDaoInter {
 	public void insertComment(CommentDto cdto);
+	public int getNowLiked(HashMap<String, String> map);
 	public List<CommentDto> getAllComments(String post_id);
 	public void updateCommentLikes(HashMap<String, String> map);
 	public String getCommentLikes(String id);
