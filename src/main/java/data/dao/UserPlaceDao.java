@@ -64,4 +64,10 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 		return getSqlSession().selectOne("selectPlaceIdOfUserPlace", id);
 	}
 
+	@Override
+	public int selectCountMyPlace(int user_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCountMyPlace", user_id);
+	}
+
 }

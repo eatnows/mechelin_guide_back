@@ -39,7 +39,7 @@ public class UserPlaceController {
 	/*
 	 * 나의 맛집 지도상에 안보이게 하는 필터기능 무조건 true값(혹은 1)을 보내야함
 	 */
-	@PutMapping("/test/{id}/{isshow}")
+	@PutMapping("/show/{id}/{isshow}")
 	public void test2(@PathVariable int id, @PathVariable boolean isshow) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("isshow", isshow);
@@ -47,4 +47,11 @@ public class UserPlaceController {
 		dao.updateIsShowUserPlace(map);
 	}
 	
+	/*
+	 * 나의 총 맛집 갯수 반환
+	 */
+	@GetMapping("/count")
+	public int selectCountMyPlace(@RequestParam int user_id) {
+		return dao.selectCountMyPlace(user_id);
+	}
 }

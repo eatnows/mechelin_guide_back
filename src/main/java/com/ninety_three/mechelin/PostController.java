@@ -193,10 +193,11 @@ public class PostController {
 		user_id 기준으로, 타임라인용 게시글 리스트 반환
 	*/
 	@GetMapping("/timeline")
-	public List<PostDto> selectUserPost(@RequestParam int user_id, @RequestParam int row) {
+	public List<PostDto> selectUserPost(@RequestParam int user_id, @RequestParam int pageStart, @RequestParam int perPageNum) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("pageStart", pageStart);
+		map.put("perPageNum", perPageNum);
 		map.put("user_id", user_id);
-		map.put("row", row);
 		
 		List<PostDto> list = dao.selectTimelinePost(map);
 		return list;

@@ -12,4 +12,5 @@ public interface UserPlaceDaoInter {
 	public void updateMinusUserPlace(int id);
 	public void updateIsShowUserPlace(HashMap<String, Object> map);
 	public int selectPostIdUserPlace(int id);
+	public int selectCountMyPlace(int user_id);
 }
