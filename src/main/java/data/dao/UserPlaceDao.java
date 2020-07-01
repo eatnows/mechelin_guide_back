@@ -78,4 +78,16 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 		return getSqlSession().selectList("selectMyPlaceOfUserPlace", map);
 	}
 
+	@Override
+	public void updateBlackList(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("updateBlacklistOfUserPlace", map);
+	}
+
+	@Override
+	public int selectIsBlackList(int user_place_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectIsBlackList", user_place_id);
+	}
+
 }

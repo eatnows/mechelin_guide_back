@@ -50,4 +50,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE up.user_id = #{user_id} AND up.isshow = true
 		GROUP BY pl.id LIMIT #{pageStart}, #{perPageNum};
 	</select>
+	<!-- 블랙리스트로 변경 -->
+	<!-- 블랙리스트를 하고싶으면 1을 넣고 
+	블랙리스트를 취소하고 싶으면 0을 넣고 SQL문 변수에 보내주면 됨-->
+	<update id="updateBlacklistOfUserPlace" parameterType="HashMap">
+		UPDATE user_place SET blacklist = IF(#{blacklist} = 1,  0, 1) WHERE id = #{user_place_id}
+	</update>
+	
+	<!-- 블랙리스트인지 아닌지 확인하는 SQL -->
+	<select id="selectIsBlackList" parameterType="int" resultType="int">
+		SELECT blacklist FROM user_place WHERE id = #{user_place_id}
+	</select>
 </mapper>

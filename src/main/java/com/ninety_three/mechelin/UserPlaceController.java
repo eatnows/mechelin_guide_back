@@ -68,4 +68,35 @@ public class UserPlaceController {
 		List<PostDto> list = dao.selectMyPlace(map);
 		return list;
 	}
+	
+	/*
+	 * 블랙 리스트 추가
+	 */
+	@PutMapping("/blacklist/{user_place_id}")
+	public String updateBlacklist(@PathVariable int user_place_id) {
+		String str;
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_place_id", user_place_id);
+		// 블랙리스트인지 아닌지 확인
+		if(dao.selectIsBlackList(user_place_id) == 1) {
+			// 블랙 리스트면 1을 반환 1을 보내서 블랙리스트를 해제
+			map.put("blacklist", 1);
+			dao.updateBlackList(map);
+			str = "블랙리스트에서 제외되었습니다.";
+		} else {
+			// 블랙리스트가 아니면 0을 보내 블랙리스트에 추가
+			map.put("blacklist", 0);
+			dao.updateBlackList(map);
+			str = "블랙리스트에 추가되었습니다.";
+		}
+		return str;
+	}
+	
+	/*
+	 *  블랙리스트인지 아닌지 확인
+	 */
+	@GetMapping("/blacklist/exist")
+	public int selectBlackListExist(@RequestParam int user_place_id) {
+		return dao.selectIsBlackList(user_place_id);
+	}
 }

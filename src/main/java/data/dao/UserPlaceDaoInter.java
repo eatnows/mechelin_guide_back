@@ -16,4 +16,6 @@ public interface UserPlaceDaoInter {
 	public int selectPostIdUserPlace(int id);
 	public int selectCountMyPlace(int user_id);
 	public List<PostDto> selectMyPlace(HashMap<String, Integer> map);
+	public void updateBlackList(HashMap<String, Integer> map);
+	public int selectIsBlackList(int user_place_id);
 }

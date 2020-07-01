@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- user_place_id에 해당하는 리뷰글의 모든 데이터를 반환하는 SQL문 -->
 	<select id="selectUPDataOfPost" resultType="ptdto" parameterType="HashMap">
 		SELECT post.*, user.nickname, user.profile_url,
-		 		up.user_id,	up.post_count, place.name
+		 		up.user_id,	up.post_count, place.name, place_id
 		FROM post
 		JOIN user_place as up
 		ON post.user_place_id = up.id
