@@ -1,5 +1,6 @@
 package com.ninety_three.mechelin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +20,7 @@ import data.dao.ImageDaoInter;
 import data.dao.PlaceDaoInter;
 import data.dao.PostDaoInter;
 import data.dao.UserPlaceDaoInter;
+import data.dao.WishListDaoInter;
 import data.dto.PlaceDto;
 import data.dto.PostDto;
 import data.dto.UserPlaceDto;
@@ -35,6 +37,8 @@ public class PostController {
 	private UserPlaceDaoInter updao;
 	@Autowired
 	private ImageDaoInter idao;
+	@Autowired
+	private WishListDaoInter wdao;
 	
 	/*
 	 * 리뷰글 등록하는 메소드
@@ -69,6 +73,10 @@ public class PostController {
 		upmap.put("user_id", dto.getUser_id());
 		upmap.put("place_id", placeId);
 		if(updao.selectCheckUserPlace(upmap) == null) {
+			// 위시리스트에 해당 맛집이 있는지 확인 후 있으면 위시리스트에서 삭제
+			if(wdao.selectIsExistWishList(upmap) != 0) {
+				wdao.deleteReviewWishList(upmap);
+			}
 			// null이면 값이 없다는 의미 새로 user_place 테이블에 insert
 			UserPlaceDto updto = new UserPlaceDto();
 			updto.setUser_id(dto.getUser_id());
@@ -85,9 +93,9 @@ public class PostController {
 		// 게시글 등록을 위해 user_place_id의 값을 dto에 넣어줌
 		dto.setUser_place_id(user_place_id);
 		
-		// 대표이미지를 설정했는지 체크 없으면 기본 이미지 출력
+		// 대표이미지를 설정했는지 체크 없으면 기본 이미지 출력}
 		if(dto.getFront_image() == null) {
-			dto.setFront_image("front_basic_image.jpg");
+			dto.setFront_image("https://mechelinbucket.s3.ap-northeast-2.amazonaws.com/images/place/default_front_image.png");
 		}
 		dao.insertPost(dto);
 		
@@ -105,9 +113,13 @@ public class PostController {
 		pmap.put("id", dao.selectLatelyPost(user_place_id).getId());
 		// 리뷰글의 제일 처음 사진 url 반환
 		String url = idao.selectFirstImage(dao.selectLatelyPost(user_place_id).getId());
+		if(url == null) {
+			url = "https://mechelinbucket.s3.ap-northeast-2.amazonaws.com/images/place/default_front_image.png";
+		}
 		pmap.put("front_image", url);
 		dao.updateFrontImagePost(pmap);
-		
+
+			
 		// 방금 작성한 글의 id값과 user_place_id값을 반환
 		return dao.selectLatelyPost(user_place_id);
 	}
@@ -152,6 +164,7 @@ public class PostController {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("user_place_id", user_place_id);
 		map.put("row", row);
+		System.out.println(row);
 		return dao.selectUPDataPost(map);
 	}
 	/*newsfeed 내 친구의 리뷰 글 모두 불러오기*/
@@ -161,7 +174,32 @@ public class PostController {
 		map.put("user_id", user_id);
 		map.put("row", row);
 		System.out.println(user_id+","+row);
+		System.out.println(dao.selectAllOfPost(map));
 		return dao.selectAllOfPost(map);
+	}
+	/*
+	 * 검색시 키워드에 맞는 데이터 반환
+	 */
+	@GetMapping("/search")
+	public List<PostDto> selectSearchPost(@RequestParam int user_id, @RequestParam String keyword){
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("user_id", user_id);
+		map.put("keyword", keyword);
+		List<PostDto> list = dao.selectSearchPost(map);
+		return list;
+	}
+	
+	/*
+		user_id 기준으로, 타임라인용 게시글 리스트 반환
+	*/
+	@GetMapping("/timeline")
+	public List<PostDto> selectUserPost(@RequestParam int user_id, @RequestParam int row) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_id", user_id);
+		map.put("row", row);
+		
+		List<PostDto> list = dao.selectTimelinePost(map);
+		return list;
 	}
 	
 }

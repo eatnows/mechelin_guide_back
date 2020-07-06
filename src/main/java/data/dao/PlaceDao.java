@@ -120,6 +120,12 @@ public class PlaceDao extends SqlSessionDaoSupport implements PlaceDaoInter {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("selectFriendsPlaceOfPlace", user_id);
 	}
+
+	@Override
+	public List<PostDto> selectALLPlace(int user_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectAllPlaceOfPlace", user_id);
+	}
 	
 
 }

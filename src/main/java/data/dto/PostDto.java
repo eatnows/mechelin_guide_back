@@ -13,25 +13,29 @@ public class PostDto {
 	private int likes;
 	private String front_image;
 	private Boolean isdelete;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp created_at;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm")
 	private Timestamp updated_at;
 	// user_place 테이블 참조
 	private int user_id;
 	private String category;
 	private int post_count;
+	private Boolean blacklist;
 	// 맛집 이름 place 테이블 참조
+	private int place_id;
 	private String name;
 	private String address;
 	private double latitude_x;
 	private double longitude_y;
+	private int wish_count;
 	// user 테이블 참조
 	private String nickname;
 	private String profile_url;
 	private String pin_url;
 	
 	private int[] image_id;
+	private Integer comment_count;
+	
+	private int wishlist_id;
 
 	public int getId() {
 		return id;
@@ -137,6 +141,22 @@ public class PostDto {
 		this.post_count = post_count;
 	}
 
+	public Boolean getBlacklist() {
+		return blacklist;
+	}
+
+	public void setBlacklist(Boolean blacklist) {
+		this.blacklist = blacklist;
+	}
+
+	public int getPlace_id() {
+		return place_id;
+	}
+
+	public void setPlace_id(int place_id) {
+		this.place_id = place_id;
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -167,6 +187,14 @@ public class PostDto {
 
 	public void setLongitude_y(double longitude_y) {
 		this.longitude_y = longitude_y;
+	}
+
+	public int getWish_count() {
+		return wish_count;
+	}
+
+	public void setWish_count(int wish_count) {
+		this.wish_count = wish_count;
 	}
 
 	public String getNickname() {
@@ -201,5 +229,21 @@ public class PostDto {
 		this.image_id = image_id;
 	}
 
+	public Integer getComment_count() {
+		return comment_count;
+	}
+
+	public void setComment_count(Integer comment_count) {
+		this.comment_count = comment_count;
+	}
+
+	public int getWishlist_id() {
+		return wishlist_id;
+	}
+
+	public void setWishlist_id(int wishlist_id) {
+		this.wishlist_id = wishlist_id;
+	}
+	
 	
 }

@@ -33,4 +33,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectPlaceIdOfUserPlace" resultType="int" parameterType="int">
 		SELECT place_id FROM user_place WHERE id = #{id}
 	</select>
+	<!-- 나의 맛집 총 갯수 반환 -->
+	<select id="selectCountMyPlace" parameterType="int" resultType="int">
+		SELECT COUNT(*) from user_place WHERE user_id = #{user_id} AND isshow = true; 
+	</select>
+	<!-- 나의 맛집 리스트 -->
+	<select id="selectMyPlaceOfUserPlace" parameterType="HashMap" resultType="ptdto">
+		SELECT post.front_image, 
+			up.id as user_place_id, up.post_count,	
+			pl.name, pl.address, pl.latitude_x, pl.longitude_y,	pl.id AS place_id
+		FROM user_place AS up 
+		JOIN place AS pl
+			ON up.place_id = pl.id
+		JOIN post
+			ON pl.id = post.user_place_id
+		WHERE up.user_id = #{user_id} AND up.isshow = true
+		GROUP BY pl.id LIMIT #{pageStart}, #{perPageNum};
+	</select>
+	<!-- 블랙리스트로 변경 -->
+	<!-- 블랙리스트를 하고싶으면 1을 넣고 
+	블랙리스트를 취소하고 싶으면 0을 넣고 SQL문 변수에 보내주면 됨-->
+	<update id="updateBlacklistOfUserPlace" parameterType="HashMap">
+		UPDATE user_place SET blacklist = IF(#{blacklist} = 1,  0, 1) WHERE id = #{user_place_id}
+	</update>
+	
+	<!-- 블랙리스트인지 아닌지 확인하는 SQL -->
+	<select id="selectIsBlackList" parameterType="int" resultType="int">
+		SELECT blacklist FROM user_place WHERE id = #{user_place_id}
+	</select>
 </mapper>

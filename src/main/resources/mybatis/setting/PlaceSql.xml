@@ -93,4 +93,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY user.id;
 	</select>
 	
+	<!-- 나와 친구의 모든 맛집 조회, 프론트에서 필터로 출력할것 -->
+	<select id="selectAllPlaceOfPlace" resultType="ptdto" parameterType="int">
+		SELECT place.*, up.id AS user_place_id, post.*, user_id, pin_url, up.category, up.blacklist
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+		WHERE isdelete = false
+		AND isshow = true AND post.id 
+        IN (SELECT MAX(post.id) FROM post GROUP BY user_place_id)
+		AND user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT #{user_id} AS user_id FROM DUAL)
+        ORDER BY user.id;
+	</select>
+	
+	
+	<!-- 내 맛집 갯수 -->
+	<select id="countMyPlaces" parameterType="int" resultType="int">
+		SELECT count(*) FROM user_place
+			WHERE user_id = #{user_id} AND isshow = true
+	</select>
+	<!-- 내가 게시글을 작성한 맛집들 리스트 -->
+	<select id="getMyPlaces" parameterType="String" resultType="ptdto">
+		SELECT post.front_image, 
+			up.id as user_place_id, up.post_count,	
+			pl.name, pl.address, pl.latitude_x, pl.longitude_y,	pl.id AS place_id
+		FROM user_place AS up 
+		JOIN place AS pl
+			ON up.place_id = pl.id
+		JOIN post
+			ON pl.id = post.user_place_id
+		WHERE up.user_id = #{user_id} AND up.isshow = true
+		GROUP BY pl.id
+	</select>
+	
+	<!-- 맛집리스트에서 비노출 -->
+	<update id="notShownOfUserPlace" parameterType="int">
+		UPDATE user_place SET isshow = false WHERE id = #{id}
+	</update>
 </mapper>

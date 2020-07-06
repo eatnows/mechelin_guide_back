@@ -18,7 +18,7 @@ public interface UserDaoInter {
 	public boolean isGranted(String email);
 	public void deleteValid(String email);
 	
-	public String getpwd(String email);
+	public String getpwd(UserDto dto);
 	public void changePwd(HashMap<String, String> map);
 	
 	public int apiUserCheck(String email);
@@ -28,4 +28,10 @@ public interface UserDaoInter {
 	
 	public int selectIdUser(String email);
 	public UserDto getUserProfile(String id);
+	public void updateProfileImageUser(HashMap<String, Object> map);
+	public void updateMarkerImageUser(HashMap<String, Object> map);
+	
+	public void changeIntro(UserDto dto);
+	public void changeNick(UserDto dto);
+	public void dropUser(String id);
 }

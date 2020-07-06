@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- user_place_id에 해당하는 리뷰글의 모든 데이터를 반환하는 SQL문 -->
 	<select id="selectUPDataOfPost" resultType="ptdto" parameterType="HashMap">
 		SELECT post.*, user.nickname, user.profile_url,
-		 		up.user_id,	up.post_count, place.name
+		 		up.user_id,	up.post_count, place.name, place_id
 		FROM post
 		JOIN user_place as up
 		ON post.user_place_id = up.id
@@ -41,8 +41,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 리뷰글 수정 -->
 	<update id="updateOfPost" parameterType="ptdto">
 		UPDATE post 
-		SET subject = #{subject}, content = #{content}, rating = #{rating}, 
-			front_image = #{front_image}, updated_at = now()
+		SET subject = #{subject}, content = #{content}, rating = #{rating}, category = #{category},
+			 updated_at = now()
 		WHERE id = #{id}
 	</update>
 	<!-- 해당 user_id(user_place_id)가 방금 작성한 리뷰글의 id와 user_place_id 반환-->
@@ -56,23 +56,65 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	<!-- 나의 밥친구들의 리뷰글 보이기 -->
 	<select id="selectAllOfPost" parameterType="HashMap" resultType="ptdto">
-		select user.id as user_id, user.profile_url, user.nickname, friend.request_user_id,
-		friend.target_user_id, post.*, place.name, place.address
-		FROM post 
-		JOIN user_place as up
-		ON post.user_place_id = up.id
-		JOIN user
-		ON up.user_id = user.id
-		JOIN friend
-		ON up.user_id = friend.target_user_id
-		JOIN place
-		ON up.place_id = place.id 
-		WHERE friend.accept=true AND friend.request_user_id=#{user_id} AND isdelete = false
-		ORDER BY created_at DESC LIMIT 5 OFFSET #{row};
+		SELECT post.*, place.*, place.id as place_id, up.id AS user_place_id, user.id AS user_id, nickname, profile_url
+	    FROM place
+	    JOIN user_place AS up
+	    ON up.place_id = place.id
+	    JOIN user
+	    ON user.id = up.user_id 
+	    JOIN post
+	    ON post.user_place_id = up.id
+	    WHERE isdelete = false 
+	    AND isshow = true 
+	    AND user.id IN(SELECT request_user_id AS user_id 
+	    FROM friend WHERE target_user_id = #{user_id} AND accept = true
+	    UNION
+	    SELECT target_user_id AS user_id 
+	    FROM friend WHERE request_user_id = #{user_id} AND accept = true)
+	    GROUP BY post.id ORDER BY post.created_at DESC LIMIT 0, #{row};
 	</select>
 	<!-- 글 등록시 대표이미지 변경 -->
 	<update id="updateFrontImageOfPost" parameterType="HashMap">
 		UPDATE post SET front_image = #{front_image} WHERE id = #{id}
 	</update>
-
+	<!-- 검색결과에 필요한 나와 내 밥친구들 모든 리뷰글 -->
+	<select id="selectSearchPostOfPost" resultType="ptdto" parameterType="HashMap">
+		SELECT place.name, place.wish_count, up.id AS user_place_id, post.*, user_id, temp.comment_count
+		FROM place
+		JOIN user_place AS up
+		ON up.place_id = place.id
+		JOIN user
+		ON user.id = up.user_id
+        JOIN post
+        ON post.user_place_id = up.id
+        LEFT JOIN (SELECT post_id, count(1) AS comment_count FROM comment 
+        WHERE isdelete = false GROUP BY post_id) temp
+        ON temp.post_id = post.id
+		WHERE isdelete = false
+		AND user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT #{user_id} AS user_id FROM DUAL)
+        AND place.name LIKE CONCAT('%',#{keyword},'%')
+        ORDER BY post.created_at DESC;
+	</select>
+	
+	<!-- 해당 유저의 모든 리뷰글 (타임라인) -->
+	<select id="selectPostsOfTimeline" parameterType="HashMap" resultType="ptdto">
+		select user.id as user_id, user.profile_url, user.nickname,
+			post.*, place.name, place.address
+		FROM post 
+			JOIN user_place as up
+				ON post.user_place_id = up.id
+			JOIN user
+				ON up.user_id = user.id
+			JOIN place
+				ON up.place_id = place.id 
+		WHERE user.id = #{user_id} AND isdelete = false
+		GROUP BY post.id
+		ORDER BY post.created_at DESC LIMIT 0, #{row};
+	</select>
 </mapper>

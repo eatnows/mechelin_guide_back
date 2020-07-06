@@ -18,6 +18,12 @@ public class CommentDao extends SqlSessionDaoSupport implements CommentDaoInter 
 	}
 
 	@Override
+	public int getNowLiked(HashMap<String, String> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("isUserAddedCommentOfLikes", map);
+	}
+	
+	@Override
 	public List<CommentDto> getAllComments(String post_id) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("listOfComments", post_id);
@@ -46,5 +52,4 @@ public class CommentDao extends SqlSessionDaoSupport implements CommentDaoInter 
 		// TODO Auto-generated method stub
 		getSqlSession().update("updateOfComment", cdto);
 	}
-	
 }

@@ -7,11 +7,11 @@
 	<!-- insert -->
 	<insert id="insertOfUser" parameterType="udto">
 		INSERT user
-		<if test="profile_url != ''">
+		<if test="profile_url != null">
 			(email, password, nickname, profile_url, created_at, updated_at)
 			VALUES ( #{email}, #{password}, #{nickname}, #{profile_url}, now(), now() )
 		</if>
-		<if test="profile_url == ''">
+		<if test="profile_url == null">
 			(email, password, nickname, created_at, updated_at)
 			VALUES ( #{email}, #{password}, #{nickname}, now(), now() )
 		</if>
@@ -19,11 +19,13 @@
 	
 	<!-- email available check-->
 	<select id="mailCheckOfUser" parameterType="String" resultType="int">
-		SELECT count(*) FROM user WHERE email = #{email}
+		SELECT count(*) FROM user
+			WHERE email = #{email} AND dropuser = false
 	</select>
 	<!-- nickname available check -->
 	<select id="nickCheckOfUser" parameterType="String" resultType="int">
-		SELECT count(*) FROM user WHERE nickname = #{nickname}
+		SELECT count(*) FROM user
+			WHERE nickname = #{nickname} AND dropuser = false
 	</select>
 	
 	<!-- hmmm... lookup mailvalid TB -->
@@ -61,16 +63,31 @@
 	
 	<!-- ID/PW valid check -->
 	<select id="matchDataOfUser" parameterType="HashMap" resultType="int">
-		SELECT count(*) FROM user WHERE email = #{email} AND password = #{password}
+		SELECT count(*) FROM user
+			WHERE email = #{email} AND password = #{password}
 	</select>
 	<!-- get PW of ID for valid check -->
-	<select id="getPassOfUser" parameterType="String" resultType="String">
-		SELECT password FROM user WHERE email = #{email}
+	<select id="getPassOfUser" parameterType="udto" resultType="String">
+		SELECT password FROM user 
+			WHERE
+			<if test="email != null">
+				email = #{email}
+			</if>
+			<if test="email == null">
+				id = #{id}
+			</if>
 	</select>
 	
 	<!-- change password -->
 	<update id="updatePassOfUser" parameterType="HashMap">
-		UPDATE user SET password = #{password} WHERE email = #{email}
+		UPDATE user SET password = #{password} 
+			WHERE
+			<if test="email != null">
+				email = #{email}
+			</if>
+			<if test="email == null">
+				id = #{id}
+			</if>
 	</update>
 	
 	
@@ -80,8 +97,6 @@
 	</select>
 	
 	<!-- kakao TB insert -->
-	<!-- created_at 을 now()로 할지 받아올지 정해야 함
-		: rfc3339 parse 해결되면. (그냥 now()로 하고 싶긴 하다) -->
 	<insert id="insertOfApiUser" parameterType="udto">
 		INSERT kuser (kakaoid, email, created_at, updated_at)
 			VALUES ( #{id}, #{email}, now(), now() )
@@ -104,4 +119,27 @@
 	<select id="profileOfUser" parameterType="String" resultType="udto">
 		SELECT * FROM user WHERE id = #{id}
 	</select>
+	<!-- user테이블의 프로필 사진 이미지 변경 -->
+	<update id="updateProfileImgOfUser" parameterType="HashMap">
+		UPDATE user SET profile_url = #{profile_url} WHERE id = #{id}
+	</update>
+	<!-- 핀 사진 이미지 주소 변경 -->
+	<update id="updateMarkerImgOfUser" parameterType="HashMap">
+		UPDATE user SET pin_url = #{pin_url} WHERE id = #{id}
+	</update>
+	
+	
+	<!-- 소개글 변경 -->
+	<update id="updateIntroduceOfUser" parameterType="udto">
+		UPDATE user SET introduce = #{introduce} WHERE id = #{id}
+	</update>
+	<!-- 닉네임 변경 -->
+	<update id="updateNicknameOfUser" parameterType="udto">
+		UPDATE user SET nickname = #{nickname} WHERE id = #{id}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<update id="deleteAccountOfUser" parameterType="String">
+		UPDATE user SET dropuser = true WHERE id = #{id}
+	</update>
 </mapper>

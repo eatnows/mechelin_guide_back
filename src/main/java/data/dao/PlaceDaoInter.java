@@ -21,4 +21,5 @@ public interface PlaceDaoInter {
 	public Integer selectCheckPlace(HashMap<String, Double> map);
 	public List<PostDto> selectMyPlace(int user_id);
 	public List<PostDto> selectFriendsPlace(int user_id);
+	public List<PostDto> selectALLPlace(int user_id);
 }
