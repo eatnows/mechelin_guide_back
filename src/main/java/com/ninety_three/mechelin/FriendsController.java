@@ -79,6 +79,9 @@ public class FriendsController {
 	
 	@PostMapping("/addfriend")
 	public void addFriend(@RequestBody FriendsDto dto) {
+		int target_user_id = udao.selectIdUser(dto.getEmail());
+		dto.setTarget_user_id(target_user_id);
+		
 		int havedata = fdao.haveData(dto);
 		if (havedata == 0) {
 			// 양쪽 다 첫 신청일 경우 TB insert
