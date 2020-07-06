@@ -105,7 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 해당 유저의 모든 리뷰글 (타임라인) -->
 	<select id="selectPostsOfTimeline" parameterType="HashMap" resultType="ptdto">
 		select user.id as user_id, user.profile_url, user.nickname,
-			post.*, place.name, place.address
+			post.*, place.name, place.address, place.id as place_id
 		FROM post 
 			JOIN user_place as up
 				ON post.user_place_id = up.id
