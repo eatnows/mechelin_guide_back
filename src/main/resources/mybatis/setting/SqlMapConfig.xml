@@ -13,6 +13,7 @@
 		<typeAlias type="data.dto.FriendsDto" alias="fdto" />
 		<typeAlias type="data.dto.AskDto" alias="adto" />
 		<typeAlias type="data.dto.WishListDto" alias="wdto" />
+		<typeAlias type="data.dto.ReportDto" alias="rdto" />
 	</typeAliases>
 	<mappers>
 		<mapper resource="mybatis/setting/TestSql.xml" />
@@ -26,5 +27,6 @@
 		<mapper resource="mybatis/setting/FriendsSql.xml" />
 		<mapper resource="mybatis/setting/AskSql.xml" />
 		<mapper resource="mybatis/setting/WishListSql.xml" />
+		<mapper resource="mybatis/setting/ReportSql.xml" />
 	</mappers>
 </configuration>
