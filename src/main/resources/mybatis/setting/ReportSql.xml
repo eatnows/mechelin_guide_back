@@ -8,4 +8,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO report (register_user_id, reported_user_id, post_id, content, created_at) 
 		VALUES (#{register_user_id}, #{reported_user_id}, #{post_id}, #{content}, now())
 	</insert>
+	
+	<!-- 이미 신고가 되었는지 id를 반환하는 SQL 문-->
+	<select id="selectIsReportOfReport" parameterType="HashMap" resultType="Integer">
+		SELECT id FROM report WHERE post_id = #{post_id} AND register_user_id = #{register_user_id}
+	</select>
 </mapper>

@@ -16,4 +16,10 @@ public class ReportDao extends SqlSessionDaoSupport implements ReportDaoInter {
 		getSqlSession().insert("insertOfReport", dto);
 	}
 
+	@Override
+	public Integer selectIsReport(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectIsReportOfReport", map);
+	}
+
 }
