@@ -28,5 +28,6 @@
 		<mapper resource="mybatis/setting/AskSql.xml" />
 		<mapper resource="mybatis/setting/WishListSql.xml" />
 		<mapper resource="mybatis/setting/ReportSql.xml" />
+		<mapper resource="mybatis/setting/AdminSql.xml" />
 	</mappers>
 </configuration>

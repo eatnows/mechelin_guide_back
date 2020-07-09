@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin">
+	<select id="selectAllOfUser" resultType="udto" parameterType="HashMap">
+	SELECT * FROM user WHERE NOT authority = 'ROLE_ADMIN' order by id LIMIT #{startPage}, #{dataCount}
+	</select>
+	<select id="selectCountOfUser" resultType="int">
+	SELECT count(*) FROM user WHERE NOT authority = 'ROLE_ADMIN' order by id
+	</select>
+</mapper>

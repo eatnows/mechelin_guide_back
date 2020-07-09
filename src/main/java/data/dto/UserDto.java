@@ -2,6 +2,8 @@ package data.dto;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class UserDto {
 	private String id;
 	private String email;
@@ -11,6 +13,7 @@ public class UserDto {
 	private String pin_url;
 	private String introduce;
 	private String authority;
+	 @JsonFormat(pattern = "yyyy-MM-dd")
 	private Timestamp created_at;
 	private Timestamp updated_at;
 	
