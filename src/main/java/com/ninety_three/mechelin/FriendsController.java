@@ -1,6 +1,8 @@
 package com.ninety_three.mechelin;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.mail.MessagingException;
@@ -145,4 +147,26 @@ public class FriendsController {
 	public UserDto getUserProfile(@RequestParam String id) {
 		return udao.getUserProfile(id);
 	}
+	
+	/*
+	 * 나의 모든 친구 데이터 반환
+	 */
+	@GetMapping("/myfriends")
+	public List<UserDto> selectAllFriends(@RequestParam int user_id, 
+			@RequestParam int pageStart, @RequestParam int perPageNum){
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("user_id", user_id);
+		map.put("pageStart", pageStart);
+		map.put("perPageNum", perPageNum);
+		List<UserDto> list = fdao.selectAllFriends(map);
+		return list;
+	}
+	/*
+	 * 나의 친구수 반환
+	 */
+	@GetMapping("/mycount")
+	public int selectCountFriends(@RequestParam int user_id) {
+		return fdao.selectCountFriends(user_id);
+	}
+	
 }
