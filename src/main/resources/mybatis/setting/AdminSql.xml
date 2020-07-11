@@ -13,8 +13,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="searchDataOfUser" resultType="udto" parameterType="HashMap">
-	SELECT * FROM user WHERE id = #{searchData} OR nickname = #{searchData} OR email = #{searchData} 
-	OR created_at = #{searchData} ORDER BY id LIMIT #{startPage}, #{dataCount}
+	SELECT * FROM user WHERE id LIKE CONCAT('%',#{searchData},'%') OR nickname LIKE CONCAT('%',#{searchData},'%')
+	OR email LIKE CONCAT('%',#{searchData},'%')	OR created_at LIKE CONCAT('%',#{searchData},'%') 
+	ORDER BY id LIMIT #{startPage}, #{dataCount}
 	</select>
 	
 	<select id="sortDataOfUser" resultType="udto" parameterType="HashMap">
