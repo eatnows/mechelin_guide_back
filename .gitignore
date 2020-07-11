@@ -26,3 +26,5 @@ target/
 /mysql.properties
 src/main/webapp/WEB-INF/mysql.properties
 src/main/java/data/util/AwsS3.java
+*.class
+.classpath
