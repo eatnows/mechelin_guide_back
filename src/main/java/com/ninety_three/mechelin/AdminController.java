@@ -24,7 +24,8 @@ import data.dto.UserDto;
 public class AdminController {
 	@Autowired
 	AdminDaoInter adao;
-	
+
+	//유저 리스트 출력
 	@GetMapping("/user")
 	public List<UserDto> selectAllOfUser(@RequestParam int startPage, @RequestParam int dataCount){
 		HashMap<String, Integer> map=new HashMap<String, Integer>();
@@ -33,12 +34,14 @@ public class AdminController {
 		List<UserDto> list= adao.selectAllOfUser(map);
 		return list;
 	}
-	
+
+	//유저 수 구하기
 	@GetMapping("/usercount")
 	public int selectCountOfUser() {
 		return adao.selectCountOfUser();
 	}
-	
+
+	//유저 검색
 	@GetMapping("/searchdata")
 	public List<UserDto> searchDataOfUser(@RequestParam String searchData, @RequestParam int startPage, @RequestParam int dataCount){
 		HashMap<String, Object> map=new HashMap<String, Object>();
@@ -49,6 +52,7 @@ public class AdminController {
 		return list;
 	}
 	
+	//유저 권한으로 정렬
 	@GetMapping("/sortdata")
 	public List<UserDto> sortDataOfUser(@RequestParam String sorting, @RequestParam int startPage, @RequestParam int dataCount){
 		HashMap<String, Object> map=new HashMap<String, Object>();
@@ -59,13 +63,15 @@ public class AdminController {
 		return list;
 	}
 	
+	//탈퇴 여부로 필터링
 	@GetMapping("/filterdata")
-	public List<UserDto> filterDataOfUser(@RequestParam String authority, @RequestParam String dropuser, @RequestParam int startPage, @RequestParam int dataCount){
+	public List<UserDto> filterDataOfUser(@RequestParam String sorting, @RequestParam String filtering, @RequestParam int startPage, @RequestParam int dataCount){
 		HashMap<String, Object> map=new HashMap<String, Object>();
-		map.put("authority",authority);
-		map.put("dropuser",dropuser);
+		map.put("sorting",sorting);
+		map.put("filtering",filtering);
 		map.put("startPage",startPage);
 		map.put("dataCount",dataCount);
+		System.out.println(sorting+","+filtering+","+startPage+","+dataCount);
 		List<UserDto> list= adao.filterDataOfUser(map);
 		return list;
 	}
