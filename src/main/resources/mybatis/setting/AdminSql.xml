@@ -13,34 +13,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="searchDataOfUser" resultType="udto" parameterType="HashMap">
-	SELECT * FROM user WHERE id LIKE CONCAT('%',#{searchData},'%') OR nickname LIKE CONCAT('%',#{searchData},'%')
-	OR email LIKE CONCAT('%',#{searchData},'%')	OR created_at LIKE CONCAT('%',#{searchData},'%') 
+	SELECT * FROM user WHERE (id LIKE CONCAT('%',#{searchData},'%') OR nickname LIKE CONCAT('%',#{searchData},'%')
+	OR email LIKE CONCAT('%',#{searchData},'%')	OR created_at LIKE CONCAT('%',#{searchData},'%')) AND authority != 'ROLE_ADMIN' 
 	ORDER BY id LIMIT #{startPage}, #{dataCount}
 	</select>
 	
 	<select id="sortDataOfUser" resultType="udto" parameterType="HashMap">
-	SELECT * FROM user 
-		<if test="#{sorting} == true">
-		ORDER BY created_at desc
-		</if>
-		<if test="#{sorting} != false">
-		ORDER BY created_at 
-		</if>
+	SELECT * FROM user WHERE NOT authority = 'ROLE_ADMIN' 
+	<choose>
+		<when test = "sorting == 1">
+		ORDER BY authority DESC
+		</when>
+		<otherwise>
+		ORDER BY authority
+		</otherwise>
+	</choose>
 	LIMIT #{startPage}, #{dataCount}
 	</select>
 	
 	<select id="filterDataOfUser" resultType="udto" parameterType="HashMap">
-	SELECT * FROM user 
-		<if test="#{authority} != null and dropuser != null">
-		WHERE authority = #{authority} and dropuser = #{dropuser} 
-		</if>
-		<if test="#{authority} != null">
-		WHERE authority = #{authority} 
-		</if>
-		<if test="dropuser != null">
-		WHERE dropuser = #{dropuser} 
-		</if>
-	ORDER BY id LIMIT #{startPage}, #{dataCount}
+	SELECT * FROM user WHERE authority != 'ROLE_ADMIN' AND
+	<choose>
+		<when test="sorting != 0 and filtering == 1">
+		dropuser = true ORDER BY id
+		</when>
+		<when test="sorting != 0 and filtering == 2">
+		dropuser = false ORDER BY id
+		</when>
+		<when test="sorting != 1 and filtering == 1">
+		dropuser = true ORDER BY authority DESC
+		</when>
+		<when test="sorting != 1 and filtering == 2">
+		dropuser = false ORDER BY authority DESC
+		</when>
+		<when test="sorting != 2 and filtering == 1">
+		dropuser = true ORDER BY authority
+		</when>
+		<otherwise>
+		dropuser = false ORDER BY authority
+		</otherwise>
+	</choose>
+		LIMIT #{startPage}, #{dataCount}
 	</select>
 	
 </mapper>
