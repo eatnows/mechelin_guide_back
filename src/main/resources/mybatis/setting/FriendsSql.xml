@@ -80,7 +80,6 @@
         UNION
         SELECT target_user_id AS user_id 
         FROM friend WHERE request_user_id = #{user_id} AND accept = true)
-        ORDER BY nickname ASC
 	</select>
 	
 </mapper>
