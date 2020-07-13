@@ -263,7 +263,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-websocket</artifactId>
-            <version>${org.springframework-version}</version>
+            <version>5.0.6.RELEASE</version>
 		</dependency>
 		
 		<dependency>

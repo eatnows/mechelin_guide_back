@@ -1,14 +1,20 @@
 package data.util;
 
+import javax.websocket.server.ServerEndpoint;
+
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
+import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-@Component
-@RequestMapping("/replyEcho")
+
 public class ReplyEchoHandler extends TextWebSocketHandler {
 	
 	/*
@@ -16,6 +22,7 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 	 */
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+		System.out.println("웹소켓 연결");
 		System.out.println("afterConnectionEstablished : " + session);
 	}
 	
