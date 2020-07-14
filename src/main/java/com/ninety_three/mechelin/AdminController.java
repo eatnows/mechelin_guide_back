@@ -76,5 +76,41 @@ public class AdminController {
 		return list;
 	}
 	
+		//신고된 글 목록 출력
+		@GetMapping("/report")
+		public List<UserDto> selectAllOfReport(@RequestParam int startPage, @RequestParam int dataCount){
+			HashMap<String, Integer> map=new HashMap<String, Integer>();
+			map.put("startPage",startPage);
+			map.put("dataCount",dataCount);
+			List<UserDto> list= adao.selectAllOfReport(map);
+			return list;
+		}
 
+		//신고된 글의 수 구하기
+		@GetMapping("/reportcount")
+		public int selectCountOfReport() {
+			return adao.selectCountOfReport();
+		}
+		
+		//신고 날짜 순으로 정렬
+		@GetMapping("/report/sortdata")
+		public List<UserDto> sortDataOfReport(@RequestParam int startPage, @RequestParam int dataCount){
+			HashMap<String, Object> map=new HashMap<String, Object>();
+			map.put("startPage",startPage);
+			map.put("dataCount",dataCount);
+			List<UserDto> list= adao.sortDataOfReport(map);
+			return list;
+		}
+		
+		//제재 상태 변경
+		@GetMapping("/report/changeauthority")
+		public void changeAuthorityOfReport(@RequestParam int id){
+			adao.changeAuthorityOfReport(id);
+		}
+		
+		//신고글 삭제하기
+		@GetMapping("/report/deletereport")
+		public void deleteOfReport(@RequestParam int id){
+			adao.deleteOfReport(id);
+		}
 }

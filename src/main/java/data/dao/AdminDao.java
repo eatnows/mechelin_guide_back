@@ -35,4 +35,28 @@ public class AdminDao extends SqlSessionDaoSupport implements AdminDaoInter{
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("filterDataOfUser", map);
 	}
+	@Override
+	public List<UserDto> selectAllOfReport(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectAllOfReport", map);
+	}
+	@Override
+	public int selectCountOfReport() {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCountOfReport");
+	}
+	@Override
+	public List<UserDto> sortDataOfReport(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("sortDataOfReport", map);
+	}
+	@Override
+	public void changeAuthorityOfReport(int id) {
+		getSqlSession().selectList("changeAuthorityOfReport");
+	}
+	@Override
+	public void deleteOfReport(int id) {
+		getSqlSession().selectList("deleteOfReport");
+	}
+
 }

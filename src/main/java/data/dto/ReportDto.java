@@ -2,12 +2,15 @@ package data.dto;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ReportDto {
 	private int id;
 	private int register_user_id;
 	private int reported_user_id;
 	private int post_id;
 	private String content;
+	 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp created_at;
 	
 	
