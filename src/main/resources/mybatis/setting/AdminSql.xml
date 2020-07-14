@@ -33,27 +33,48 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="filterDataOfUser" resultType="udto" parameterType="HashMap">
 	SELECT * FROM user WHERE authority != 'ROLE_ADMIN' AND
-	<choose>
-		<when test="sorting != 0 and filtering == 1">
-		dropuser = true ORDER BY id
-		</when>
-		<when test="sorting != 0 and filtering == 2">
-		dropuser = false ORDER BY id
-		</when>
-		<when test="sorting != 1 and filtering == 1">
-		dropuser = true ORDER BY authority DESC
-		</when>
-		<when test="sorting != 1 and filtering == 2">
-		dropuser = false ORDER BY authority DESC
-		</when>
-		<when test="sorting != 2 and filtering == 1">
-		dropuser = true ORDER BY authority
-		</when>
-		<otherwise>
-		dropuser = false ORDER BY authority
-		</otherwise>
-	</choose>
+		<choose>
+			<when test="sorting != 0 and filtering == 1">
+			dropuser = true ORDER BY id
+			</when>
+			<when test="sorting != 0 and filtering == 2">
+			dropuser = false ORDER BY id
+			</when>
+			<when test="sorting != 1 and filtering == 1">
+			dropuser = true ORDER BY authority DESC
+			</when>
+			<when test="sorting != 1 and filtering == 2">
+			dropuser = false ORDER BY authority DESC
+			</when>
+			<when test="sorting != 2 and filtering == 1">
+			dropuser = true ORDER BY authority
+			</when>
+			<otherwise>
+			dropuser = false ORDER BY authority
+			</otherwise>
+		</choose>
 		LIMIT #{startPage}, #{dataCount}
 	</select>
+	
+	<select id="selectAllOfReport" resultType="rdto" parameterType="HashMap">
+	SELECT * FROM report ORDER BY id LIMIT #{startPage}, #{dataCount}
+	</select>
+	
+	<select id="selectCountOfReport" resultType="int">
+	SELECT count(*) FROM report ORDER BY id
+	</select>
+	
+	<select id="sortDataOfReport" resultType="rdto" parameterType="HashMap">
+	SELECT * FROM report ORDER BY created_at DESC LIMIT #{startPage}, #{dataCount}
+	</select>
+	
+	<update id="changeAuthorityOfReport" parameterType="int">
+	UPDATE INTO user JOIN report ON user.id = report.reported_user_id SET 
+	authority = ROLE_BAN WHERE report.reported_user_id = #{id}
+	</update>
+	
+	<delete id="deleteOfReport" parameterType="int">
+	DELETE FROM report WHERE id = #{id}
+	</delete>
 	
 </mapper>
