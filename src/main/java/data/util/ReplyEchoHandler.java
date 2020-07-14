@@ -64,7 +64,7 @@ public class ReplyEchoHandler extends TextWebSocketHandler {
 				
 				WebSocketSession receiveUserSession = userSessions.get(friendUserId);
 				if(receiveUserSession != null) {
-					receiveUserSession.sendMessage(new TextMessage(sendMessage));
+					receiveUserSession.sendMessage(new TextMessage(sendMessage+","+myUserId));
 				}
 			}
 			
