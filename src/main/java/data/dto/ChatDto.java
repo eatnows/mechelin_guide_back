@@ -2,11 +2,14 @@ package data.dto;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class ChatDto {
 	private int id;
 	private int chatroom_id;
 	private int user_id;
 	private String content;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp created_at;
 	
 	// dm_member 테이블

@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 채팅방에 대화내용 반환 -->
 	<select id="selectChatContentOfChat" parameterType="HashMap" resultType="chdto">
 		SELECT * FROM chat WHERE chatroom_id = #{chatroom_id} 
-		ORDER BY created_at DESC LIMIT 10 OFFSET #{page}
+		ORDER BY created_at DESC LIMIT 0, #{page}
 	</select>
 	
 	
