@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import data.dao.AdminDaoInter;
 import data.dao.CommentDaoInter;
+import data.dto.AskDto;
+import data.dto.ReportDto;
 import data.dto.UserDto;
 
 @RestController
@@ -78,11 +80,11 @@ public class AdminController {
 	
 		//신고된 글 목록 출력
 		@GetMapping("/report")
-		public List<UserDto> selectAllOfReport(@RequestParam int startPage, @RequestParam int dataCount){
+		public List<ReportDto> selectAllOfReport(@RequestParam int startPage, @RequestParam int dataCount){
 			HashMap<String, Integer> map=new HashMap<String, Integer>();
 			map.put("startPage",startPage);
 			map.put("dataCount",dataCount);
-			List<UserDto> list= adao.selectAllOfReport(map);
+			List<ReportDto> list= adao.selectAllOfReport(map);
 			return list;
 		}
 
@@ -94,11 +96,11 @@ public class AdminController {
 		
 		//신고 날짜 순으로 정렬
 		@GetMapping("/report/sortdata")
-		public List<UserDto> sortDataOfReport(@RequestParam int startPage, @RequestParam int dataCount){
+		public List<ReportDto> sortDataOfReport(@RequestParam int startPage, @RequestParam int dataCount){
 			HashMap<String, Object> map=new HashMap<String, Object>();
 			map.put("startPage",startPage);
 			map.put("dataCount",dataCount);
-			List<UserDto> list= adao.sortDataOfReport(map);
+			List<ReportDto> list= adao.sortDataOfReport(map);
 			return list;
 		}
 		
@@ -113,4 +115,42 @@ public class AdminController {
 		public void deleteOfReport(@RequestParam int id){
 			adao.deleteOfReport(id);
 		}
+		
+		//문의글 리스트 출력
+		@GetMapping("/ask")
+		public List<AskDto> selectAllOfAsk(@RequestParam int startPage, @RequestParam int dataCount){
+			HashMap<String, Integer> map=new HashMap<String, Integer>();
+			map.put("startPage",startPage);
+			map.put("dataCount",dataCount);
+			System.out.println(startPage+","+dataCount);
+			List<AskDto> list= adao.selectAllOfAsk(map);
+			return list;
+		}
+
+		//문의글 수 구하기
+		@GetMapping("/askcount")
+		public int selectCountOfAsk() {
+			return adao.selectCountOfAsk();
+		}
+
+		//문의한 유저 검색
+		@GetMapping("/ask/searchdata")
+		public List<AskDto> searchDataOfAsk(@RequestParam String searchData, @RequestParam int startPage, @RequestParam int dataCount){
+			HashMap<String, Object> map=new HashMap<String, Object>();
+			map.put("searchData",searchData);
+			map.put("startPage",startPage);
+			map.put("dataCount",dataCount);
+			List<AskDto> list= adao.searchDataOfAsk(map);
+			return list;
+		}
+		
+		//답변 수정
+		@GetMapping("/ask/answer")
+		public void answerOfAsk(@RequestParam int id,@RequestParam String reply){
+			HashMap<String, Object> map=new HashMap<String, Object>();
+			map.put("id",id);
+			map.put("reply",reply);
+			adao.answerOfAsk(map);
+		}
+
 }

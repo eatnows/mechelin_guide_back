@@ -78,4 +78,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	DELETE FROM report WHERE id = #{id}
 	</delete>
 	
+	<select id="selectAllOfASK" resultType="adto" parameterType="HashMap">
+	SELECT * FROM ask ORDER BY id LIMIT #{startPage}, #{dataCount}
+	</select>
+	
+	<select id="selectCountOfAsk" resultType="int">
+	SELECT count(*) FROM ask ORDER BY id
+	</select>
+	
+	<select id="searchDataOfAsk" resultType="adto" parameterType="HashMap">
+	SELECT * FROM ask WHERE user_id = #{id}	ORDER BY id DESC LIMIT #{startPage}, #{dataCount}
+	</select>
+	
+	<update id="answerOfAsk" parameterType="HashMap">
+	UPDATE ask SET reply = #{answer}, reply_created_at = now() WHERE id = #{id}
+	</update>
+	
+	
 </mapper>
