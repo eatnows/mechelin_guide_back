@@ -30,9 +30,9 @@ public class ChatDao extends SqlSessionDaoSupport implements ChatDaoInter {
 	}
 
 	@Override
-	public Integer selectIdChatRoom(int user_id) {
+	public Integer selectIdChatRoom(HashMap<String, Integer> map) {
 		// TODO Auto-generated method stub
-		return getSqlSession().selectOne("selectIdOfChatRoom", user_id);
+		return getSqlSession().selectOne("selectIdOfChatRoom", map);
 	}
 	
 	/*
@@ -50,6 +50,8 @@ public class ChatDao extends SqlSessionDaoSupport implements ChatDaoInter {
 	@Override
 	public void insertChat(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
+		System.out.println(map);
+		System.out.println("실행");
 		getSqlSession().insert("insertOfChat", map);
 	}
 

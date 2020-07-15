@@ -9,7 +9,7 @@ public interface ChatDaoInter {
 	public void insertChatRoom();
 	public int selectLatelyChatRoom();
 	public void deleteChatRoom(int id);
-	public Integer selectIdChatRoom(int user_id);
+	public Integer selectIdChatRoom(HashMap<String, Integer> map);
 	
 	/*
 	 * dm_member 테이블

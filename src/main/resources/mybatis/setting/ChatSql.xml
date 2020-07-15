@@ -17,15 +17,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM chatroom WHERE id = #{id}
 	</delete>
 	<!-- 채팅방의 번호 얻기 -->
-	<select id="selectIdOfChatRoom" resultType="Integer" parameterType="int">      
+	<select id="selectIdOfChatRoom" resultType="Integer" parameterType="HashMap">      
         SELECT chatroom_id FROM dm_member 
-        WHERE user_id = #{user_id} AND chatroom_id =
-        (SELECT chatroom_id FROM dm_member 
-        WHERE user_id IN(SELECT request_user_id AS user_id 
-		FROM friend WHERE target_user_id = #{user_id} AND accept = true
-        UNION
-        SELECT target_user_id AS user_id 
-        FROM friend WHERE request_user_id = #{user_id} AND accept = true))
+        WHERE user_id = #{myUserId} 
+        AND chatroom_id IN (SELECT chatroom_id FROM dm_member WHERE user_id = #{friendUserId})
 	</select>
 	
 	
@@ -42,7 +37,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		INSERT INTO chat (chatroom_id, user_id, content, created_at) 
 		VALUES (#{chatroom_id}, #{user_id}, #{content}, now())
 	</insert>
-	
+	<!-- 채팅방에 대화내용 반환 -->
+	<select id="selectChatContentOfChat" parameterType="">
+		SELECT * FROM chat WHERE chatroom_id = #{chatroom_id} 
+		ORDER BY created_at DESC LIMIT 10 OFFSET #{page}
+	</select>
 	
 	
 </mapper>

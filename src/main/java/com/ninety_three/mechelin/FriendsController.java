@@ -162,8 +162,11 @@ public class FriendsController {
 	public void deleteFriend(@RequestBody FriendsDto dto) {
 		// 친구를 삭제했을 경우 채팅방 삭제
 		// 채팅방 id를 얻기
-		if(chdao.selectIdChatRoom(dto.getRequest_user_id()) != null) {
-			int chatroom_id = chdao.selectIdChatRoom(dto.getRequest_user_id());			
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("myUserId", dto.getRequest_user_id());
+		map.put("friendUserId", dto.getTarget_user_id());
+		if(chdao.selectIdChatRoom(map) != null) {
+			int chatroom_id = chdao.selectIdChatRoom(map);			
 			System.out.println(chatroom_id);
 			// 채팅방 삭제
 			chdao.deleteChatRoom(chatroom_id);
