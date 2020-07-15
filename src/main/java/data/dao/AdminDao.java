@@ -6,6 +6,8 @@ import java.util.List;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
 
+import data.dto.AskDto;
+import data.dto.ReportDto;
 import data.dto.UserDto;
 @Repository
 public class AdminDao extends SqlSessionDaoSupport implements AdminDaoInter{
@@ -36,7 +38,7 @@ public class AdminDao extends SqlSessionDaoSupport implements AdminDaoInter{
 		return getSqlSession().selectList("filterDataOfUser", map);
 	}
 	@Override
-	public List<UserDto> selectAllOfReport(HashMap<String, Integer> map) {
+	public List<ReportDto> selectAllOfReport(HashMap<String, Integer> map) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("selectAllOfReport", map);
 	}
@@ -46,17 +48,36 @@ public class AdminDao extends SqlSessionDaoSupport implements AdminDaoInter{
 		return getSqlSession().selectOne("selectCountOfReport");
 	}
 	@Override
-	public List<UserDto> sortDataOfReport(HashMap<String, Object> map) {
+	public List<ReportDto> sortDataOfReport(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("sortDataOfReport", map);
 	}
 	@Override
 	public void changeAuthorityOfReport(int id) {
-		getSqlSession().selectList("changeAuthorityOfReport");
+		getSqlSession().update("changeAuthorityOfReport",id);
 	}
 	@Override
 	public void deleteOfReport(int id) {
-		getSqlSession().selectList("deleteOfReport");
+		getSqlSession().delete("deleteOfReport",id);
 	}
-
+	@Override
+	public void answerOfAsk(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().update("answerOfAsk");
+	}
+	@Override
+	public List<AskDto> searchDataOfAsk(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("searchDataOfAsk",map);
+	}
+	@Override
+	public List<AskDto> selectAllOfAsk(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectAllOfAsk",map);
+	}
+	@Override
+	public int selectCountOfAsk() {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCountOfAsk");
+	}
 }
