@@ -1,6 +1,9 @@
 package data.dao;
 
 import java.util.HashMap;
+import java.util.List;
+
+import data.dto.ChatDto;
 
 public interface ChatDaoInter {
 	/*
@@ -20,4 +23,5 @@ public interface ChatDaoInter {
 	 * chat 테이블
 	 */
 	public void insertChat(HashMap<String, Object> map);
+	public List<ChatDto> selectChatContent(HashMap<String, Integer> map);
 }

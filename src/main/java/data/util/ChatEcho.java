@@ -67,7 +67,7 @@ public class ChatEcho extends TextWebSocketHandler {
 				String friendUserId = strs[2];
 				String sendMessage = strs[3];
 				String chatRoomId = strs[4];
-				
+				System.out.println(friendUserId);
 				// chat테이블 insert
 				HashMap<String, Object> map = new HashMap<String, Object>();
 				map.put("chatroom_id", Integer.parseInt(chatRoomId));
@@ -77,7 +77,7 @@ public class ChatEcho extends TextWebSocketHandler {
 				
 				WebSocketSession receiveUserSession = userSessions.get(friendUserId);
 				if(receiveUserSession != null) {
-					receiveUserSession.sendMessage(new TextMessage(sendMessage+","+chatRoomId));
+					receiveUserSession.sendMessage(new TextMessage(sendMessage+","+chatRoomId+","+myUserId));
 				}
 			}
 			
