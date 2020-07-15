@@ -12,8 +12,8 @@ public class ReportDto {
 	private String content;
 	 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Timestamp created_at;
-	
-	
+	//user 권한 참조
+	private String authority;
 	public int getId() {
 		return id;
 	}
@@ -49,6 +49,12 @@ public class ReportDto {
 	}
 	public void setCreated_at(Timestamp created_at) {
 		this.created_at = created_at;
+	}
+	public String getAuthority() {
+		return authority;
+	}
+	public void setAuthority(String authority) {
+		this.authority = authority;
 	}
 	
 	

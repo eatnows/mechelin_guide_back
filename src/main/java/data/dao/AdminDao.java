@@ -52,11 +52,11 @@ public class AdminDao extends SqlSessionDaoSupport implements AdminDaoInter{
 	}
 	@Override
 	public void changeAuthorityOfReport(int id) {
-		getSqlSession().selectList("changeAuthorityOfReport");
+		getSqlSession().update("changeAuthorityOfReport",id);
 	}
 	@Override
 	public void deleteOfReport(int id) {
-		getSqlSession().selectList("deleteOfReport");
+		getSqlSession().delete("deleteOfReport",id);
 	}
 
 }

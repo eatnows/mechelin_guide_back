@@ -57,7 +57,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectAllOfReport" resultType="rdto" parameterType="HashMap">
-	SELECT * FROM report ORDER BY id LIMIT #{startPage}, #{dataCount}
+	SELECT report.*, user.authority FROM report JOIN user ON user.id = report.reported_user_id 
+	ORDER BY id LIMIT #{startPage}, #{dataCount}
 	</select>
 	
 	<select id="selectCountOfReport" resultType="int">
@@ -69,8 +70,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<update id="changeAuthorityOfReport" parameterType="int">
-	UPDATE INTO user JOIN report ON user.id = report.reported_user_id SET 
-	authority = ROLE_BAN WHERE report.reported_user_id = #{id}
+	UPDATE user JOIN report ON user.id = report.reported_user_id SET 
+	authority = "ROLE_BAN" WHERE report.reported_user_id = #{id}
 	</update>
 	
 	<delete id="deleteOfReport" parameterType="int">
