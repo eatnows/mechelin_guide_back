@@ -146,10 +146,12 @@ public class AdminController {
 		
 		//답변 수정
 		@GetMapping("/ask/answer")
-		public void answerOfAsk(@RequestParam int id,@RequestParam String reply){
+		public void answerOfAsk(@RequestParam int id,@RequestParam String answer){
 			HashMap<String, Object> map=new HashMap<String, Object>();
+			System.out.println(id+","+answer);
 			map.put("id",id);
-			map.put("reply",reply);
+			map.put("answer",answer);
+			System.out.println(map);
 			adao.answerOfAsk(map);
 		}
 

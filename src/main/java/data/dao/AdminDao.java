@@ -63,7 +63,7 @@ public class AdminDao extends SqlSessionDaoSupport implements AdminDaoInter{
 	@Override
 	public void answerOfAsk(HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
-		getSqlSession().update("answerOfAsk");
+		getSqlSession().update("answerOfAsk",map);
 	}
 	@Override
 	public List<AskDto> searchDataOfAsk(HashMap<String, Object> map) {
