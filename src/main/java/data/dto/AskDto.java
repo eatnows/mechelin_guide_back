@@ -2,13 +2,17 @@ package data.dto;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 public class AskDto {
 	private int id;
 	private int user_id;
 	private String subject;
 	private String content;
 	private String reply;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Timestamp created_at;
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
 	private Timestamp reply_created_at;
 	
 	public int getId() {
