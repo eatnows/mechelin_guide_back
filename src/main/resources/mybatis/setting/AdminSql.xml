@@ -13,19 +13,29 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="searchDataOfUser" resultType="udto" parameterType="HashMap">
-	SELECT * FROM user WHERE id = #{searchData} OR nickname LIKE CONCAT('%',#{searchData},'%')
-	OR email LIKE CONCAT('%',#{searchData},'%')	OR created_at LIKE CONCAT('%',#{searchData},'%') AND authority != 'ROLE_ADMIN' 
-	ORDER BY id LIMIT #{startPage}, #{dataCount}
+	SELECT * FROM user WHERE 
+	<choose>
+		<when test="option.equals('email')">		
+		email LIKE CONCAT('%',#{searchData},'%')  
+		</when>
+		<when test="option.equals('id')">		 
+		id = #{searchData} 
+		</when>
+		<otherwise>		
+		created_at LIKE CONCAT('%',#{searchData},'%') 
+		</otherwise>
+	</choose>
+	AND authority != 'ROLE_ADMIN' ORDER BY id LIMIT #{startPage}, #{dataCount}
 	</select>
 	
 	<select id="sortDataOfUser" resultType="udto" parameterType="HashMap">
 	SELECT * FROM user WHERE NOT authority = 'ROLE_ADMIN' 
 	<choose>
-		<when test = "sorting == 1">
+		<when test="sorting == 1">
 		ORDER BY authority DESC
 		</when>
 		<otherwise>
-		ORDER BY authority
+		ORDER BY authority ASC
 		</otherwise>
 	</choose>
 	LIMIT #{startPage}, #{dataCount}
@@ -34,26 +44,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="filterDataOfUser" resultType="udto" parameterType="HashMap">
 	SELECT * FROM user WHERE authority != 'ROLE_ADMIN' AND
 		<choose>
-			<when test="sorting != 0 and filtering == 1">
-			dropuser = true ORDER BY id
+			<when test="sorting == 0 and filtering == 1">
+			dropuser = true ORDER BY id ASC
 			</when>
-			<when test="sorting != 0 and filtering == 2">
-			dropuser = false ORDER BY id
+			<when test="sorting == 0 and filtering == 2">
+			dropuser = false ORDER BY id ASC
 			</when>
-			<when test="sorting != 1 and filtering == 1">
+			<when test="sorting == 1 and filtering == 1">
 			dropuser = true ORDER BY authority DESC
 			</when>
-			<when test="sorting != 1 and filtering == 2">
+			<when test="sorting == 1 and filtering == 2">
 			dropuser = false ORDER BY authority DESC
 			</when>
-			<when test="sorting != 2 and filtering == 1">
-			dropuser = true ORDER BY authority
+			<when test="sorting == 2 and filtering == 1">
+			dropuser = true ORDER BY authority ASC
 			</when>
 			<otherwise>
-			dropuser = false ORDER BY authority
+			dropuser = false ORDER BY authority ASC
 			</otherwise>
 		</choose>
 		LIMIT #{startPage}, #{dataCount}
+	</select>
+	
+	<select id="filterDataCountOfUser" resultType="int" parameterType="HashMap">
+	SELECT count(*) FROM user WHERE authority != 'ROLE_ADMIN' AND
+		<choose>
+			<when test="filtering == 1">
+			dropuser = true 
+			</when>
+			<otherwise>
+			dropuser = false 
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="selectAllOfReport" resultType="rdto" parameterType="HashMap">
@@ -79,7 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<select id="selectAllOfAsk" resultType="adto" parameterType="HashMap">
-	SELECT * FROM ask ORDER BY id LIMIT #{startPage}, #{dataCount}
+	SELECT * FROM ask ORDER BY id LIMIT #{currentPage}, #{dataCount}
 	</select>
 	
 	<select id="selectCountOfAsk" resultType="int">
@@ -87,7 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="searchDataOfAsk" resultType="adto" parameterType="HashMap">
-	SELECT * FROM ask WHERE user_id = #{searchData}	ORDER BY id DESC LIMIT #{startPage}, #{dataCount}
+	SELECT * FROM ask WHERE user_id = #{searchData}	ORDER BY id DESC LIMIT #{currentPage}, #{dataCount}
 	</select>
 	
 	<update id="answerOfAsk" parameterType="HashMap">

@@ -38,6 +38,11 @@ public class AdminDao extends SqlSessionDaoSupport implements AdminDaoInter{
 		return getSqlSession().selectList("filterDataOfUser", map);
 	}
 	@Override
+	public int filterDataCountOfUser(HashMap<String, String> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("filterDataCountOfUser",map);
+	}
+	@Override
 	public List<ReportDto> selectAllOfReport(HashMap<String, Integer> map) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectList("selectAllOfReport", map);

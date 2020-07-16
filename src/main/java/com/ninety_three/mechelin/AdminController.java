@@ -45,11 +45,13 @@ public class AdminController {
 
 	//유저 검색
 	@GetMapping("/searchdata")
-	public List<UserDto> searchDataOfUser(@RequestParam String searchData, @RequestParam int startPage, @RequestParam int dataCount){
+	public List<UserDto> searchDataOfUser(@RequestParam String option, @RequestParam String searchData, @RequestParam int startPage, @RequestParam int dataCount){
 		HashMap<String, Object> map=new HashMap<String, Object>();
+		map.put("option",option);
 		map.put("searchData",searchData);
 		map.put("startPage",startPage);
 		map.put("dataCount",dataCount);
+		System.out.println(map);
 		List<UserDto> list= adao.searchDataOfUser(map);
 		return list;
 	}
@@ -61,6 +63,7 @@ public class AdminController {
 		map.put("sorting",sorting);
 		map.put("startPage",startPage);
 		map.put("dataCount",dataCount);
+		System.out.println(map);
 		List<UserDto> list= adao.sortDataOfUser(map);
 		return list;
 	}
@@ -73,11 +76,20 @@ public class AdminController {
 		map.put("filtering",filtering);
 		map.put("startPage",startPage);
 		map.put("dataCount",dataCount);
-		System.out.println(sorting+","+filtering+","+startPage+","+dataCount);
+		System.out.println(map);
 		List<UserDto> list= adao.filterDataOfUser(map);
 		return list;
 	}
 	
+	//필터링된 유저 수 구하기
+		@GetMapping("/filteredusercount")
+		public int filterDataCountOfUser(@RequestParam String filtering) {
+			HashMap<String, String> map=new HashMap<String, String>();
+			map.put("filtering",filtering);
+			System.out.println(filtering+","+adao.filterDataCountOfUser(map));
+			return adao.filterDataCountOfUser(map);
+		}
+
 		//신고된 글 목록 출력
 		@GetMapping("/report")
 		public List<ReportDto> selectAllOfReport(@RequestParam int startPage, @RequestParam int dataCount){
@@ -118,11 +130,11 @@ public class AdminController {
 		
 		//문의글 리스트 출력
 		@GetMapping("/ask")
-		public List<AskDto> selectAllOfAsk(@RequestParam int startPage, @RequestParam int dataCount){
+		public List<AskDto> selectAllOfAsk(@RequestParam int currentPage, @RequestParam int dataCount){
 			HashMap<String, Integer> map=new HashMap<String, Integer>();
-			map.put("startPage",startPage);
+			map.put("currentPage",currentPage);
 			map.put("dataCount",dataCount);
-			System.out.println(startPage+","+dataCount);
+			System.out.println(currentPage+","+dataCount);
 			List<AskDto> list= adao.selectAllOfAsk(map);
 			return list;
 		}
@@ -135,10 +147,10 @@ public class AdminController {
 
 		//문의한 유저 검색
 		@GetMapping("/ask/searchdata")
-		public List<AskDto> searchDataOfAsk(@RequestParam String searchData, @RequestParam int startPage, @RequestParam int dataCount){
+		public List<AskDto> searchDataOfAsk(@RequestParam String searchData, @RequestParam int currentPage, @RequestParam int dataCount){
 			HashMap<String, Object> map=new HashMap<String, Object>();
 			map.put("searchData",searchData);
-			map.put("startPage",startPage);
+			map.put("currentPage",currentPage);
 			map.put("dataCount",dataCount);
 			List<AskDto> list= adao.searchDataOfAsk(map);
 			return list;
