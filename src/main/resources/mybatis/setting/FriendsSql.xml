@@ -63,4 +63,24 @@
 		SELECT email FROM user WHERE id = #{user_id}
 	</select>
 	
+	<!-- 나의 모든 친구 반환 -->
+	<select id="selectAllFriendsOfUser" resultType="udto" parameterType="HashMap">
+		SELECT *, dm_member.chatroom_id FROM user JOIN dm_member ON user_id = user.id 
+		WHERE user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true)
+        ORDER BY nickname ASC
+        LIMIT #{pageStart}, #{perPageNum}
+	</select>
+	<!-- 나의 모든 친구 갯수 반환 -->
+	<select id="selectCountFriendsOfUser" resultType="int" parameterType="int">
+		SELECT COUNT(*) FROM user WHERE user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true)
+	</select>
+	
 </mapper>
