@@ -41,7 +41,6 @@ public class ChatEcho extends TextWebSocketHandler {
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		HttpSession hsession;
-		System.out.println("웹소켓 연결");
 		System.out.println("afterConnectionEstablished : " + session);
 		String senderId = getId(session);
 		userSessions.put(senderId, session);
@@ -54,8 +53,6 @@ public class ChatEcho extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		System.out.println("handleTextMessage : " + session + " : " + message);
-		System.out.println("페이로드");
-		System.out.println(message.getPayload());
 		String senderId = getId(session);
 		// protocol = 챗타입, 보낸사람, 받는사람, 메시지, 채팅방번호
 		String msg = message.getPayload();
@@ -83,12 +80,7 @@ public class ChatEcho extends TextWebSocketHandler {
 			
 			
 		}
-        
-        
-//		for(WebSocketSession sess : sessions) {
-//			String senderId = session.getId();
-//			sess.sendMessage(new TextMessage(senderId + " : " + message.getPayload()));
-//		}
+
 	}
 	/*
 	 * 커넥션이 클로즈됐을때
