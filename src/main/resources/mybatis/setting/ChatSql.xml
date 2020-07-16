@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="chat">
+				<!-- chatromm 테이블 -->
+	<!-- Chatroom 데이터 생성 -->
+	<insert id="insertOfChatRoom">
+		INSERT INTO chatroom (created_at) VALUES (now())
+	</insert>
+	<!-- 가장 최근에 생성된 Chatroom의 id값 반환 -->
+	<select id="selectLatleyChatRoom" resultType="int">
+		SELECT id FROM chatroom ORDER BY created_at DESC LIMIT 1
+	</select>
+	<!-- 친구삭제시 채팅방 삭제 -->
+	<delete id="deleteOfChatRoom" parameterType="HashMap">
+		DELETE FROM chatroom WHERE id = #{id}
+	</delete>
+	<!-- 채팅방의 번호 얻기 -->
+	<select id="selectIdOfChatRoom" resultType="Integer" parameterType="HashMap">      
+        SELECT chatroom_id FROM dm_member 
+        WHERE user_id = #{myUserId} 
+        AND chatroom_id IN (SELECT chatroom_id FROM dm_member WHERE user_id = #{friendUserId})
+	</select>
+	
+	
+				<!-- dm_member 테이블 -->
+	<!-- dm_member 테이블 생성, 채팅방에 소속 -->
+	<insert id="insertOfdm_member" parameterType="HashMap">
+		INSERT INTO dm_member (user_id, chatroom_id, title, created_at) 
+		VALUES (#{user_id}, #{chatroom_id}, #{title}, now())
+	</insert>
+	
+				<!-- chat테이블 -->
+	<!-- chat 테이블 생성 (메시지를 입력했을때) -->
+	<insert id="insertOfChat" parameterType="HashMap">
+		INSERT INTO chat (chatroom_id, user_id, content, created_at) 
+		VALUES (#{chatroom_id}, #{user_id}, #{content}, now())
+	</insert>
+	<!-- 채팅방에 대화내용 반환 -->
+	<select id="selectChatContentOfChat" parameterType="HashMap" resultType="chdto">
+		SELECT * FROM chat WHERE chatroom_id = #{chatroom_id} 
+		ORDER BY created_at DESC LIMIT 0, #{page}
+	</select>
+	
+	
+</mapper>

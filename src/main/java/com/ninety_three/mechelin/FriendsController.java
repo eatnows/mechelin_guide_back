@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import data.dao.ChatDaoInter;
 import data.dao.FriendsDaoInter;
 import data.dao.UserDaoInter;
 import data.dto.FriendsDto;
@@ -34,6 +35,10 @@ public class FriendsController {
 	
 	@Autowired
 	UserDaoInter udao;
+	
+	// 채팅에 관한 dao
+	@Autowired
+	ChatDaoInter chdao;
 	
 	@Autowired
 	private JavaMailSender sender;
@@ -81,7 +86,13 @@ public class FriendsController {
 	
 	@PostMapping("/addfriend")
 	public void addFriend(@RequestBody FriendsDto dto) {
-		int target_user_id = udao.selectIdUser(dto.getEmail());
+		//int target_user_id = udao.selectIdUser(dto.getEmail());
+		int target_user_id;
+		if(dto.getEmail() == null) {
+			target_user_id = dto.getTarget_user_id();			
+		} else {
+			target_user_id = udao.selectIdUser(dto.getEmail());
+		}
 		dto.setTarget_user_id(target_user_id);
 		
 		int havedata = fdao.haveData(dto);
@@ -130,6 +141,18 @@ public class FriendsController {
 		dto.setTarget_user_id(Integer.parseInt(target));
 		
 		fdao.acceptFriend(dto);
+		
+		// 친구가 수락되었을때 채팅방 생성
+		chdao.insertChatRoom();
+		// 방금 생성한 채팅방의 id로 dm_member 테이블 insert
+		int chatroom_id = chdao.selectLatelyChatRoom();
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("chatroom_id", chatroom_id);
+		map.put("user_id", request);
+		map.put("title", ""); // 채팅방이름
+		chdao.insertDmMember(map);
+		map.put("user_id", target);
+		chdao.insertDmMember(map);
 	}
 	
 	/*
@@ -137,7 +160,21 @@ public class FriendsController {
 	*/
 	@PostMapping("/deletefriend")
 	public void deleteFriend(@RequestBody FriendsDto dto) {
+		// 친구를 삭제했을 경우 채팅방 삭제
+		// 채팅방 id를 얻기
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("myUserId", dto.getRequest_user_id());
+		map.put("friendUserId", dto.getTarget_user_id());
+		if(chdao.selectIdChatRoom(map) != null) {
+			int chatroom_id = chdao.selectIdChatRoom(map);			
+			System.out.println(chatroom_id);
+			// 채팅방 삭제
+			chdao.deleteChatRoom(chatroom_id);
+		}
+		
+		// 친구삭제
 		fdao.deleteFriend(dto);
+		
 	}
 	
 	/*
