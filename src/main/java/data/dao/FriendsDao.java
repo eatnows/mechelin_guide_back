@@ -12,7 +12,13 @@ import data.dto.UserDto;
 
 @Repository
 public class FriendsDao extends SqlSessionDaoSupport implements FriendsDaoInter {
-
+ 
+	@Override
+	public int isMyFriend(FriendsDto dto) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("isMyFriend", dto);
+	}
+	
 	@Override
 	public int haveData(FriendsDto dto) {
 		// TODO Auto-generated method stub

@@ -44,23 +44,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="filterDataOfUser" resultType="udto" parameterType="HashMap">
 	SELECT * FROM user WHERE authority != 'ROLE_ADMIN' AND
 		<choose>
-			<when test="sorting == 0 and filtering == 1">
-			dropuser = true ORDER BY id ASC
-			</when>
-			<when test="sorting == 0 and filtering == 2">
-			dropuser = false ORDER BY id ASC
-			</when>
-			<when test="sorting == 1 and filtering == 1">
-			dropuser = true ORDER BY authority DESC
-			</when>
-			<when test="sorting == 1 and filtering == 2">
-			dropuser = false ORDER BY authority DESC
-			</when>
-			<when test="sorting == 2 and filtering == 1">
-			dropuser = true ORDER BY authority ASC
+			<when test="filtering == 1">
+			dropuser = true 
 			</when>
 			<otherwise>
-			dropuser = false ORDER BY authority ASC
+			dropuser = false 
 			</otherwise>
 		</choose>
 		LIMIT #{startPage}, #{dataCount}

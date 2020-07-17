@@ -70,9 +70,8 @@ public class AdminController {
 	
 	//탈퇴 여부로 필터링
 	@GetMapping("/filterdata")
-	public List<UserDto> filterDataOfUser(@RequestParam String sorting, @RequestParam String filtering, @RequestParam int startPage, @RequestParam int dataCount){
+	public List<UserDto> filterDataOfUser(@RequestParam String filtering, @RequestParam int startPage, @RequestParam int dataCount){
 		HashMap<String, Object> map=new HashMap<String, Object>();
-		map.put("sorting",sorting);
 		map.put("filtering",filtering);
 		map.put("startPage",startPage);
 		map.put("dataCount",dataCount);
