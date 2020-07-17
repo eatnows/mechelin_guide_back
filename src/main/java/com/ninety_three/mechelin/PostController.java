@@ -89,6 +89,16 @@ public class PostController {
 			user_place_id = updao.selectCheckUserPlace(upmap);
 			// id의 해당하는 리뷰글 수 1증가
 			updao.updatePlusUserPlace(user_place_id);
+			System.out.println("updao.selectIsShow(upmap) : "+ updao.selectIsShow(upmap));
+			// 맛집이 전에 삭제된 맛집인지 isshow가 0인지 확인 0이면 1로 변환
+			if(updao.selectIsShow(upmap) == 0) {
+				// 맛집이 삭제된 맛집, isshow를 1로 바꿔줘야함 0을 보내줘야함
+				System.out.println("isshow가 0 이여서 싫애됨");
+				HashMap<String, Object> showMap = new HashMap<String, Object>();
+				showMap.put("id", user_place_id);
+				showMap.put("isshow", 1);
+				updao.updateIsShowUserPlace(showMap);
+			}
 		}
 		// 게시글 등록을 위해 user_place_id의 값을 dto에 넣어줌
 		dto.setUser_place_id(user_place_id);
