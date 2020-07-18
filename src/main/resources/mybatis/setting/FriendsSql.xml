@@ -6,6 +6,11 @@
 <mapper namespace="friends">
 	
 	<!-- 친구 신청/수락 과정 -->
+	<!-- 이메일로 친구인지 확인하기 -->
+	<select id="isMyFriend" parameterType="fdto" resultType="int">
+	SELECT count(*) FROM friend WHERE (request_user_id = #{request_user_id} AND target_user_id = (SELECT id FROM user WHERE email = #{email}))
+	OR (request_user_id = (SELECT id FROM user WHERE email = #{email}) AND target_user_id = #{request_user_id})
+	</select>
 	<!-- friends TB 에 있는가? -->
 	<select id="isDataAtFriends" parameterType="fdto" resultType="int">
 		SELECT count(*) FROM friend

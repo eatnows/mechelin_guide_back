@@ -13,7 +13,8 @@ public interface AdminDaoInter {
  public int selectCountOfUser(); 
  public List<UserDto> searchDataOfUser(HashMap<String, Object> map); 
  public List<UserDto> sortDataOfUser(HashMap<String, Object> map); 
- public List<UserDto> filterDataOfUser(HashMap<String, Object> map); 
+ public List<UserDto> filterDataOfUser(HashMap<String, Object> map);
+ public int filterDataCountOfUser(HashMap<String, String> map); 
  public List<ReportDto> selectAllOfReport(HashMap<String, Integer> map); 
  public int selectCountOfReport(); 
  public List<ReportDto> sortDataOfReport(HashMap<String, Object> map); 
