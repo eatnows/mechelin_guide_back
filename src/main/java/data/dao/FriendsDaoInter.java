@@ -8,6 +8,7 @@ import data.dto.FriendsDto;
 import data.dto.UserDto;
 
 public interface FriendsDaoInter {
+	public int isMyFriend(FriendsDto dto);
 	public int haveData(FriendsDto dto);
 	public boolean isFriend(FriendsDto dto);
 	public int isFirst(FriendsDto dto);

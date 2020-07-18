@@ -84,6 +84,17 @@ public class FriendsController {
 		}
 	}
 	
+	@PostMapping("/confirmfriend")
+	public String confirmFriend(@RequestBody FriendsDto dto) {
+		// 테이블에 있는가?
+		if(fdao.isMyFriend(dto) == 0 ) {
+			return "0";
+		} else {
+			return "1";
+		}
+	}
+	
+	
 	@PostMapping("/addfriend")
 	public void addFriend(@RequestBody FriendsDto dto) {
 		//int target_user_id = udao.selectIdUser(dto.getEmail());
