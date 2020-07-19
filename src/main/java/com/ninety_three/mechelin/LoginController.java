@@ -402,4 +402,39 @@ public class LoginController {
 		return dto;
 	}
 	
+	
+	/*
+	 * 네이버 로그인
+	 */
+	@PostMapping("/naverlogin")
+	public int naverLogin(@RequestBody UserDto dto) {
+		int user_id;
+		// naver login 테이블에 있는지 확인
+		if(udao.selectExistNaverUser(Integer.parseInt(dto.getId())) == 0) {
+			System.out.println("네이버테이블에 없을때");
+			// 없으면 우리 db에 등록된 아이디 인지 확인
+			if(udao.selectCountEmailUser(dto.getEmail()) == 0) {
+				System.out.println("우리디비에도 없을때");
+				UserDto newdto = new UserDto();
+				newdto.setEmail(dto.getEmail());
+				newdto.setPassword("");
+				newdto.setNickname(dto.getNickname());
+				newdto.setProfile_url(dto.getProfile_url());
+				// 우리 db에 insert
+				udao.insertUser(newdto);
+			}
+			// email에 대한 id번호를 얻기
+			user_id = udao.selectIdUser(dto.getEmail());
+			// naver login 테이블에 insert
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			map.put("email", dto.getEmail());
+			map.put("naverid", dto.getId());
+			map.put("nickname", dto.getNickname());
+			map.put("user_id", user_id);
+			udao.insertNaverUser(map);
+		}
+		System.out.println("맨밑에");
+		return udao.selectGetUserIdNaver(dto.getEmail());
+	}
+	
 }

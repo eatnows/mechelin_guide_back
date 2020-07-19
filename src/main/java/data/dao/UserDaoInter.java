@@ -34,4 +34,9 @@ public interface UserDaoInter {
 	public void changeIntro(UserDto dto);
 	public void changeNick(UserDto dto);
 	public void dropUser(String id);
+	
+	public void insertNaverUser(HashMap<String, Object> map);
+	public int selectExistNaverUser(int naverid);
+	public int selectGetUserIdNaver(String email);
+	public int selectCountEmailUser(String email);
 }
