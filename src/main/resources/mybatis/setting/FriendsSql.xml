@@ -71,7 +71,7 @@
 	<!-- 나의 모든 친구 반환 -->
 	<select id="selectAllFriendsOfUser" resultType="udto" parameterType="HashMap">
 		SELECT `dm_member`.chatroom_id, 
-		       `user`.id AS user_id, 
+		       `user`.id, 
 		       `user`.nickname, 
 		       `user`.introduce,
 		       `user`.profile_url

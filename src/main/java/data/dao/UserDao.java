@@ -147,4 +147,28 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		getSqlSession().update("deleteAccountOfUser", id);
 	}
 
+	@Override
+	public void insertNaverUser(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().insert("insertOfnaveruser", map);
+	}
+
+	@Override
+	public int selectExistNaverUser(int naverid) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectIsExistNaverUser", naverid);
+	}
+
+	@Override
+	public int selectGetUserIdNaver(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectUserIdOfNaver", email);
+	}
+
+	@Override
+	public int selectCountEmailUser(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("SelctCountEmailUser", email);
+	}
+
 }
