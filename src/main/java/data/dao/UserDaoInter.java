@@ -39,4 +39,8 @@ public interface UserDaoInter {
 	public int selectExistNaverUser(int naverid);
 	public int selectGetUserIdNaver(String email);
 	public int selectCountEmailUser(String email);
+
+	public void insertOfGoogleUser(HashMap<String, Object> map);
+	public int existGoogleUser(int googleId);
+	public int selectUserIdOfGoogle(String email);
 }

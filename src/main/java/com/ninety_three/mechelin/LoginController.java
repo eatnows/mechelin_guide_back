@@ -1,6 +1,9 @@
 package com.ninety_three.mechelin;
 
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -17,6 +20,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
 import data.dao.UserDaoInter;
 import data.dto.UserDto;
@@ -436,5 +447,73 @@ public class LoginController {
 		System.out.println("맨밑에");
 		return udao.selectGetUserIdNaver(dto.getEmail());
 	}
+	
+	@PostMapping("/tokenlogin")
+	public void googlelogin(@RequestParam String idtoken) {
+		System.out.println(idtoken);
+		 HttpTransport httpTransport = new NetHttpTransport();
+         JsonFactory jsonFactory = new JacksonFactory();
+		String client_id="클라이언트 아이디";
+		GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(httpTransport, jsonFactory)
+				// Specify the CLIENT_ID of the app that accesses the backend:
+				.setAudience(Collections.singletonList(client_id)).build();
+		// Or, if multiple clients access the backend:
+		//.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
+
+		// (Receive idTokenString by HTTPS POST)
+		GoogleIdToken idToken;
+		try {
+			idToken = verifier.verify(idtoken);
+			if (idToken != null) {
+				Payload payload = idToken.getPayload();
+				// Print user identifier
+				String googleId = payload.getSubject();
+				System.out.println("User ID: " + googleId);
+
+				// Get profile information from payload
+				String email = payload.getEmail();
+				boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+				String name = (String) payload.get("name");
+				String pictureUrl = (String) payload.get("picture");
+				String locale = (String) payload.get("locale");
+				String familyName = (String) payload.get("family_name");
+				String givenName = (String) payload.get("given_name");
+				int user_id;
+				
+				if(udao.existGoogleUser(Integer.parseInt(googleId))!=0) {
+					// 없으면 우리 db에 등록된 아이디 인지 확인
+					if(udao.selectCountEmailUser(email) == 0) {
+						UserDto newdto = new UserDto();
+						newdto.setEmail(email);
+						newdto.setPassword("");
+						newdto.setNickname(name);
+						newdto.setProfile_url(pictureUrl);
+						// 우리 db에 insert
+						udao.insertUser(newdto);
+					}
+					// email에 대한 id번호를 얻기
+					user_id = udao.selectIdUser(email);
+					// google login 테이블에 insert
+					HashMap<String, Object> map = new HashMap<String, Object>();
+					map.put("email", email);
+					map.put("googleId", googleId);
+					map.put("nickname", name);
+					map.put("user_id", user_id);
+					udao.insertOfGoogleUser(map);
+				}
+				
+			} else {
+				System.out.println("Invalid ID token.");
+			}
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+	
 	
 }

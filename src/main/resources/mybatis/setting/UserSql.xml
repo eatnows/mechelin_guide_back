@@ -162,4 +162,19 @@
 	<select id="SelctCountEmailUser" parameterType="String" resultType="int">
 		SELECT COUNT(*) FROM user WHERE email = #{email}
 	</select>
+
+	<!-- 구글 회원가입 -->
+	<insert id="insertOfGoogleUser" parameterType="HashMap">
+		INSERT INTO guser (googleId, email, nickname, user_id, created_at, updated_at) 
+		VALUES (#{googleId}, #{email}, #{nickname}, #{user_id}, now(), now())
+	</insert>
+	<!-- 구글 유저 테이블에 등록이 되어있는지 -->
+	<select id="existGoogleUser" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM guser WHERE googleId = #{googleId}
+	</select>
+	<!-- 구글 이메일로 user_id 얻기 -->
+	<select id="selectUserIdOfGoogle" parameterType="String" resultType="int">
+		SELECT user_id FROM guser WHERE email = #{email}
+	</select>
+
 </mapper>
