@@ -169,7 +169,7 @@
 		VALUES (#{googleId}, #{email}, #{nickname}, #{user_id}, now(), now())
 	</insert>
 	<!-- 구글 유저 테이블에 등록이 되어있는지 -->
-	<select id="existGoogleUser" parameterType="int" resultType="int">
+	<select id="existGoogleUser" parameterType="BigInteger" resultType="int">
 		SELECT COUNT(*) FROM guser WHERE googleId = #{googleId}
 	</select>
 	<!-- 구글 이메일로 user_id 얻기 -->

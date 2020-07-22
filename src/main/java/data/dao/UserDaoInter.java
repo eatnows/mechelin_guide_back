@@ -1,5 +1,6 @@
 package data.dao;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 
 import data.dto.UserDto;
@@ -41,6 +42,6 @@ public interface UserDaoInter {
 	public int selectCountEmailUser(String email);
 
 	public void insertOfGoogleUser(HashMap<String, Object> map);
-	public int existGoogleUser(int googleId);
+	public int existGoogleUser(BigInteger googleId);
 	public int selectUserIdOfGoogle(String email);
 }

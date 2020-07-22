@@ -1,5 +1,6 @@
 package data.dao;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -178,7 +179,7 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 	} 
 	
 	@Override
-	public int existGoogleUser(int googleId) {
+	public int existGoogleUser(BigInteger googleId) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("existGoogleUser", googleId);
 	}
