@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigInteger;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.mail.MessagingException;
@@ -437,31 +440,107 @@ public class LoginController {
 	 * 네이버 로그인
 	 */
 	@PostMapping("/naverlogin")
-	public int naverLogin(@RequestBody UserDto dto) {
+	public int naverLogin(@RequestBody String token) throws ParseException {
+		JSONParser jsonParse = new JSONParser();
+		JSONObject jsonObj = null;
+		String naverToken = null;
+		try {
+			jsonObj = (JSONObject) jsonParse.parse(token);
+			naverToken = (String) jsonObj.get("token");
+			
+			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String header = "Bearer " + naverToken;
+		String apiURL = "https://openapi.naver.com/v1/nid/me";
+		Map<String, String> requestHeaders = new HashMap<String, String>();
+        requestHeaders.put("Authorization", header);
+        String responseBody = get(apiURL,requestHeaders);
+		JSONObject response = null;
+		JSONObject naverUserInfo = null;
+		response = (JSONObject) jsonParse.parse(responseBody);
+		naverUserInfo = (JSONObject) jsonParse.parse(response.get("response").toString());
+		String id = (String) naverUserInfo.get("id");
+		String nickname = (String) naverUserInfo.get("nickname");
+		String profile_url = (String) naverUserInfo.get("profile_image");
+		String email = (String) naverUserInfo.get("email");
+
 		int user_id;
 		// naver login 테이블에 있는지 확인
-		if(udao.selectExistNaverUser(Integer.parseInt(dto.getId())) == 0) {
+		if(udao.selectExistNaverUser(Integer.parseInt(id)) == 0) {
 			// 없으면 우리 db에 등록된 아이디 인지 확인
-			if(udao.selectCountEmailUser(dto.getEmail()) == 0) {
+			if(udao.selectCountEmailUser(email) == 0) {
 				UserDto newdto = new UserDto();
-				newdto.setEmail(dto.getEmail());
+				newdto.setEmail(email);
 				newdto.setPassword("");
-				newdto.setNickname(dto.getNickname());
-				newdto.setProfile_url(dto.getProfile_url());
+				newdto.setNickname(nickname);
+				newdto.setProfile_url(profile_url);
 				// 우리 db에 insert
 				udao.insertUser(newdto);
 			}
 			// email에 대한 id번호를 얻기
-			user_id = udao.selectIdUser(dto.getEmail());
+			user_id = udao.selectIdUser(email);
 			// naver login 테이블에 insert
 			HashMap<String, Object> map = new HashMap<String, Object>();
-			map.put("email", dto.getEmail());
-			map.put("naverid", dto.getId());
-			map.put("nickname", dto.getNickname());
+			map.put("email", email);
+			map.put("naverid", id);
+			map.put("nickname", nickname);
 			map.put("user_id", user_id);
 			udao.insertNaverUser(map);
 		}
-		return udao.selectGetUserIdNaver(dto.getEmail());
+		return udao.selectGetUserIdNaver(email);
+	}
+
+	private String get(String apiURL, Map<String, String> requestHeaders) {
+		HttpURLConnection con = connect(apiURL);
+		try {
+            con.setRequestMethod("GET");
+            for(Map.Entry<String, String> header :requestHeaders.entrySet()) {
+                con.setRequestProperty(header.getKey(), header.getValue());
+            }
+
+            int responseCode = con.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) { // 정상 호출
+                return readBody(con.getInputStream());
+            } else { // 에러 발생
+                return readBody(con.getErrorStream());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("API 요청과 응답 실패", e);
+        } finally {
+            con.disconnect();
+        }
+	}
+
+	private String readBody(InputStream body) {
+		InputStreamReader streamReader = new InputStreamReader(body);
+
+        try (BufferedReader lineReader = new BufferedReader(streamReader)) {
+            StringBuilder responseBody = new StringBuilder();
+
+            String line;
+            while ((line = lineReader.readLine()) != null) {
+                responseBody.append(line);
+            }
+
+            return responseBody.toString();
+        } catch (IOException e) {
+            throw new RuntimeException("API 응답을 읽는데 실패했습니다.", e);
+        }
+	}
+
+	private HttpURLConnection connect(String apiURL) {
+		try {
+            URL url = new URL(apiURL);
+            return (HttpURLConnection)url.openConnection();
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("API URL이 잘못되었습니다. : " + apiURL, e);
+        } catch (IOException e) {
+            throw new RuntimeException("연결이 실패했습니다. : " + apiURL, e);
+        }
 	}
 
 	@PostMapping("/tokenlogin")
