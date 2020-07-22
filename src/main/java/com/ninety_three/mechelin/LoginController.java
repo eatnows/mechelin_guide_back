@@ -496,10 +496,12 @@ public class LoginController {
 					String name = jsonObj.get("name").toString();
 					String pictureUrl = jsonObj.get("picture").toString();
 					if(udao.selectCountEmailUser(email) == 0) {
+						// 중복된 이름이 있을 수 있기에 이메일 앞 아이디를 닉네임으로 함
+						String[] nickname = email.split("@");
 						UserDto newdto = new UserDto();
 						newdto.setEmail(email);
 						newdto.setPassword("");
-						newdto.setNickname(name);
+						newdto.setNickname(nickname[0]);
 						newdto.setProfile_url(pictureUrl);
 						// 우리 db에 insert
 						udao.insertUser(newdto);
@@ -508,9 +510,12 @@ public class LoginController {
 					int user_id = udao.selectIdUser(email);
 					// google login 테이블에 insert
 					HashMap<String, Object> map = new HashMap<String, Object>();
+					// 중복된 이름이 있을 수 있기에 이메일 앞 아이디를 닉네임으로 함
+					String[] nickname = email.split("@");
+					System.out.println(nickname[0]);
 					map.put("email", email);
 					map.put("googleId", googleId);
-					map.put("nickname", name);
+					map.put("nickname", nickname[0]);
 					map.put("user_id", user_id);
 					udao.insertOfGoogleUser(map);
 					System.out.println(map);
