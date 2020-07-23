@@ -1,15 +1,24 @@
 package data.dao;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.stereotype.Repository;
 
 import data.dto.FriendsDto;
+import data.dto.UserDto;
 
 @Repository
 public class FriendsDao extends SqlSessionDaoSupport implements FriendsDaoInter {
-
+ 
+	@Override
+	public int isMyFriend(FriendsDto dto) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("isMyFriend", dto);
+	}
+	
 	@Override
 	public int haveData(FriendsDto dto) {
 		// TODO Auto-generated method stub
@@ -63,6 +72,18 @@ public class FriendsDao extends SqlSessionDaoSupport implements FriendsDaoInter 
 	public String getMailAddr(int user_id) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("getMailAddrOfUser", user_id);
+	}
+
+	@Override
+	public List<UserDto> selectAllFriends(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectList("selectAllFriendsOfUser", map);
+	}
+
+	@Override
+	public int selectCountFriends(int user_id) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectCountFriendsOfUser", user_id);
 	}
 
 }

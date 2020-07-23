@@ -90,4 +90,10 @@ public class UserPlaceDao extends SqlSessionDaoSupport implements UserPlaceDaoIn
 		return getSqlSession().selectOne("selectIsBlackList", user_place_id);
 	}
 
+	@Override
+	public int selectIsShow(HashMap<String, Integer> map) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectIsShowOfUserPlace", map);
+	}
+
 }

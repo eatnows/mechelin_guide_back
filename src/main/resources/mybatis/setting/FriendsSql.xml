@@ -6,6 +6,11 @@
 <mapper namespace="friends">
 	
 	<!-- 친구 신청/수락 과정 -->
+	<!-- 이메일로 친구인지 확인하기 -->
+	<select id="isMyFriend" parameterType="fdto" resultType="int">
+	SELECT count(*) FROM friend WHERE (request_user_id = #{request_user_id} AND target_user_id = (SELECT id FROM user WHERE email = #{email}))
+	OR (request_user_id = (SELECT id FROM user WHERE email = #{email}) AND target_user_id = #{request_user_id})
+	</select>
 	<!-- friends TB 에 있는가? -->
 	<select id="isDataAtFriends" parameterType="fdto" resultType="int">
 		SELECT count(*) FROM friend
@@ -61,6 +66,44 @@
 	<!-- UserSql로 보내야 하나..? -->
 	<select id="getMailAddrOfUser" parameterType="int" resultType="String">
 		SELECT email FROM user WHERE id = #{user_id}
+	</select>
+	
+	<!-- 나의 모든 친구 반환 -->
+	<select id="selectAllFriendsOfUser" resultType="udto" parameterType="HashMap">
+		SELECT `dm_member`.chatroom_id, 
+		       `user`.id, 
+		       `user`.nickname, 
+		       `user`.introduce,
+		       `user`.profile_url
+		FROM   `dm_member` 
+		       JOIN `user` 
+		         ON `user`.id = `dm_member`.user_id 
+		WHERE  `dm_member`.user_id IN (SELECT `user`.id AS user_id 
+		                             FROM   `user` 
+		                             WHERE  `user`.id IN (SELECT request_user_id AS 
+		                                                       user_id 
+		                                                FROM   `friend` 
+		                                                WHERE  target_user_id = #{user_id} 
+		                                                       AND accept = true 
+		                                                UNION 
+		                                                SELECT target_user_id AS user_id 
+		                                                FROM   `friend` 
+		                                                WHERE  request_user_id = #{user_id} 
+		                                                       AND accept = true)) 
+		       AND `dm_member`.chatroom_id IN (SELECT chatroom_id 
+		                                     FROM   `dm_member` 
+		                                     WHERE  user_id = #{user_id}) 
+		GROUP  BY `dm_member`.chatroom_id 
+		ORDER  BY `user`.nickname
+        LIMIT #{pageStart}, #{perPageNum}
+	</select>
+	<!-- 나의 모든 친구 갯수 반환 -->
+	<select id="selectCountFriendsOfUser" resultType="int" parameterType="int">
+		SELECT COUNT(*) FROM user WHERE user.id IN(SELECT request_user_id AS user_id 
+		FROM friend WHERE target_user_id = #{user_id} AND accept = true
+        UNION
+        SELECT target_user_id AS user_id 
+        FROM friend WHERE request_user_id = #{user_id} AND accept = true)
 	</select>
 	
 </mapper>

@@ -1,5 +1,6 @@
 package data.dao;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -101,10 +102,10 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		getSqlSession().delete("deleteOfApiUser", email);
 	}
 	/*
-	 * 이메일로 유저 id 반환
+	 * �씠硫붿씪濡� �쑀�� id 諛섑솚
 	 */
 	@Override
-	public int selectIdUser(String email) {
+	public UserDto selectIdUser(String email) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectIdOfUser", email);
 	}
@@ -115,7 +116,7 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		return getSqlSession().selectOne("profileOfUser", id);
 	}
 	/*
-	 * 프로필 이미지 변경하는 메소드
+	 * �봽濡쒗븘 �씠誘몄� 蹂�寃쏀븯�뒗 硫붿냼�뱶
 	 */
 	@Override
 	public void updateProfileImageUser(HashMap<String, Object> map) {
@@ -147,4 +148,46 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 		getSqlSession().update("deleteAccountOfUser", id);
 	}
 
+	@Override
+	public void insertNaverUser(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().insert("insertOfnaveruser", map);
+	}
+
+	@Override
+	public int selectExistNaverUser(int naverid) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectIsExistNaverUser", naverid);
+	}
+
+	@Override
+	public int selectGetUserIdNaver(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectUserIdOfNaver", email);
+	}
+
+	@Override
+	public int selectCountEmailUser(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("SelctCountEmailUser", email);
+	}
+
+	@Override
+	public void insertOfGoogleUser(HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		getSqlSession().insert("insertOfGoogleUser", map);
+	} 
+	
+	@Override
+	public int existGoogleUser(BigInteger googleId) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("existGoogleUser", googleId);
+	}
+
+	@Override
+	public int selectUserIdOfGoogle(String email) {
+		// TODO Auto-generated method stub
+		return getSqlSession().selectOne("selectUserIdOfGoogle", email);
+	}
 }
+

@@ -61,4 +61,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectIsBlackList" parameterType="int" resultType="int">
 		SELECT blacklist FROM user_place WHERE id = #{user_place_id}
 	</select>
+	<!-- 삭제를 한 맛집인지 isshow가 false인 맛집인지 -->
+	<select id="selectIsShowOfUserPlace" resultType="int" parameterType="HashMap">
+		SELECT isshow FROM user_place WHERE user_id = #{user_id} AND place_id = #{place_id}
+	</select>
+	
 </mapper>

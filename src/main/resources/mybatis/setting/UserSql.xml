@@ -111,8 +111,8 @@
 	</delete>
 	
 	<!-- 이메일로 유저의 id 반환 -->
-	<select id="selectIdOfUser" resultType="int" parameterType="String">
-		SELECT id FROM user WHERE email = #{email}
+	<select id="selectIdOfUser" resultType="udto" parameterType="String">
+		SELECT id, authority FROM user WHERE email = #{email}
 	</select>
 	
 	<!-- id로 user dto 반환 -->
@@ -142,4 +142,39 @@
 	<update id="deleteAccountOfUser" parameterType="String">
 		UPDATE user SET dropuser = true WHERE id = #{id}
 	</update>
+	
+	
+	<!-- 네이버 회원가입 -->
+	<insert id="insertOfnaveruser" parameterType="HashMap">
+		INSERT INTO nuser (naverid, email, nickname, user_id, created_at, updated_at) 
+		VALUES (#{naverid}, #{email}, #{nickname}, #{user_id}, now(), now())
+	</insert>
+	<!-- 네이버 유저 테이블에 등록이 되어있는지 -->
+	<select id="selectIsExistNaverUser" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM nuser WHERE naverid = #{naverid}
+	</select>
+	<!-- 네이버 이메일로 user_id 얻기 -->
+	<select id="selectUserIdOfNaver" parameterType="String" resultType="int">
+		SELECT user_id FROM nuser WHERE email = #{email}
+	</select>
+	<!-- 우리 DB에 email인 유저가 등록되어있는지 -->
+	<!-- id 반환하는것으로 수정하려고 했으나 혹시 오류가 발생할 수 있어서 새로만듦 -->
+	<select id="SelctCountEmailUser" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM user WHERE email = #{email}
+	</select>
+
+	<!-- 구글 회원가입 -->
+	<insert id="insertOfGoogleUser" parameterType="HashMap">
+		INSERT INTO guser (googleId, email, nickname, user_id, created_at, updated_at) 
+		VALUES (#{googleId}, #{email}, #{nickname}, #{user_id}, now(), now())
+	</insert>
+	<!-- 구글 유저 테이블에 등록이 되어있는지 -->
+	<select id="existGoogleUser" parameterType="BigInteger" resultType="int">
+		SELECT COUNT(*) FROM guser WHERE googleId = #{googleId}
+	</select>
+	<!-- 구글 이메일로 user_id 얻기 -->
+	<select id="selectUserIdOfGoogle" parameterType="String" resultType="int">
+		SELECT user_id FROM guser WHERE email = #{email}
+	</select>
+
 </mapper>

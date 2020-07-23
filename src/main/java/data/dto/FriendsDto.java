@@ -6,6 +6,7 @@ public class FriendsDto {
 	private int request_user_id;
 	private int target_user_id;
 	private Timestamp updated_at;
+	private String email;
 	
 	public int getRequest_user_id() {
 		return request_user_id;
@@ -24,6 +25,12 @@ public class FriendsDto {
 	}
 	public void setUpdated_at(Timestamp updated_at) {
 		this.updated_at = updated_at;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
 	}
 	
 }
