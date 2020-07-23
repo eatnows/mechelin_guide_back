@@ -78,8 +78,6 @@
 		FROM   `dm_member` 
 		       JOIN `user` 
 		         ON `user`.id = `dm_member`.user_id 
-		       JOIN `chat` 
-		         ON `user`.id = `chat`.user_id 
 		WHERE  `dm_member`.user_id IN (SELECT `user`.id AS user_id 
 		                             FROM   `user` 
 		                             WHERE  `user`.id IN (SELECT request_user_id AS 
