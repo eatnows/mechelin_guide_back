@@ -303,7 +303,7 @@ public class LoginController {
 			}
 		}
 
-		udto.setId(Integer.toString(udao.selectIdUser(email)));
+		udto.setId(udao.selectIdUser(email).getId());
 		udto.setEmail(email);
 		udto.setAccess_token(access_token);
 
@@ -371,10 +371,10 @@ public class LoginController {
 	}
 
 	/*
-	 * 이메일로 id 반환하는 메소드
+	 * 이메일로 id, authority 반환하는 메소드
 	 */
 	@GetMapping("/select/id")
-	public int selectIdUser(@RequestParam String email) {
+	public UserDto selectIdUser(@RequestParam String email) {
 		return udao.selectIdUser(email);
 	}
 
@@ -482,7 +482,7 @@ public class LoginController {
 				udao.insertUser(newdto);
 			}
 			// email에 대한 id번호를 얻기
-			user_id = udao.selectIdUser(email);
+			user_id = Integer.parseInt((udao.selectIdUser(email).getId()));
 			// naver login 테이블에 insert
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("email", email);
@@ -575,21 +575,26 @@ public class LoginController {
 					String name = jsonObj.get("name").toString();
 					String pictureUrl = jsonObj.get("picture").toString();
 					if(udao.selectCountEmailUser(email) == 0) {
+						// 중복된 이름이 있을 수 있기에 이메일 앞 아이디를 닉네임으로 함
+						String[] nickname = email.split("@");
 						UserDto newdto = new UserDto();
 						newdto.setEmail(email);
 						newdto.setPassword("");
-						newdto.setNickname(name);
+						newdto.setNickname(nickname[0]);
 						newdto.setProfile_url(pictureUrl);
 						// 우리 db에 insert
 						udao.insertUser(newdto);
 					}
 					// email에 대한 id번호를 얻기
-					int user_id = udao.selectIdUser(email);
+					int user_id =Integer.parseInt((udao.selectIdUser(email).getId()));
 					// google login 테이블에 insert
 					HashMap<String, Object> map = new HashMap<String, Object>();
+					// 중복된 이름이 있을 수 있기에 이메일 앞 아이디를 닉네임으로 함
+					String[] nickname = email.split("@");
+					System.out.println(nickname[0]);
 					map.put("email", email);
 					map.put("googleId", googleId);
-					map.put("nickname", name);
+					map.put("nickname", nickname[0]);
 					map.put("user_id", user_id);
 					udao.insertOfGoogleUser(map);
 					System.out.println(map);

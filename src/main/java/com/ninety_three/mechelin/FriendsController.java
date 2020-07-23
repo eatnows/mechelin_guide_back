@@ -102,7 +102,7 @@ public class FriendsController {
 		if(dto.getEmail() == null) {
 			target_user_id = dto.getTarget_user_id();			
 		} else {
-			target_user_id = udao.selectIdUser(dto.getEmail());
+			target_user_id = Integer.parseInt(udao.selectIdUser(dto.getEmail()).getId());
 		}
 		dto.setTarget_user_id(target_user_id);
 		

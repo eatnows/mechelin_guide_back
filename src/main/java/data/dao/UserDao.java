@@ -105,7 +105,7 @@ public class UserDao extends SqlSessionDaoSupport implements UserDaoInter {
 	 * �씠硫붿씪濡� �쑀�� id 諛섑솚
 	 */
 	@Override
-	public int selectIdUser(String email) {
+	public UserDto selectIdUser(String email) {
 		// TODO Auto-generated method stub
 		return getSqlSession().selectOne("selectIdOfUser", email);
 	}

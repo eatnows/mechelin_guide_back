@@ -111,8 +111,8 @@
 	</delete>
 	
 	<!-- 이메일로 유저의 id 반환 -->
-	<select id="selectIdOfUser" resultType="int" parameterType="String">
-		SELECT id FROM user WHERE email = #{email}
+	<select id="selectIdOfUser" resultType="udto" parameterType="String">
+		SELECT id, authority FROM user WHERE email = #{email}
 	</select>
 	
 	<!-- id로 user dto 반환 -->
