@@ -303,7 +303,7 @@ public class LoginController {
 			}
 		}
 
-		udto.setId(Integer.toString(udao.selectIdUser(email)));
+		udto.setId(udao.selectIdUser(email).getId());
 		udto.setEmail(email);
 		udto.setAccess_token(access_token);
 
@@ -371,10 +371,10 @@ public class LoginController {
 	}
 
 	/*
-	 * 이메일로 id 반환하는 메소드
+	 * 이메일로 id, authority 반환하는 메소드
 	 */
 	@GetMapping("/select/id")
-	public int selectIdUser(@RequestParam String email) {
+	public UserDto selectIdUser(@RequestParam String email) {
 		return udao.selectIdUser(email);
 	}
 
@@ -482,7 +482,7 @@ public class LoginController {
 				udao.insertUser(newdto);
 			}
 			// email에 대한 id번호를 얻기
-			user_id = udao.selectIdUser(email);
+			user_id = Integer.parseInt((udao.selectIdUser(email).getId()));
 			// naver login 테이블에 insert
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("email", email);
@@ -584,7 +584,7 @@ public class LoginController {
 						udao.insertUser(newdto);
 					}
 					// email에 대한 id번호를 얻기
-					int user_id = udao.selectIdUser(email);
+					int user_id =Integer.parseInt((udao.selectIdUser(email).getId()));
 					// google login 테이블에 insert
 					HashMap<String, Object> map = new HashMap<String, Object>();
 					map.put("email", email);

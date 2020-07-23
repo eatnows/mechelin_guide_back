@@ -27,7 +27,7 @@ public interface UserDaoInter {
 	public void updateApiUser(UserDto dto);
 	public void deleteApiUser(String email);
 	
-	public int selectIdUser(String email);
+	public UserDto selectIdUser(String email);
 	public UserDto getUserProfile(String id);
 	public void updateProfileImageUser(HashMap<String, Object> map);
 	public void updateMarkerImageUser(HashMap<String, Object> map);
